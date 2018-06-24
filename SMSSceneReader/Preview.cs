@@ -50,7 +50,7 @@ namespace SMSSceneReader
         private Matrix4 m_CamMatrix, m_SkyboxMatrix;
         private RenderInfo m_RenderInfo;
         private bool MouseLook = false;
-        private bool WireFrame;
+        //private bool WireFrame;
         private bool Orthographic;
         private float OrthoZoom = 1;
 
@@ -78,8 +78,7 @@ namespace SMSSceneReader
 
         private bool startedMoving = false;
 
-        /* Debug */
-        private Ray LastClick;
+
 
         private Point FormCenter
         {
@@ -121,8 +120,8 @@ namespace SMSSceneReader
         List<Bmd> otherModels;  //Others
 
         /* Debug */
+        private Ray LastClick;
         bool Debug_ShowLastMouse = true;
-        Vector3 Debug_LastMouse;
 
         /* Preview */
         public Preview(string sceneRoot)
@@ -234,10 +233,10 @@ namespace SMSSceneReader
             GL.NewList(SkyGList, ListMode.Compile);
             if (sky != null)
             {
-                if ((Properties.Settings.Default.skyDrawMode | 0x01) == Properties.Settings.Default.skyDrawMode) ;
-                    //DrawBMD(sky);
-                if ((Properties.Settings.Default.skyDrawMode | 0x02) == Properties.Settings.Default.skyDrawMode) ;
-                    //DrawBMD(sky, RenderMode.Translucent);
+                if ((Properties.Settings.Default.skyDrawMode | 0x01) == Properties.Settings.Default.skyDrawMode && !Orthographic) 
+                    DrawBMD(sky);
+                if ((Properties.Settings.Default.skyDrawMode | 0x02) == Properties.Settings.Default.skyDrawMode && !Orthographic) 
+                    DrawBMD(sky, RenderMode.Translucent);
             }
             GL.EndList();
 
@@ -748,7 +747,10 @@ namespace SMSSceneReader
             LockedAxis = false;
 
             if (DidMove)
-                mainForm.UpdateObjectInfo();
+            { 
+               mainForm.UpdateObjectInfo();
+               startedMoving = false;
+            }
         }
         private void glControl1_MouseMove(object sender, MouseEventArgs e)
         {
@@ -771,10 +773,6 @@ namespace SMSSceneReader
                     CameraRotation.X -= pi2;
                 while (CameraRotation.X < -pi2)
                     CameraRotation.X += pi2;
-                //while (CameraRotation.Y > pi2)
-                //    CameraRotation.Y -= pi2;
-                //while (CameraRotation.Y < -pi2)
-                //    CameraRotation.Y += pi2;
 
                 //Keep camera from going upside down
                 if (CameraRotation.Y > pii2)
@@ -910,10 +908,17 @@ namespace SMSSceneReader
                         Vector3 ObjectPosition = new Vector3(x,y,z);
                         float t = Vector3.Dot(CameraUnitVector, ObjectPosition - ClickLine.Origin) / Vector3.Dot(CameraUnitVector, ClickLine.Direction);//Parameter for our line. This is in the form r=u+t*v where r,u, and v are vectors. and t is the scalar. This formula is from solving the vector eqn.
                         Vector3 OutputPosition = ClickLine.Origin + t * ClickLine.Direction;
+                        if (!startedMoving)
+                        {
+                            startedMoving = true;
+                            mainForm.CreateUndoSnapshot();
+                            mainForm.Changed = true;
+                        }
                         op.SetParamValue("X", selected[0], OutputPosition.X.ToString());
                         op.SetParamValue("Y", selected[0], OutputPosition.Y.ToString());
                         op.SetParamValue("Z", selected[0], OutputPosition.Z.ToString());
                         UpdateObject(selected[0]);
+                        DidMove = true;//dodgy
                     }
                     
                 }
@@ -977,12 +982,37 @@ namespace SMSSceneReader
                 if (e.KeyCode == Keys.ShiftKey)
                     LockKeyHeld = true;
             }
-            if (e.KeyCode == Keys.G)
+            //View angle shortcuts
+            if (e.KeyCode == Keys.NumPad1)//Front view
+            {
+                CameraRotation.X = (float)Math.PI / 2;
+                CameraRotation.Y = 0f;
+                CameraPosition = new Vector3(0f, 0f, -1f);
+                UpdateCamera();
+                glControl1.Invalidate();
+            }
+            if (e.KeyCode == Keys.NumPad3)//Right view
+            {
+                CameraRotation.X = (float)Math.PI;
+                CameraRotation.Y = 0f;
+                CameraPosition = new Vector3(1f, 0f, 0f);
+                UpdateCamera();
+                glControl1.Invalidate();
+            }
+            if (e.KeyCode == Keys.NumPad5)
             {
                 Orthographic = !Orthographic;
                 UpdateViewport();
                 UpdateCamera();
                 glControl1.Refresh();
+            }
+            if (e.KeyCode == Keys.NumPad7)//Top view
+            {
+                CameraRotation.X = 0f;
+                CameraRotation.Y = (float)-Math.PI / 2;
+                CameraPosition = new Vector3(0f, 1f, 0f);
+                UpdateCamera();
+                glControl1.Invalidate();
             }
         }
         private void glControl1_KeyUp(object sender, KeyEventArgs e)
@@ -1256,7 +1286,6 @@ namespace SMSSceneReader
 
         private void DemoAnim_Tick(object sender, EventArgs e)
         {
-            Vector3 arcam;
 
             float rdur = StartDemo_DemoDuration;
             BckSection.BckANK1 sec = ((BckSection.BckANK1)demo.sections[0]);
@@ -1501,9 +1530,6 @@ namespace SMSSceneReader
         {
 
         }
-        private void glControlX_MouseMove(object sender, MouseEventArgs e)
-        {
-        }
 
         /* Mousewheel zooms in and out */
         private void glControlX_MouseWheel(object sender, MouseEventArgs e)
@@ -1535,9 +1561,7 @@ namespace SMSSceneReader
         {
 
         }
-        private void glControlY_MouseMove(object sender, MouseEventArgs e)
-        {
-        }
+
 
         /* Mousewheel zooms in and out */
         private void glControlY_MouseWheel(object sender, MouseEventArgs e)
@@ -1569,9 +1593,7 @@ namespace SMSSceneReader
         {
 
         }
-        private void glControlZ_MouseMove(object sender, MouseEventArgs e)
-        {
-        }
+
 
         /* Mousewheel zooms in and out */
         private void glControlZ_MouseWheel(object sender, MouseEventArgs e)

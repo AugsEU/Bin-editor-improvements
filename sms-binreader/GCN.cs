@@ -826,7 +826,6 @@ namespace DataReader
                 if (entry.children.Count > 0 && !Directory.Exists(target + "/" + entry.FullPath))
                     Directory.CreateDirectory(target + "/" + entry.FullPath);
             }
-            bool first = false;
             foreach (TOCFile.Entry entry in entries)
             {
                 if (entry.children.Count > 0)
@@ -837,7 +836,6 @@ namespace DataReader
                     iso.Seek(entry.offset, SeekOrigin.Begin);
                     iso.Read(buf, 0, buf.Length);
                     fs.Write(buf, 0, buf.Length);
-                    first = true;
                 }
             }
             iso.Close();

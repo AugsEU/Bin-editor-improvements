@@ -361,7 +361,6 @@ namespace SMSReader
 
         public long Reformat(Entry entry = null, long offset = -1, uint index = 0)
         {
-            bool root = false;
             if (offset == -1)
             {
                 entry = RootEntry;
@@ -369,7 +368,6 @@ namespace SMSReader
                 Layout = new Dictionary<uint, Entry>();
                 DiscSize = 0;
                 offset = FileStart;
-                root = true;
             }
             entry.index = index++;
             for (int i = 0; i < entry.children.Count; i++)
