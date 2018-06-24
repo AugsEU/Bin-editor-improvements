@@ -2,7 +2,7 @@
 
 Miluaces made this editor, all I did was add a few features. So full credit to him not me.
 
-#Added features
+# Added features
 
 Fixed orthogonal mode. Keybinds are the same as blender:
 Numpad1: front view
