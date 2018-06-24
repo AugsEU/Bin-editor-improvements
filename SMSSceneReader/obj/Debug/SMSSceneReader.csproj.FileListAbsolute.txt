@@ -3,14 +3,10 @@ C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\obj\Debug\SMSSceneReader.pdb
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\SMSSceneReader.exe
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\SMSSceneReader.pdb
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\BinReader.dll
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\BMDReader.dll
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\OpenTK.dll
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\OpenTK.GLControl.dll
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\SMSManager.exe
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\BinReader.pdb
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\BMDReader.pdb
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\SMSManager.pdb
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\OpenTK.xml
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\OpenTK.GLControl.xml
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\obj\Debug\SMSSceneReader.csprojResolveAssemblyReference.cache
@@ -33,3 +29,5 @@ C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\obj\Debug\SMSSceneReader.WarpEdit.resources
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\obj\Debug\SMSSceneReader.WarpFinder.resources
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\obj\Debug\SMSSceneReader.csproj.GenerateResource.Cache
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\BinReader.dll
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\BinReader.pdb
