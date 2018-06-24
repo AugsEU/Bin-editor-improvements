@@ -1,0 +1,14 @@
+Fence
+X FLOAT
+Y FLOAT
+Z FLOAT
+Pitch FLOAT
+Yaw FLOAT
+Roll FLOAT
+ScaleX FLOAT
+ScaleY FLOAT
+ScaleZ FLOAT
+Manager STRING
+Unknown INT
+Model STRING
+fence3x3 COMMENT mapobj/fence_half.bmd

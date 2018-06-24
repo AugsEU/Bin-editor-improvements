@@ -1,0 +1,16 @@
+Wood Barrel
+X FLOAT
+Y FLOAT
+Z FLOAT
+Pitch? FLOAT
+Yaw? FLOAT
+Roll? FLOAT
+Unknown FLOAT
+Unknown FLOAT
+Unknown FLOAT
+Unknown STRING
+Unknown INT
+Model STRING
+wood_barrel COMMENT mapobj/barrel_normal.bmd
+wood_barrel_tex COMMENT mapobj/barrel.bmt
+drum_can COMMENT mapobj/drum_can_model.bmd

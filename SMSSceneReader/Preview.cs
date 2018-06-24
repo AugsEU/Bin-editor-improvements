@@ -40,8 +40,8 @@ namespace SMSSceneReader
         private const float k_FOV = (float)((70f * Math.PI) / 180f);
         private const float k_zNear = 0.01f;
         private const float k_zFar = 1000f;
-        private const float k_zNearOrtho = -10000f;
-        private const float k_zFarOrtho = 10000f;
+        private const float k_zNearOrtho = -1f;
+        private const float k_zFarOrtho = 100f;
         private Matrix4 m_ProjMatrix;
         private float m_AspectRatio;
         private Vector3 CameraRotation;
@@ -231,10 +231,10 @@ namespace SMSSceneReader
             GL.NewList(SkyGList, ListMode.Compile);
             if (sky != null)
             {
-                if ((Properties.Settings.Default.skyDrawMode | 0x01) == Properties.Settings.Default.skyDrawMode)
-                    DrawBMD(sky);
-                if ((Properties.Settings.Default.skyDrawMode | 0x02) == Properties.Settings.Default.skyDrawMode)
-                    DrawBMD(sky, RenderMode.Translucent);
+                if ((Properties.Settings.Default.skyDrawMode | 0x01) == Properties.Settings.Default.skyDrawMode) ;
+                    //DrawBMD(sky);
+                if ((Properties.Settings.Default.skyDrawMode | 0x02) == Properties.Settings.Default.skyDrawMode) ;
+                    //DrawBMD(sky, RenderMode.Translucent);
             }
             GL.EndList();
 
@@ -444,8 +444,6 @@ namespace SMSSceneReader
             if (Properties.Settings.Default.previewOrigin)
             {
                 Vector3 originPosition = Vector3.Zero;
-                if (Orthographic)
-                    originPosition = CameraPos;
                 GL.LineWidth(1);
                 GL.Begin(PrimitiveType.Lines);
                 GL.Color4(1f, 0f, 0f, 1f);
@@ -541,7 +539,6 @@ namespace SMSSceneReader
 
             //Get Normalized mouse position
             Vector3 normalizedmouse = new Vector3((2.0f * mousePos.X) / glControl1.Width - 1.0f, -((2.0f * mousePos.Y) / glControl1.Height - 1.0f), -1.0f);
-
             Vector3 origin;
             Vector3 dir;
             if (!Orthographic)
@@ -564,7 +561,7 @@ namespace SMSSceneReader
             {
                 Vector3 CameraUnitVector = new Vector3((float)(Math.Cos(CameraRotation.X) * Math.Cos(CameraRotation.Y)),
                                                        (float)Math.Sin(CameraRotation.Y),
-                                                       (float)(Math.Sin(CameraRotation.X) * Math.Cos(CameraRotation.Y)));
+                                                       (float)(Math.Sin(CameraRotation.X) * Math.Cos(CameraRotation.Y)));//Unit vector in camera direction
 
                 float angle;
                 Vector3 axis;
@@ -585,8 +582,7 @@ namespace SMSSceneReader
                     float x = axis.X;
                     float y = axis.Y;
                     float z = axis.Z;
-                    Vector3 scaledmouse = normalizedmouse * OrthoZoom * new Vector3(glControl1.Width, glControl1.Height, 1f) / 2f;
-                    scaledmouse.Z = 0;
+                    Vector3 scaledmouse = normalizedmouse * OrthoZoom * new Vector3(glControl1.Width, glControl1.Height, 0f) / 2f;
 
                     Matrix3 rotmtx = new Matrix3(
                         new Vector3(    x * x * C + c,      x * y * C - z * s,  x * z * C + y * s   ),
@@ -941,7 +937,8 @@ namespace SMSSceneReader
             }
             else
             {
-                OrthoZoom += -e.Delta / 4800f;
+                
+                OrthoZoom *= (float)Math.Pow((double)1.1,Convert.ToDouble(-e.Delta/100));//To do: scale zoom according to distance.
                 if (OrthoZoom < 0.025)
                     OrthoZoom = 0.025f;
                 UpdateViewport();
@@ -977,13 +974,13 @@ namespace SMSSceneReader
                 if (e.KeyCode == Keys.ShiftKey)
                     LockKeyHeld = true;
             }
-            //if (e.KeyCode == Keys.G)
-            //{
-            //    Orthographic = !Orthographic;
-            //    UpdateViewport();
-            //    UpdateCamera();
-            //    glControl1.Refresh();
-            //}
+            if (e.KeyCode == Keys.G)
+            {
+                Orthographic = !Orthographic;
+                UpdateViewport();
+                UpdateCamera();
+                glControl1.Refresh();
+            }
         }
         private void glControl1_KeyUp(object sender, KeyEventArgs e)
         {

@@ -1,0 +1,5 @@
+PopoManager
+Character STRING
+Unknown1 INT
+Unknown2 INT
+Unknown3 INT

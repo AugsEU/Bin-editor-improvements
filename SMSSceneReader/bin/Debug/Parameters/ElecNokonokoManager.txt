@@ -1,0 +1,5 @@
+Electric Noko-Noko Manager
+Unknown STRING
+Unknown INT
+Unknown FLOAT
+Unknown FLOAT

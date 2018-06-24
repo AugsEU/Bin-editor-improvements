@@ -1,0 +1,14 @@
+Raccoon Dog
+X FLOAT
+Y FLOAT
+Z FLOAT
+Pitch FLOAT
+Yaw FLOAT
+Roll FLOAT
+Unknown FLOAT
+Unknown FLOAT
+Unknown FLOAT
+MManager STRING
+Unknown INT
+Manager STRING
+DisplayModel COMMENT raccoondog/tanuki.bmd

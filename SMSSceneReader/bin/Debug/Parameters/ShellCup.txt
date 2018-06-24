@@ -1,0 +1,13 @@
+Spinning Shell Ride
+X FLOAT
+Y FLOAT
+Z FLOAT
+Pitch FLOAT
+Yaw FLOAT
+Roll FLOAT
+Unknown FLOAT
+Unknown FLOAT
+Unknown FLOAT
+Unknown STRING
+CRASH INT
+Model STRING

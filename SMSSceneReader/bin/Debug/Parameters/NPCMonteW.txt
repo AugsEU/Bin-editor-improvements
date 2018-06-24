@@ -1,0 +1,16 @@
+NPC Pianta Female
+X FLOAT (null)
+Y FLOAT (null)
+Z FLOAT (null)
+Pitch FLOAT (null)
+Yaw FLOAT (null)
+Roll FLOAT (null)
+ScaleX FLOAT (null)
+ScaleY FLOAT (null)
+ScaleZ FLOAT (null)
+CharManager STRING (null)
+Unknown INT (null)
+Manager STRING (null)
+Rail STRING (null)
+ForceDrawMode COMMENT Both
+DisplayModel COMMENT montew/mow_model.bmd

@@ -1,0 +1,14 @@
+Bonus Stage Nail
+X FLOAT
+Y FLOAT
+Z FLOAT
+Pitch FLOAT
+Yaw FLOAT
+Roll FLOAT
+ScaleX FLOAT
+ScaleY FLOAT
+ScaleZ FLOAT
+Unknown STRING
+Unknown INT
+Model STRING
+DisplayModel COMMENT mapobj/kugi.bmd

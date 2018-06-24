@@ -1,0 +1,2 @@
+Effect Object Manager
+Default COMMENT true

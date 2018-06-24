@@ -436,6 +436,9 @@ namespace BMDReader
                                     LogicOp.CopyInverted, LogicOp.OrInverted, LogicOp.Nand, LogicOp.Set };
 
             Matrix4[] lastmatrixtable = null;
+            //GL.MatrixMode(MatrixMode.Projection);
+            //GL.LoadIdentity();
+            //GL.Ortho(-1.0, 1.0, -1.0, 1.0, -10.5, 10.5);
 
             foreach (Bmd.SceneGraphNode node in m_Model.SceneGraph)
             {
@@ -678,6 +681,7 @@ namespace BMDReader
                             Vector3 pos = m_Model.PositionArray[prim.PositionIndices[i]];
                             if ((prim.ArrayMask & (1 << 0)) != 0) Vector3.TransformPerspective(ref pos, ref mtxtable[prim.PosMatrixIndices[i]], out pos);
                             else Vector3.TransformPerspective(ref pos, ref mtxtable[0], out pos);
+                            
                             GL.Vertex3(pos);
                         }
 

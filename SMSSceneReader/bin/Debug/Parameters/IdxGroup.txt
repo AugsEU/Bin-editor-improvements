@@ -1,0 +1,3 @@
+IdxGroup
+ID INT (null)
+Default COMMENT true

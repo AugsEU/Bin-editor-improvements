@@ -1,0 +1,4 @@
+SamboHeadManager
+Name STRING (null)
+Unknown INT (null)
+Unknown FLOAT (null)

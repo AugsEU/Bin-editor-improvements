@@ -1,0 +1,10 @@
+Unknown
+X FLOAT
+Y FLOAT
+Z FLOAT
+Pitch FLOAT
+Yaw FLOAT
+Roll FLOAT
+Unknown INT
+Unknown INT
+Unknown INT

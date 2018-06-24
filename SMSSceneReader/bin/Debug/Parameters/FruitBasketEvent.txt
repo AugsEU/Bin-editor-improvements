@@ -1,0 +1,14 @@
+Fruit Basket
+X FLOAT
+Y FLOAT
+Z FLOAT
+Pitch FLOAT
+Yaw FLOAT
+Roll FLOAT
+Unknown FLOAT
+Unknown FLOAT
+Unknown FLOAT
+Unknown STRING
+Unknown INT
+Model STRING
+DisplayModel COMMENT mapobj/basket.bmd

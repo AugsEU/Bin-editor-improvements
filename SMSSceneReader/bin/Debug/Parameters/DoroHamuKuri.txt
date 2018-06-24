@@ -1,0 +1,16 @@
+﻿Theif Strollin Stu
+X FLOAT (null)
+Y FLOAT (null)
+Z FLOAT (null)
+Pitch FLOAT (null)
+Yaw FLOAT (null)
+Roll FLOAT (null)
+ScaleX FLOAT (null)
+ScaleY FLOAT (null)
+ScaleZ FLOAT (null)
+Manager STRING "ドロクリマネージャー キャラ"
+Unknown INT (null)
+Data STRING "ドロクリマネージャー"
+Rail STRING (null)
+Padding INT -1
+DisplayModel COMMENT dorokuri/dorokuri_model.bmd

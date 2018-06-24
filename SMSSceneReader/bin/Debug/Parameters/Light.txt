@@ -1,0 +1,10 @@
+Light
+X FLOAT (null)
+Y FLOAT (null)
+Z FLOAT (null)
+Red BYTE (null)
+Blue BYTE (null)
+Green BYTE (null)
+Alpha BYTE (null)
+Intensity? FLOAT (null)
+Default COMMENT true

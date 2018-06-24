@@ -1,0 +1,15 @@
+Coin
+X FLOAT (null)
+Y FLOAT (null)
+Z FLOAT (null)
+Pitch FLOAT (null)
+Yaw FLOAT (null)
+Roll FLOAT (null)
+ScaleX FLOAT (null)
+ScaleY FLOAT (null)
+ScaleZ FLOAT (null)
+Desc STRING "(null)"
+CRASH INT (null)
+Model STRING (null)
+Unknown INT (null)
+DisplayModel COMMENT mapobj/eggyoshi_normal.bmd

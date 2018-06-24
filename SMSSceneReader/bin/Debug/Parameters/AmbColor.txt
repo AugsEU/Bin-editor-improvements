@@ -1,0 +1,6 @@
+Ambient Color
+Red BYTE (null)
+Green BYTE (null)
+Blue BYTE (null)
+Alpha BYTE (null)
+Default COMMENT true

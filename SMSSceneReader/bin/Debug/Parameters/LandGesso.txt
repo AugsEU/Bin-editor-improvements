@@ -1,0 +1,16 @@
+LandGesso
+X FLOAT (null)
+Y FLOAT (null)
+Z FLOAT (null)
+Pitch FLOAT (null)
+Yaw FLOAT (null)
+Roll FLOAT (null)
+ScaleX FLOAT (null)
+ScaleY FLOAT (null)
+ScaleZ FLOAT (null)
+Manager STRING (null)
+Unknown INT (null)
+Model STRING (null)
+DisplayModel COMMENT rikugesso/geso_model1.bmd
+Rail STRING "(null)"
+Unknown INT (null)

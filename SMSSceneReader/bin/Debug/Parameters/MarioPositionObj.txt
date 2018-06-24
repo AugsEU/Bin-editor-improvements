@@ -1,0 +1,12 @@
+Mario Position Object
+Unknown STRING
+X INT
+Y FLOAT
+Z FLOAT
+Pitch INT
+Yaw INT
+Roll INT
+ScaleX FLOAT
+ScaleY FLOAT
+ScaleZ FLOAT
+Description STRING

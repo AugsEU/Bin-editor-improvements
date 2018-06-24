@@ -1,0 +1,16 @@
+HinoKuri2
+X FLOAT
+Y FLOAT
+Z FLOAT
+Pitch FLOAT
+Yaw FLOAT
+Roll FLOAT
+ScaleX FLOAT
+ScaleY FLOAT
+ScaleZ FLOAT
+Manager STRING
+Unknown INT
+Data STRING
+Rail STRING
+Padding INT
+DisplayModel COMMENT hinokuri2/hinokuri2_model.bmd

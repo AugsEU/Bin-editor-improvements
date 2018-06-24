@@ -1,0 +1,15 @@
+Palm Tree
+X FLOAT (null)
+Y FLOAT (null)
+Z FLOAT (null)
+Pitch FLOAT (null)
+Yaw FLOAT (null)
+Roll FLOAT (null)
+ScaleX FLOAT (null)
+ScaleY FLOAT (null)
+ScaleZ FLOAT (null)
+Desc STRING "(null)"
+Unknown INT (null)
+Model STRING (null)
+palmNormal COMMENT mapobj/palmnormal.bmd
+palmLeaf COMMENT mapobj/palmleaf.bmd

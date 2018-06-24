@@ -1,0 +1,14 @@
+FenceRevolve
+X FLOAT
+Y FLOAT
+Z FLOAT
+Pitch FLOAT
+Yaw FLOAT
+Roll FLOAT
+ScaleX FLOAT
+ScaleY FLOAT
+ScaleZ FLOAT
+Manager STRING
+Unknown INT
+Model STRING
+DisplayModel COMMENT mapobj/fence_revolve_outer.bmd
