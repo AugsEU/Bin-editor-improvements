@@ -1,0 +1,15 @@
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSManager\bin\Debug\SMSManager.exe.config
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSManager\bin\Debug\SMSManager.exe
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSManager\bin\Debug\SMSManager.pdb
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSManager\bin\Debug\BinReader.dll
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSManager\bin\Debug\BinReader.pdb
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSManager\obj\Debug\SMSManager.csprojResolveAssemblyReference.cache
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSManager\obj\Debug\SMSManager.AboutBox1.resources
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSManager\obj\Debug\SMSManager.Form1.resources
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSManager\obj\Debug\SMSManager.NewProjectWizard.resources
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSManager\obj\Debug\SMSManager.Properties.Resources.resources
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSManager\obj\Debug\SMSManager.Settings.resources
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSManager\obj\Debug\SMSManager.Translate_Buddy.resources
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSManager\obj\Debug\SMSManager.csproj.GenerateResource.Cache
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSManager\obj\Debug\SMSManager.exe
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSManager\obj\Debug\SMSManager.pdb

@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMSSceneReader", "SMSSceneReader\SMSSceneReader.csproj", "{B94A4DF8-A4B5-422B-AF7D-738DAE09A554}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMDReader", "BMDReader\BMDReader.csproj", "{9D96E82D-C8B7-4148-A902-B5C817862B3A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMSManager", "SMSManager\SMSManager.csproj", "{D1FD874C-5393-46F7-AD58-301B3F6E21DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SunEditor", "SunEditor\SunEditor.csproj", "{0F7DD344-CE54-4576-890C-E472558E4030}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinReader", "sms-binreader\BinReader.csproj", "{6EC26C32-4E84-40AC-BE5A-175D41CD59A5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B94A4DF8-A4B5-422B-AF7D-738DAE09A554}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B94A4DF8-A4B5-422B-AF7D-738DAE09A554}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B94A4DF8-A4B5-422B-AF7D-738DAE09A554}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B94A4DF8-A4B5-422B-AF7D-738DAE09A554}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D96E82D-C8B7-4148-A902-B5C817862B3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D96E82D-C8B7-4148-A902-B5C817862B3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D96E82D-C8B7-4148-A902-B5C817862B3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D96E82D-C8B7-4148-A902-B5C817862B3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1FD874C-5393-46F7-AD58-301B3F6E21DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1FD874C-5393-46F7-AD58-301B3F6E21DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1FD874C-5393-46F7-AD58-301B3F6E21DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1FD874C-5393-46F7-AD58-301B3F6E21DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F7DD344-CE54-4576-890C-E472558E4030}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F7DD344-CE54-4576-890C-E472558E4030}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F7DD344-CE54-4576-890C-E472558E4030}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F7DD344-CE54-4576-890C-E472558E4030}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EC26C32-4E84-40AC-BE5A-175D41CD59A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EC26C32-4E84-40AC-BE5A-175D41CD59A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EC26C32-4E84-40AC-BE5A-175D41CD59A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EC26C32-4E84-40AC-BE5A-175D41CD59A5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

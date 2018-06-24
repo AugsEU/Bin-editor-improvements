@@ -1,0 +1,5 @@
+<Name>
+Character STRING "(null)"
+Unknown1 INT (null)
+Unknown2 INT (null)
+Unknown3 INT (null)

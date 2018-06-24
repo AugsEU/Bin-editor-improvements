@@ -1,0 +1,15 @@
+﻿<Name>
+X FLOAT (null)
+Y FLOAT (null)
+Z FLOAT (null)
+Pitch FLOAT (null)
+Yaw FLOAT (null)
+Roll FLOAT (null)
+ScaleX FLOAT (null)
+ScaleY FLOAT (null)
+ScaleZ FLOAT (null)
+Manager STRING "(null)"
+Unknown INT (null)
+Data STRING "(null)"
+Rail STRING "(null)"
+Padding INT -1
