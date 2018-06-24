@@ -1,2 +1,0 @@
-Name Reference Group
-Default COMMENT true

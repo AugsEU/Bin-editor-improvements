@@ -1,5 +1,0 @@
-KinopioManager
-Name STRING
-Unknown INT
-Unknown FLOAT
-Unknown FLOAT

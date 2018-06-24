@@ -1,3 +1,0 @@
-Mirror Draw Buffer
-Unknown INT
-Unknown^2 INT

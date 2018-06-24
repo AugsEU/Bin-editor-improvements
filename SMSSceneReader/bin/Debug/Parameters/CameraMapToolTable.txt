@@ -1,2 +1,0 @@
-Camera Map Table
-Default COMMENT true

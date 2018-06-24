@@ -1,4 +1,0 @@
-Poison Chestnut ? Manager
-Character STRING (null)
-Unknown1 INT (null)
-Unknown2 INT (null)

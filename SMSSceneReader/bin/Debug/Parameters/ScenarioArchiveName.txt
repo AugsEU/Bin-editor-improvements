@@ -1,2 +1,0 @@
-Scenario Archive Name
-Name STRING

@@ -1,2 +1,0 @@
-Stream General Info Table
-Default COMMENT true

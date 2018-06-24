@@ -1,3 +1,0 @@
-Mario Scene Group
-ID INT (null)
-Default COMMENT true

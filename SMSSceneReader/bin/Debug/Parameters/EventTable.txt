@@ -1,2 +1,0 @@
-Event Table
-Default COMMENT true

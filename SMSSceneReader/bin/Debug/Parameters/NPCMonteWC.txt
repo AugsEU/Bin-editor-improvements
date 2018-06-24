@@ -1,4 +1,0 @@
-Unknown
-Unknown FLOAT "(null)"
-Unknown FLOAT (null)
-Unknown FLOAT (null)

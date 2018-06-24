@@ -1,5 +1,0 @@
-Item Manager
-Unknown STRING
-Unknown INT
-Unknown FLOAT
-Unknown FLOAT

@@ -1,3 +1,0 @@
-Unknown
-SoundName STRING "(null)"
-Default COMMENT true
