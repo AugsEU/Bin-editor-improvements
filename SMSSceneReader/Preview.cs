@@ -78,6 +78,9 @@ namespace SMSSceneReader
 
         private bool startedMoving = false;
 
+        /* Debug */
+        private Ray LastClick;
+
         private Point FormCenter
         {
             get
@@ -118,7 +121,7 @@ namespace SMSSceneReader
         List<Bmd> otherModels;  //Others
 
         /* Debug */
-        bool Debug_ShowLastMouse = false;
+        bool Debug_ShowLastMouse = true;
         Vector3 Debug_LastMouse;
 
         /* Preview */
@@ -333,8 +336,6 @@ namespace SMSSceneReader
             {
                 if (so.Key == go)
                 {
-                    if (Orthographic)
-                        CameraPosition = so.Value.ObjPosition / 10000f;
                     so.Value.Select();
                 }
                 else if (so.Value.Selected == true)
@@ -456,20 +457,11 @@ namespace SMSSceneReader
                 GL.Vertex3(originPosition);
                 GL.Vertex3(originPosition + new Vector3(0f, 0f, 100000f));
 
-                if (Debug_ShowLastMouse)
+                if (Debug_ShowLastMouse && LastClick != null)
                 {
-                    GL.Vertex3(Debug_LastMouse);
-                    GL.Vertex3(Debug_LastMouse + new Vector3(0f, 0f, 1000f));
-                    GL.Vertex3(Debug_LastMouse);
-                    GL.Vertex3(Debug_LastMouse + new Vector3(0f, 1000f, 0f));
-                    GL.Vertex3(Debug_LastMouse);
-                    GL.Vertex3(Debug_LastMouse + new Vector3(1000f, 0f, 0f));
-                    GL.Vertex3(Debug_LastMouse);
-                    GL.Vertex3(Debug_LastMouse + new Vector3(0f, 0f, -1000f));
-                    GL.Vertex3(Debug_LastMouse);
-                    GL.Vertex3(Debug_LastMouse + new Vector3(0f, -1000f, 0f));
-                    GL.Vertex3(Debug_LastMouse);
-                    GL.Vertex3(Debug_LastMouse + new Vector3(-1000f, 0f, 0f));
+                    GL.Color4(1f, 0.5f, 0f, 1f);
+                    GL.Vertex3(LastClick.Origin);
+                    GL.Vertex3(LastClick.Origin + 100000f * LastClick.Direction);
                 }
 
                 GL.End();
@@ -563,40 +555,17 @@ namespace SMSSceneReader
                                                        (float)Math.Sin(CameraRotation.Y),
                                                        (float)(Math.Sin(CameraRotation.X) * Math.Cos(CameraRotation.Y)));//Unit vector in camera direction
 
-                float angle;
-                Vector3 axis;
-                if (CameraUnitVector == new Vector3(0, 0, 1))
-                {
-                    angle = 0;
-                    axis = Vector3.Zero;
-                }
-                else {
-                    angle = Vector3.Dot(new Vector3(0, 0, 1), CameraUnitVector);
-                    axis = Vector3.Cross(new Vector3(0, 0, 1), CameraUnitVector).Normalized();
-                }
-
-                {
-                    float c = angle;
-                    float s = (float)Math.Sqrt(1 - Math.Pow(angle, 2));
-                    float C = 1 - angle;
-                    float x = axis.X;
-                    float y = axis.Y;
-                    float z = axis.Z;
-                    Vector3 scaledmouse = normalizedmouse * OrthoZoom * new Vector3(glControl1.Width, glControl1.Height, 0f) / 2f;
-
-                    Matrix3 rotmtx = new Matrix3(
-                        new Vector3(    x * x * C + c,      x * y * C - z * s,  x * z * C + y * s   ),
-                        new Vector3(    y * x * C + z * s,  y * y * C + c,      y * z * C - x * s   ),
-                        new Vector3(    z * x * C - y * s,  z * y * C + x * s,  z * z * C + c       ));
-
-                    normalizedmouse.Z = 0;
-                    origin = CameraPos + (10000f * -CameraUnitVector) + (scaledmouse * rotmtx);
-                }
-
+                Vector3 scaledmouse = normalizedmouse * OrthoZoom * new Vector3(glControl1.Width, glControl1.Height, 0f) / 2f;
+                Vector3 ScreenXBasis = new Vector3((float)(-Math.Sin(CameraRotation.X))
+                                                       ,0f
+                                                       ,(float)(Math.Cos(CameraRotation.X)));//Basis vector on the viewport plane. This one is flat on the y axis.
+                Vector3 ScreenYBasis = Vector3.Cross(ScreenXBasis, CameraUnitVector);
+                Vector3 ApparentCameraPos = CameraPos - 10000f * CameraUnitVector;
+                origin = scaledmouse.X* ScreenXBasis*1.415f + scaledmouse.Y*ScreenYBasis*1.415f + ApparentCameraPos;
                 dir = CameraUnitVector;
-            }
 
-            Debug_LastMouse = origin + (5000 * dir);
+            }
+            //LastClick = new Ray(origin, dir);//Debug
             return new Ray(origin, dir);
         }
 
@@ -816,105 +785,139 @@ namespace SMSSceneReader
                 UpdateCamera();
                 glControl1.Refresh();
             }
-            else if (e.Button == MouseButtons.Left)
+            else if (e.Button == MouseButtons.Left)//Drag
             {
-                Ray r = ScreenToRay(glControl1.PointToClient(Cursor.Position));
-
-                float num = Vector3.Dot(ClickPosition - CameraPos, ClickNormal);
-                float den = Vector3.Dot(r.Direction, ClickNormal);
-                float t = num / den;    //Distance from camera
-
-                Vector3 newpoint = CameraPos + (r.Direction * t);
-
-                if (LockKeyHeld || LockedAxis)
+                if (!Orthographic)
                 {
-                    Vector3 nY;
-                    Vector3 nX;
-                    float angle;
-                    Vector3 axis;
+                    Ray r = ScreenToRay(glControl1.PointToClient(Cursor.Position));
 
-                    if (ClickNormal == new Vector3(0, 0, 1))
+                    float num = Vector3.Dot(ClickPosition - CameraPos, ClickNormal);
+                    float den = Vector3.Dot(r.Direction, ClickNormal);
+                    float t = num / den;    //Distance from camera
+
+                    Vector3 newpoint = CameraPos + (r.Direction * t);
+
+                    if (LockKeyHeld || LockedAxis)
                     {
-                        angle = 0;
-                        axis = new Vector3(1,0,0);
-                    }
-                    else
-                    {
-                        angle = Vector3.Dot(new Vector3(0, 0, 1), ClickNormal);
-                        axis = Vector3.Cross(new Vector3(0, 0, 1), ClickNormal).Normalized();
-                    }
+                        Vector3 nY;
+                        Vector3 nX;
+                        float angle;
+                        Vector3 axis;
 
-                    if (angle != 0)
-                    {
-                        float c = angle;
-                        float s = (float)Math.Sqrt(1 - Math.Pow(angle, 2));
-                        float C = 1 - angle;
-                        float x = axis.X;
-                        float y = axis.Y;
-                        float z = axis.Z;
-
-                        Matrix3 rotmtx = new Matrix3(
-                            new Vector3(x * x * C + c, x * y * C - z * s, x * z * C + y * s),
-                            new Vector3(y * x * C + z * s, y * y * C + c, y * z * C - x * s),
-                            new Vector3(z * x * C - y * s, z * y * C + x * s, z * z * C + c));
-
-                        nX = rotmtx * new Vector3(1, 0, 0);
-                        nY = rotmtx * new Vector3(0, 1, 0);
-                    }
-                    else
-                    {
-                        nX = new Vector3(1, 0, 0);
-                        nY = new Vector3(0, 1, 0);
-                    }
-
-                    Vector3 pdif = (newpoint + ClickRelMouse) - ClickOrigin;
-                    float xdif = Vector3.Dot(pdif, nX);
-                    float ydif = Vector3.Dot(pdif, nY);
-
-                    if (LockedAxis)
-                        newpoint = (pdif * LastAxis.Direction) + LastAxis.Origin;
-                    else
-                    {
-                        if (xdif > ydif)
-                            LastAxis = new Ray(ClickOrigin, nX);
+                        if (ClickNormal == new Vector3(0, 0, 1))
+                        {
+                            angle = 0;
+                            axis = new Vector3(1, 0, 0);
+                        }
                         else
-                            LastAxis = new Ray(ClickOrigin, nY);
+                        {
+                            angle = Vector3.Dot(new Vector3(0, 0, 1), ClickNormal);
+                            axis = Vector3.Cross(new Vector3(0, 0, 1), ClickNormal).Normalized();
+                        }
 
-                        LockedAxis = true;
+                        if (angle != 0)
+                        {
+                            float c = angle;
+                            float s = (float)Math.Sqrt(1 - Math.Pow(angle, 2));
+                            float C = 1 - angle;
+                            float x = axis.X;
+                            float y = axis.Y;
+                            float z = axis.Z;
+
+                            Matrix3 rotmtx = new Matrix3(
+                                new Vector3(x * x * C + c, x * y * C - z * s, x * z * C + y * s),
+                                new Vector3(y * x * C + z * s, y * y * C + c, y * z * C - x * s),
+                                new Vector3(z * x * C - y * s, z * y * C + x * s, z * z * C + c));
+
+                            nX = rotmtx * new Vector3(1, 0, 0);
+                            nY = rotmtx * new Vector3(0, 1, 0);
+                        }
+                        else
+                        {
+                            nX = new Vector3(1, 0, 0);
+                            nY = new Vector3(0, 1, 0);
+                        }
+
+                        Vector3 pdif = (newpoint + ClickRelMouse) - ClickOrigin;
+                        float xdif = Vector3.Dot(pdif, nX);
+                        float ydif = Vector3.Dot(pdif, nY);
+
+                        if (LockedAxis)
+                            newpoint = (pdif * LastAxis.Direction) + LastAxis.Origin;
+                        else
+                        {
+                            if (xdif > ydif)
+                                LastAxis = new Ray(ClickOrigin, nX);
+                            else
+                                LastAxis = new Ray(ClickOrigin, nY);
+
+                            LockedAxis = true;
+                        }
                     }
-                }
-                if (!ClickRail)
-                {
-                    if (!startedMoving)
+                    if (!ClickRail)
                     {
-                        startedMoving = true;
-                        mainForm.CreateUndoSnapshot();
-                        mainForm.Changed = true;
+                        if (!startedMoving)
+                        {
+                            startedMoving = true;
+                            mainForm.CreateUndoSnapshot();
+                            mainForm.Changed = true;
+                        }
+
+                        GameObject[] selected = GetSelectedObjects();
+                        //Update all selected objects
+                        foreach (GameObject go in selected)
+                        {
+                            ObjectParameters op = new ObjectParameters();
+                            op.ReadObjectParameters(go);
+                            Vector3 n = newpoint + ClickRelMouse;
+                            op.SetParamValue("X", go, n.X.ToString());
+                            op.SetParamValue("Y", go, n.Y.ToString());
+                            op.SetParamValue("Z", go, n.Z.ToString());
+
+                            UpdateObject(go);
+
+                            DidMove = true;
+                        }
                     }
-
-                    GameObject[] selected = GetSelectedObjects();
-                    //Update all selected objects
-                    foreach (GameObject go in selected)
+                    else
                     {
-                        ObjectParameters op = new ObjectParameters();
-                        op.ReadObjectParameters(go);
-                        Vector3 n = newpoint + ClickRelMouse;
-                        op.SetParamValue("X", go, n.X.ToString());
-                        op.SetParamValue("Y", go, n.Y.ToString());
-                        op.SetParamValue("Z", go, n.Z.ToString());
-
-                        UpdateObject(go);
-
-                        DidMove = true;
+                        rails.GetRail(SelectedRail).frames[SelectedFrame].x = (short)(ClickOrigin.X + (short)ClickRelMouse.X);
+                        rails.GetRail(SelectedRail).frames[SelectedFrame].y = (short)(ClickOrigin.Y + (short)ClickRelMouse.Y);
+                        rails.GetRail(SelectedRail).frames[SelectedFrame].z = (short)(ClickOrigin.Z + (short)ClickRelMouse.Z);
+                        mainForm.UpdateRailForm(SelectedRail, SelectedFrame);
                     }
                 }
                 else
                 {
-                    rails.GetRail(SelectedRail).frames[SelectedFrame].x = (short)(ClickOrigin.X + (short)ClickRelMouse.X);
-                    rails.GetRail(SelectedRail).frames[SelectedFrame].y = (short)(ClickOrigin.Y + (short)ClickRelMouse.Y);
-                    rails.GetRail(SelectedRail).frames[SelectedFrame].z = (short)(ClickOrigin.Z + (short)ClickRelMouse.Z);
-                    mainForm.UpdateRailForm(SelectedRail, SelectedFrame);
+                    Ray ClickLine = ScreenToRay(glControl1.PointToClient(Cursor.Position));
+                    Vector3 CameraUnitVector = new Vector3((float)(Math.Cos(CameraRotation.X) * Math.Cos(CameraRotation.Y)),
+                                                           (float)Math.Sin(CameraRotation.Y),
+                                                           (float)(Math.Sin(CameraRotation.X) * Math.Cos(CameraRotation.Y)));//Unit vector in camera direction. Also normal vector to plane of movement.
+                    GameObject[] selected = GetSelectedObjects();
+                    if(selected.Length != 0)
+                    {
+                        ObjectParameters op = new ObjectParameters();
+                        op.ReadObjectParameters(selected[0]);
+
+                        float x = 0f;
+                        float y = 0f;
+                        float z = 0f;
+
+                        float.TryParse(op.GetParamValue("X", selected[0]), out x);
+                        float.TryParse(op.GetParamValue("Y", selected[0]), out y);
+                        float.TryParse(op.GetParamValue("Z", selected[0]), out z);
+
+                        Vector3 ObjectPosition = new Vector3(x,y,z);
+                        float t = Vector3.Dot(CameraUnitVector, ObjectPosition - ClickLine.Origin) / Vector3.Dot(CameraUnitVector, ClickLine.Direction);//Parameter for our line. This is in the form r=u+t*v where r,u, and v are vectors. and t is the scalar. This formula is from solving the vector eqn.
+                        Vector3 OutputPosition = ClickLine.Origin + t * ClickLine.Direction;
+                        op.SetParamValue("X", selected[0], OutputPosition.X.ToString());
+                        op.SetParamValue("Y", selected[0], OutputPosition.Y.ToString());
+                        op.SetParamValue("Z", selected[0], OutputPosition.Z.ToString());
+                        UpdateObject(selected[0]);
+                    }
+                    
                 }
+
                 glControl1.Invalidate();
             }
         }
