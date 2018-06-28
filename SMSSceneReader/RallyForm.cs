@@ -123,14 +123,6 @@ namespace SMSRallyEditor
             u6UpDown.Value = rp.connections[5];
             u7UpDown.Value = rp.connections[6];
             u8UpDown.Value = rp.connections[7];
-            u9UpDown.Value = (decimal)rp.periods[0];
-            u10UpDown.Value = (decimal)rp.periods[1];
-            u11UpDown.Value = (decimal)rp.periods[2];
-            u12UpDown.Value = (decimal)rp.periods[3];
-            u13UpDown.Value = (decimal)rp.periods[4];
-            u14UpDown.Value = (decimal)rp.periods[5];
-            u15UpDown.Value = (decimal)rp.periods[6];
-            u16UpDown.Value = (decimal)rp.periods[7];
         }
 
         private void applyButton_Click(object sender, EventArgs e)
@@ -154,14 +146,13 @@ namespace SMSRallyEditor
             rp.connections[5] = (short)u6UpDown.Value;
             rp.connections[6] = (short)u7UpDown.Value;
             rp.connections[7] = (short)u8UpDown.Value;
-            rp.periods[0] = (float)u9UpDown.Value;
-            rp.periods[1] = (float)u10UpDown.Value;
-            rp.periods[2] = (float)u11UpDown.Value;
-            rp.periods[3] = (float)u12UpDown.Value;
-            rp.periods[4] = (float)u13UpDown.Value;
-            rp.periods[5] = (float)u14UpDown.Value;
-            rp.periods[6] = (float)u15UpDown.Value;
-            rp.periods[7] = (float)u16UpDown.Value;
+            for(int i = 0;i < rp.periods.Length;i++)//Calculate distance values
+            {
+                Vector rpPosition = new Vector(rp.x, rp.y, rp.z);
+                KeyFrame ConnectedFrame = file.GetAllRails()[listBox2.SelectedIndex].frames[rp.connections[i]];
+                Vector ConnectionDisplacement = new Vector(rp.x - ConnectedFrame.x, rp.y - ConnectedFrame.y, rp.z - ConnectedFrame.z);
+                rp.periods[i] = ConnectionDisplacement.Length;
+            }
             file.GetAllRails()[listBox1.SelectedIndex].frames[listBox2.SelectedIndex] = rp;
         }
 
@@ -241,48 +232,31 @@ namespace SMSRallyEditor
             u7UpDown.Enabled = false;
             u8UpDown.Enabled = false;
 
-            u9UpDown.Enabled = false;
-            u10UpDown.Enabled = false;
-            u11UpDown.Enabled = false;
-            u12UpDown.Enabled = false;
-            u13UpDown.Enabled = false;
-            u14UpDown.Enabled = false;
-            u15UpDown.Enabled = false;
-            u16UpDown.Enabled = false;
-
             switch ((int)u1UpDown.Value)
             {
                 case 8:
                     u8UpDown.Enabled = true;
-                    u16UpDown.Enabled = true;
                     goto case 7;
                 case 7:
                     u7UpDown.Enabled = true;
-                    u15UpDown.Enabled = true;
                     goto case 6;
                 case 6:
                     u6UpDown.Enabled = true;
-                    u14UpDown.Enabled = true;
                     goto case 5;
                 case 5:
                     u5UpDown.Enabled = true;
-                    u13UpDown.Enabled = true;
                     goto case 4;
                 case 4:
                     u4UpDown.Enabled = true;
-                    u12UpDown.Enabled = true;
                     goto case 3;
                 case 3:
                     u3UpDown.Enabled = true;
-                    u11UpDown.Enabled = true;
                     goto case 2;
                 case 2:
                     endUpDown.Enabled = true;
-                    u10UpDown.Enabled = true;
                     goto case 1;
                 case 1:
                     startUpDown.Enabled = true;
-                    u9UpDown.Enabled = true;
                     break;
             }
         }
@@ -347,5 +321,6 @@ namespace SMSRallyEditor
             }
             listBox2.SelectedIndex = OldFrameIndex;
         }
+
     }
 }
