@@ -31,3 +31,4 @@ C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\obj\Debug\SMSSceneReader.csproj.GenerateResource.Cache
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\BinReader.dll
 C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\bin\Debug\BinReader.pdb
+C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\SMSSceneReader\obj\Debug\SMSRallyEditor.VectorInput.resources

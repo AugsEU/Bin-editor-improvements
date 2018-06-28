@@ -63,8 +63,6 @@ namespace SMSRallyEditor
             listBox1.Enabled = value;
             listBox2.Enabled = value;
             applyButton.Enabled = value;
-            button1.Enabled = value;
-            button2.Enabled = value;
         }
 
         private void UpdateItems()
@@ -287,6 +285,67 @@ namespace SMSRallyEditor
                     u9UpDown.Enabled = true;
                     break;
             }
+        }
+
+        private void DupBtn_Click(object sender, EventArgs e)
+        {
+            int DuplicationIndex = listBox1.SelectedIndex;//Index of rail to duplicate;
+            int OutputIndex = listBox1.Items.Count; //Index of duplicated rail.
+            if (DuplicationIndex == -1 || listBox1.Items.Count == 0)//Make sure indicies make sense
+                return;
+
+            NameCheck nc = new NameCheck("New Rail");
+            if (nc.ShowDialog() != DialogResult.OK)//Cancel if no name is put in.
+                return;
+
+            if (file.ContainsRail(nc.name))//Check rail name
+            {
+                MessageBox.Show("There is already a path with this key name", "Key taken", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+            else if(nc.Name == "")
+            {
+                MessageBox.Show("Invalid name", "Too short", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            file.AddRail(nc.name); //Add rail
+            UpdateItems();//Update
+
+            
+            for(int i = 0; i < file.GetAllRails()[DuplicationIndex].frames.Length;i++)//For each frame
+            {
+                KeyFrame rp = file.GetAllRails()[DuplicationIndex].frames[i];//Keyframe = node
+                file.GetAllRails()[OutputIndex].InsertFrame(rp, i);//add node to file
+            }
+
+            UpdateItems();//Update
+            listBox2.SelectedIndex = 0;
+            listBox1.SelectedIndex = OutputIndex;
+        }
+
+        private void TranslateBtn_Click(object sender, EventArgs e)
+        {
+            int RailIndex = listBox1.SelectedIndex;//Index of rail we are translating
+            int OldFrameIndex = listBox2.SelectedIndex;//Store this so we can set the selected index back at the end
+            if (RailIndex == -1 || listBox1.Items.Count == 0)//Make sure indicies make sense
+                return;
+
+            VectorInput VectorInput = new VectorInput();
+            if (VectorInput.ShowDialog() != DialogResult.OK)//Cancel if no vector is put in.
+                return;
+
+
+            for (int i = 0; i < file.GetAllRails()[RailIndex].frames.Length; i++)
+            {
+                KeyFrame FrameToEdit = file.GetAllRails()[RailIndex].frames[i];
+                FrameToEdit.x += (short)VectorInput.X;
+                FrameToEdit.y += (short)VectorInput.Y;
+                FrameToEdit.z += (short)VectorInput.Z;//Translate
+                file.GetAllRails()[RailIndex].frames[i] = FrameToEdit;
+                UpdateRails(RailIndex, i);
+            }
+            listBox2.SelectedIndex = OldFrameIndex;
         }
     }
 }

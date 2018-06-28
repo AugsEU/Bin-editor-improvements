@@ -37,7 +37,6 @@
             this.listBox2 = new System.Windows.Forms.ListBox();
             this.remButton2 = new System.Windows.Forms.Button();
             this.addButton2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.xUpDown = new System.Windows.Forms.NumericUpDown();
             this.yUpDown = new System.Windows.Forms.NumericUpDown();
@@ -71,8 +70,6 @@
             this.label16 = new System.Windows.Forms.Label();
             this.u4UpDown = new System.Windows.Forms.NumericUpDown();
             this.u3UpDown = new System.Windows.Forms.NumericUpDown();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.label17 = new System.Windows.Forms.Label();
             this.u12UpDown = new System.Windows.Forms.NumericUpDown();
             this.label18 = new System.Windows.Forms.Label();
@@ -92,6 +89,9 @@
             this.label25 = new System.Windows.Forms.Label();
             this.u16UpDown = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.DupBtn = new System.Windows.Forms.Button();
+            this.TranslateBtn = new System.Windows.Forms.Button();
+            this.PLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.xUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.zUpDown)).BeginInit();
@@ -132,14 +132,14 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(13, 13);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(178, 303);
+            this.listBox1.Size = new System.Drawing.Size(178, 264);
             this.listBox1.TabIndex = 0;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // addButton
             // 
             this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.addButton.Location = new System.Drawing.Point(116, 324);
+            this.addButton.Location = new System.Drawing.Point(116, 291);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(75, 23);
             this.addButton.TabIndex = 2;
@@ -150,7 +150,7 @@
             // remButton
             // 
             this.remButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.remButton.Location = new System.Drawing.Point(13, 324);
+            this.remButton.Location = new System.Drawing.Point(13, 291);
             this.remButton.Name = "remButton";
             this.remButton.Size = new System.Drawing.Size(75, 23);
             this.remButton.TabIndex = 1;
@@ -161,7 +161,7 @@
             // applyButton
             // 
             this.applyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.applyButton.Location = new System.Drawing.Point(632, 324);
+            this.applyButton.Location = new System.Drawing.Point(301, 324);
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(75, 23);
             this.applyButton.TabIndex = 34;
@@ -201,17 +201,6 @@
             this.addButton2.Text = "Insert";
             this.addButton2.UseVisualStyleBackColor = true;
             this.addButton2.Click += new System.EventHandler(this.addButton2_Click);
-            // 
-            // button3
-            // 
-            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button3.Enabled = false;
-            this.button3.Location = new System.Drawing.Point(197, 324);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(179, 23);
-            this.button3.TabIndex = 999;
-            this.button3.TabStop = false;
-            this.button3.UseVisualStyleBackColor = true;
             // 
             // saveFileDialog1
             // 
@@ -371,9 +360,9 @@
             this.label5.BackColor = System.Drawing.SystemColors.Control;
             this.label5.Location = new System.Drawing.Point(382, 117);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(13, 13);
+            this.label5.Size = new System.Drawing.Size(32, 13);
             this.label5.TabIndex = 18;
-            this.label5.Text = "?";
+            this.label5.Text = "Flags";
             // 
             // label6
             // 
@@ -627,31 +616,10 @@
             this.u3UpDown.Size = new System.Drawing.Size(115, 20);
             this.u3UpDown.TabIndex = 20;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(279, 280);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(19, 20);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "▲";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(279, 300);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(19, 20);
-            this.button2.TabIndex = 7;
-            this.button2.Text = "▼";
-            this.button2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(547, 194);
+            this.label17.Location = new System.Drawing.Point(547, 221);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(20, 13);
             this.label17.TabIndex = 51;
@@ -660,7 +628,7 @@
             // u12UpDown
             // 
             this.u12UpDown.DecimalPlaces = 3;
-            this.u12UpDown.Location = new System.Drawing.Point(591, 192);
+            this.u12UpDown.Location = new System.Drawing.Point(591, 219);
             this.u12UpDown.Maximum = new decimal(new int[] {
             -1,
             -1,
@@ -678,7 +646,7 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(547, 168);
+            this.label18.Location = new System.Drawing.Point(547, 195);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(20, 13);
             this.label18.TabIndex = 49;
@@ -687,7 +655,7 @@
             // u11UpDown
             // 
             this.u11UpDown.DecimalPlaces = 3;
-            this.u11UpDown.Location = new System.Drawing.Point(591, 166);
+            this.u11UpDown.Location = new System.Drawing.Point(591, 193);
             this.u11UpDown.Maximum = new decimal(new int[] {
             -1,
             -1,
@@ -705,7 +673,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(547, 142);
+            this.label19.Location = new System.Drawing.Point(547, 169);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(20, 13);
             this.label19.TabIndex = 47;
@@ -714,7 +682,7 @@
             // u10UpDown
             // 
             this.u10UpDown.DecimalPlaces = 3;
-            this.u10UpDown.Location = new System.Drawing.Point(591, 140);
+            this.u10UpDown.Location = new System.Drawing.Point(591, 167);
             this.u10UpDown.Maximum = new decimal(new int[] {
             -1,
             -1,
@@ -732,7 +700,7 @@
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(547, 116);
+            this.label20.Location = new System.Drawing.Point(547, 143);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(20, 13);
             this.label20.TabIndex = 45;
@@ -750,7 +718,7 @@
             // u9UpDown
             // 
             this.u9UpDown.DecimalPlaces = 3;
-            this.u9UpDown.Location = new System.Drawing.Point(591, 114);
+            this.u9UpDown.Location = new System.Drawing.Point(591, 141);
             this.u9UpDown.Maximum = new decimal(new int[] {
             -1,
             0,
@@ -780,7 +748,7 @@
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(547, 220);
+            this.label22.Location = new System.Drawing.Point(547, 247);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(20, 13);
             this.label22.TabIndex = 53;
@@ -789,7 +757,7 @@
             // u13UpDown
             // 
             this.u13UpDown.DecimalPlaces = 3;
-            this.u13UpDown.Location = new System.Drawing.Point(591, 218);
+            this.u13UpDown.Location = new System.Drawing.Point(591, 245);
             this.u13UpDown.Maximum = new decimal(new int[] {
             -1,
             -1,
@@ -807,7 +775,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(547, 272);
+            this.label23.Location = new System.Drawing.Point(547, 299);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(20, 13);
             this.label23.TabIndex = 57;
@@ -816,7 +784,7 @@
             // u15UpDown
             // 
             this.u15UpDown.DecimalPlaces = 3;
-            this.u15UpDown.Location = new System.Drawing.Point(591, 270);
+            this.u15UpDown.Location = new System.Drawing.Point(591, 297);
             this.u15UpDown.Maximum = new decimal(new int[] {
             -1,
             -1,
@@ -834,7 +802,7 @@
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(547, 246);
+            this.label24.Location = new System.Drawing.Point(547, 273);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(20, 13);
             this.label24.TabIndex = 55;
@@ -843,7 +811,7 @@
             // u14UpDown
             // 
             this.u14UpDown.DecimalPlaces = 3;
-            this.u14UpDown.Location = new System.Drawing.Point(591, 244);
+            this.u14UpDown.Location = new System.Drawing.Point(591, 271);
             this.u14UpDown.Maximum = new decimal(new int[] {
             -1,
             -1,
@@ -861,7 +829,7 @@
             // label25
             // 
             this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(547, 298);
+            this.label25.Location = new System.Drawing.Point(547, 325);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(20, 13);
             this.label25.TabIndex = 59;
@@ -870,7 +838,7 @@
             // u16UpDown
             // 
             this.u16UpDown.DecimalPlaces = 3;
-            this.u16UpDown.Location = new System.Drawing.Point(591, 296);
+            this.u16UpDown.Location = new System.Drawing.Point(591, 323);
             this.u16UpDown.Maximum = new decimal(new int[] {
             -1,
             -1,
@@ -898,11 +866,45 @@
             this.numericUpDown1.Size = new System.Drawing.Size(50, 20);
             this.numericUpDown1.TabIndex = 13;
             // 
+            // DupBtn
+            // 
+            this.DupBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.DupBtn.Location = new System.Drawing.Point(12, 324);
+            this.DupBtn.Name = "DupBtn";
+            this.DupBtn.Size = new System.Drawing.Size(75, 23);
+            this.DupBtn.TabIndex = 60;
+            this.DupBtn.Text = "Duplicate";
+            this.DupBtn.UseVisualStyleBackColor = true;
+            this.DupBtn.Click += new System.EventHandler(this.DupBtn_Click);
+            // 
+            // TranslateBtn
+            // 
+            this.TranslateBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.TranslateBtn.Location = new System.Drawing.Point(116, 324);
+            this.TranslateBtn.Name = "TranslateBtn";
+            this.TranslateBtn.Size = new System.Drawing.Size(75, 23);
+            this.TranslateBtn.TabIndex = 61;
+            this.TranslateBtn.Text = "Translate";
+            this.TranslateBtn.UseVisualStyleBackColor = true;
+            this.TranslateBtn.Click += new System.EventHandler(this.TranslateBtn_Click);
+            // 
+            // PLabel
+            // 
+            this.PLabel.AutoSize = true;
+            this.PLabel.Location = new System.Drawing.Point(547, 117);
+            this.PLabel.Name = "PLabel";
+            this.PLabel.Size = new System.Drawing.Size(129, 13);
+            this.PLabel.TabIndex = 62;
+            this.PLabel.Text = "Node distances(Optional):";
+            // 
             // RallyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(719, 358);
+            this.Controls.Add(this.PLabel);
+            this.Controls.Add(this.TranslateBtn);
+            this.Controls.Add(this.DupBtn);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.label25);
             this.Controls.Add(this.u16UpDown);
@@ -922,8 +924,6 @@
             this.Controls.Add(this.label21);
             this.Controls.Add(this.u9UpDown);
             this.Controls.Add(this.u8UpDown);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.u7UpDown);
             this.Controls.Add(this.label13);
@@ -956,7 +956,6 @@
             this.Controls.Add(this.zUpDown);
             this.Controls.Add(this.yUpDown);
             this.Controls.Add(this.xUpDown);
-            this.Controls.Add(this.button3);
             this.Controls.Add(this.remButton2);
             this.Controls.Add(this.addButton2);
             this.Controls.Add(this.listBox2);
@@ -1012,7 +1011,6 @@
         public System.Windows.Forms.ListBox listBox2;
         private System.Windows.Forms.Button remButton2;
         private System.Windows.Forms.Button addButton2;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.NumericUpDown xUpDown;
         private System.Windows.Forms.NumericUpDown yUpDown;
@@ -1046,8 +1044,6 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.NumericUpDown u4UpDown;
         private System.Windows.Forms.NumericUpDown u3UpDown;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.NumericUpDown u12UpDown;
         private System.Windows.Forms.Label label18;
@@ -1067,6 +1063,9 @@
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.NumericUpDown u16UpDown;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.Button DupBtn;
+        private System.Windows.Forms.Button TranslateBtn;
+        private System.Windows.Forms.Label PLabel;
     }
 }
 

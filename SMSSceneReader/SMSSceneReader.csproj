@@ -164,6 +164,12 @@
     <Compile Include="Translate Buddy.Designer.cs">
       <DependentUpon>Translate Buddy.cs</DependentUpon>
     </Compile>
+    <Compile Include="VectorInput.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VectorInput.Designer.cs">
+      <DependentUpon>VectorInput.cs</DependentUpon>
+    </Compile>
     <Compile Include="WarpEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -229,6 +235,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Translate Buddy.resx">
       <DependentUpon>Translate Buddy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VectorInput.resx">
+      <DependentUpon>VectorInput.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WarpEdit.resx">
       <DependentUpon>WarpEdit.cs</DependentUpon>
