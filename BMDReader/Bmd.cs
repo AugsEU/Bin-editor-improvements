@@ -989,6 +989,8 @@ namespace BMDReader
                                                 byte b = fb.Reader.ReadByte();
 
                                                 int outp = (((by + y) * width) + (bx + x));
+                                                if ( outp >= image.Length)
+                                                    goto OutOfTexSwitch;//Used a go to, sue me.
                                                 image[outp++] = (byte)((b & 0xF0) | (b >> 4));
                                                 image[outp  ] = (byte)((b << 4) | (b & 0x0F));
                                             }
@@ -1013,6 +1015,8 @@ namespace BMDReader
                                                 byte b = fb.Reader.ReadByte();
 
                                                 int outp = (((by + y) * width) + (bx + x));
+                                                if ( outp >= image.Length)
+                                                    goto OutOfTexSwitch;//Used a go to, sue me.
                                                 image[outp] = b;
                                             }
                                         }
@@ -1036,6 +1040,8 @@ namespace BMDReader
                                                 byte b = fb.Reader.ReadByte();
 
                                                 int outp = (((by + y) * width) + (bx + x)) * 2;
+                                                if ( outp >= image.Length)
+                                                    goto OutOfTexSwitch;//Used a go to, sue me.
                                                 image[outp++] = (byte)((b << 4) | (b & 0x0F));
                                                 image[outp  ] = (byte)((b & 0xF0) | (b >> 4));
                                             }
@@ -1061,6 +1067,8 @@ namespace BMDReader
                                                 byte l = fb.Reader.ReadByte();
 
                                                 int outp = (((by + y) * width) + (bx + x)) * 2;
+                                                if ( outp >= image.Length)
+                                                    goto OutOfTexSwitch;//Used a go to, sue me.
                                                 image[outp++] = l;
                                                 image[outp  ] = a;
                                             }
@@ -1085,6 +1093,8 @@ namespace BMDReader
                                                 ushort col = fb.Reader.ReadUInt16();
 
                                                 int outp = (((by + y) * width) + (bx + x)) * 4;
+                                                if ( outp >= image.Length)
+                                                    goto OutOfTexSwitch;//Used a go to, sue me.
                                                 image[outp++] = (byte)(((col & 0x001F) << 3) | ((col & 0x001F) >> 2));
                                                 image[outp++] = (byte)(((col & 0x07E0) >> 3) | ((col & 0x07E0) >> 8));
                                                 image[outp++] = (byte)(((col & 0xF800) >> 8) | ((col & 0xF800) >> 13));
@@ -1101,6 +1111,9 @@ namespace BMDReader
                             {
                                 image = new byte[width * height * 4];
 
+                                for (int bicycle = 0; bicycle < image.Length; bicycle++)
+                                    image[bicycle] = 3;
+
                                 for (int by = 0; by < height; by += 4)
                                 {
                                     for (int bx = 0; bx < width; bx += 4)
@@ -1112,6 +1125,8 @@ namespace BMDReader
                                                 byte r, g, b, a;
                                                 ushort srcPixel = fb.Reader.ReadUInt16();
                                                 int outp = (((by + y) * width) + (bx + x)) * 4;
+                                                if ( outp >= image.Length)
+                                                    goto OutOfTexSwitch;//Used a go to, sue me.
                                                 if ((srcPixel & 0x8000) == 0x8000)
                                                 {
                                                     r = (byte)((srcPixel & 0x7c00) >> 10);
@@ -1143,7 +1158,7 @@ namespace BMDReader
                                                 image[outp++] = r;
                                                 image[outp++] = g;
                                                 image[outp++] = b;
-                                                image[outp] = a;
+                                                image[outp  ] = a;
                                             }
                                         }
                                     }
@@ -1169,6 +1184,8 @@ namespace BMDReader
                                                     byte a = fb.Reader.ReadByte();
                                                     byte r = fb.Reader.ReadByte();
                                                     int outp = (((by + y) * width) + (bx + x)) * 4;
+                                                    if ( outp >= image.Length)
+                                                        goto OutOfTexSwitch;//Used a go to, sue me.
                                                     image[outp + 0] = r;
                                                     image[outp + 3] = a;
                                                 }
@@ -1183,6 +1200,8 @@ namespace BMDReader
                                                     byte g = fb.Reader.ReadByte();
                                                     byte b = fb.Reader.ReadByte();
                                                     int outp = (((by + y) * width) + (bx + x)) * 4;
+                                                    if ( outp >= image.Length)
+                                                        goto OutOfTexSwitch;//Used a go to, sue me.
                                                     image[outp + 1] = g;
                                                     image[outp + 2] = b;
                                                 }
@@ -1247,6 +1266,9 @@ namespace BMDReader
                                                     {
                                                         int c = (int)(block >> 30);
                                                         int outp = (((by + sby + y) * width) + (bx + sbx + x)) * 4;
+                                                        if ( outp >= image.Length)
+                                                            goto OutOfTexSwitch;//Used a go to, sue me.
+
                                                         image[outp++] = (byte)(colors[c, 3] | (colors[c, 3] >> 5));
                                                         image[outp++] = (byte)(colors[c, 2] | (colors[c, 2] >> 5));
                                                         image[outp++] = (byte)(colors[c, 1] | (colors[c, 1] >> 5));
@@ -1260,6 +1282,8 @@ namespace BMDReader
                                 }
                             }
                             break;
+
+
 
                         default: throw new NotImplementedException("Bmd: unsupported texture format " + tex.Format.ToString());
                     }
@@ -1299,6 +1323,7 @@ namespace BMDReader
                     }
                     lol.Save("loltex/vanish" + lolz.ToString() + "_" + i.ToString() + "_mip" + mip.ToString() + ".png", System.Drawing.Imaging.ImageFormat.Png);
 #endif
+                    OutOfTexSwitch:
 
                     tex.Image[mip] = image;
                     width /= 2; height /= 2;

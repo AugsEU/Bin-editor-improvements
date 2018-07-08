@@ -24,26 +24,26 @@ namespace SMSReader
             UInt32 sectioncount;
 
             fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-            fs.Read(tag, 0, 4);
+            fs.Read(tag, 0, 4);//Read the file tag at the start, j3dview
 
-            if ((char)tag[0] != 'J' || (char)tag[1] != '3' || (char)tag[2] != 'D')
-                throw new FileLoadException("Not a valid bmd file type.");
+            if ((char)tag[0] != 'J' || (char)tag[1] != '3' || (char)tag[2] != 'D')//Check file tag
+                throw new FileLoadException("Not a valid bck file.");
 
-            fs.Read(type, 0, 4);
+            fs.Read(type, 0, 4);//Read file type should be bck1
 
-            if ((char)type[0] != 'b' || (char)type[1] != 'c' || (char)type[2] != 'k' || (char)type[3] != '1')
+            if ((char)type[0] != 'b' || (char)type[1] != 'c' || (char)type[2] != 'k' || (char)type[3] != '1')//Check
                 throw new FileLoadException("Not an animation file.");
 
-            size = Data.ReadUInt32(fs);
+            size = Data.ReadUInt32(fs);//Get size of file by reading it from the file header
 
-            if (size != fs.Length)
+            if (size != fs.Length)//Check if this matches the real file size
                 Console.WriteLine("Bck: Inconsistent file size.");
 
-            sectioncount = Data.ReadUInt32(fs);
+            sectioncount = Data.ReadUInt32(fs);//Read the next 4 bytes as integer. This gives the total number of sections.
 
-            fs.Seek(16, SeekOrigin.Current);
+            fs.Seek(16, SeekOrigin.Current);//skip buffer
 
-            for (int i = 0; i < sectioncount; i++)
+            for (int i = 0; i < sectioncount; i++)//Get sections
                 sections.Add(BckSection.LoadSection(fs));
             fs.Close();
         }
@@ -59,13 +59,13 @@ namespace SMSReader
 
     public class BckSection
     {
-        string magic;
-        UInt32 size;
+        string magic;//section tag, we want ank1
+        UInt32 size;//total size of section(including header), in bytes
 
         public static BckSection LoadSection(Stream stream)
         {
-            string section;
-            UInt32 secsize;
+            string section;//magic
+            UInt32 secsize;//sectionsize
 
             section = Data.ReadString(stream, 4);
             secsize = Data.ReadUInt32(stream);
@@ -84,7 +84,7 @@ namespace SMSReader
 
         public class BckANK1 : BckSection
         {   //Got structure from blank's J3DView https://github.com/blank63/j3dview/blob/master/j3d/ank1.py
-            public struct Header
+            public struct Header//header(not including magic or section size)
             {
                 public byte loopmode;
                 public byte anglescaleexp;
@@ -98,9 +98,9 @@ namespace SMSReader
                 public UInt32 rotoffset;
                 public UInt32 translationoffset;
 
-                public static Header Read(Stream str)
+                public static Header Read(Stream str)//load header of section
                 {
-                    Header hdr = new Header();
+                    Header hdr = new Header();//
                     hdr.loopmode = Data.ReadByte(str);
                     hdr.anglescaleexp = Data.ReadByte(str);
                     hdr.duration = Data.ReadUInt16(str);
@@ -218,11 +218,12 @@ namespace SMSReader
                         if ((after == null || list[i].time <= after.time) && list[i].time >= time)
                         {
                             after = list[i];
-                            break;
+                            //We can't break here; the list isn't necessarily ordered by time.
                         }
+
                     }
 
-                    if (after == null && prev == null)
+                    if (after == null && prev == null)//this shouldn't happen
                         after = prev = new AnimKeyFrame();
                     else if (after == null)
                         after = prev;
@@ -256,6 +257,7 @@ namespace SMSReader
 
                 public Vector InterpolatePosition(float time, InterpolationType type = InterpolationType.Linear)
                 {
+                    InterpolateKeyFrameList(x, 257.5f, type);
                     Vector interpolation = new Vector(InterpolateKeyFrameList(x, time, type),
                                                       InterpolateKeyFrameList(y, time, type),
                                                       InterpolateKeyFrameList(z, time, type));
@@ -286,32 +288,33 @@ namespace SMSReader
 
             public BckANK1(UInt32 size, Stream stream)
             {
-                long secptr = stream.Position - 8;
+                long secptr = stream.Position - 8;//section pointer
 
                 this.magic = "ANK1";
                 this.size = size;
 
-                hdr = Header.Read(stream);
+                hdr = Header.Read(stream);//get header
 
-                stream.Seek(secptr + hdr.jointanimationoffset, SeekOrigin.Begin);
+                stream.Seek(secptr + hdr.jointanimationoffset, SeekOrigin.Begin);//go to the animations 
                 for (int i = 0; i < hdr.jointanimationcount; i++)
-                    jointanims.Add(JointAnimation.Read(stream));
+                    jointanims.Add(JointAnimation.Read(stream));//read animations
 
-                stream.Seek(secptr + hdr.scaleoffset, SeekOrigin.Begin);
+                stream.Seek(secptr + hdr.scaleoffset, SeekOrigin.Begin);//go to the scales
                 for (int i = 0; i < hdr.scalecount; i++)
-                    scales.Add(Data.ReadSingle(stream));
+                    scales.Add(Data.ReadSingle(stream));//read scales
 
-                stream.Seek(secptr + hdr.rotoffset, SeekOrigin.Begin);
+                stream.Seek(secptr + hdr.rotoffset, SeekOrigin.Begin);//go to rotations
                 for (int i = 0; i < hdr.rotcount; i++)
-                    rotations.Add(Data.ReadInt16(stream));
+                    rotations.Add(Data.ReadInt16(stream));//read rotations
 
-                stream.Seek(secptr + hdr.translationoffset, SeekOrigin.Begin);
+                stream.Seek(secptr + hdr.translationoffset, SeekOrigin.Begin);//go to translations
                 for (int i = 0; i < hdr.translationcount; i++)
-                    translations.Add(Data.ReadSingle(stream));
+                    translations.Add(Data.ReadSingle(stream));//read translations
+                    
 
-                anglescale = (float)Math.Pow(360f / 32767f, hdr.anglescaleexp + 1);
+                anglescale = (float)Math.Pow(2f, hdr.anglescaleexp) * (180f / 32767f);//some kind of float shenanigans
 
-                stream.Seek(secptr + this.size, SeekOrigin.Begin);
+                stream.Seek(secptr + this.size, SeekOrigin.Begin);//seek the next section
             }
 
             private AnimKeyFrame[] GetScaleArray(int start, int count, int type)
@@ -362,8 +365,7 @@ namespace SMSReader
             }
             private AnimKeyFrame[] GetTranslationArray(int start, int count, int type)
             {
-                int size = (type == 0 ? 3 : 4);
-                AnimKeyFrame[] dat = new AnimKeyFrame[count];
+                AnimKeyFrame[] dat = new AnimKeyFrame[count];//array of keyframes
 
                 int ptr = start;
                 int c = 0;
@@ -384,11 +386,11 @@ namespace SMSReader
                 return dat;
             }
 
-            public Animation GetJointAnimation(int index)
+            public Animation GetJointAnimation(int index)//
             {
                 AnimKeyFrame[] x = GetTranslationArray(jointanims[index].x.translation.first, jointanims[index].x.translation.count, jointanims[index].x.translation.u1);
-                AnimKeyFrame[] y = GetTranslationArray(jointanims[index].y.translation.first, jointanims[index].y.translation.count, jointanims[index].x.translation.u1);
-                AnimKeyFrame[] z = GetTranslationArray(jointanims[index].z.translation.first, jointanims[index].z.translation.count, jointanims[index].x.translation.u1);
+                AnimKeyFrame[] y = GetTranslationArray(jointanims[index].y.translation.first, jointanims[index].y.translation.count, jointanims[index].y.translation.u1);
+                AnimKeyFrame[] z = GetTranslationArray(jointanims[index].z.translation.first, jointanims[index].z.translation.count, jointanims[index].z.translation.u1);
 
                 AnimKeyFrame[] rx = GetRotationArray(jointanims[index].x.rotation.first, jointanims[index].x.rotation.count, jointanims[index].x.rotation.u1);
                 AnimKeyFrame[] ry = GetRotationArray(jointanims[index].y.rotation.first, jointanims[index].y.rotation.count, jointanims[index].y.rotation.u1);

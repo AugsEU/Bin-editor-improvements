@@ -1290,20 +1290,23 @@ namespace SMSSceneReader
             float rdur = StartDemo_DemoDuration;
             BckSection.BckANK1 sec = ((BckSection.BckANK1)demo.sections[0]);
 
-            BckSection.BckANK1.Animation anim1 = sec.GetJointAnimation(0);
-            BckSection.BckANK1.Animation anim2 = sec.GetJointAnimation(1);
+            BckSection.BckANK1.Animation anim1 = sec.GetJointAnimation(1);
+            BckSection.BckANK1.Animation anim2 = sec.GetJointAnimation(0);
             BckSection.BckANK1.Animation canim = null;
             if (StartDemo_DemoDuration > anim1.Duration)
             {
-                rdur -= anim1.Duration;
+                //rdur = 0f;
                 canim = anim2;
             }
             else
+            {
                 canim = anim1;
 
-            CameraPosition = (DataVectorToVector3(canim.InterpolatePosition(rdur, BckSection.BckANK1.Animation.InterpolationType.Linear))) / 10000f;
+            }
+            Console.WriteLine(rdur);
+            CameraPosition = (DataVectorToVector3(canim.InterpolatePosition(rdur, BckSection.BckANK1.Animation.InterpolationType.Linear)))/10000f;
             Vector3 camrot = (DataVectorToVector3(canim.InterpolateRotation(rdur, BckSection.BckANK1.Animation.InterpolationType.Linear)) * (float)Math.PI / 180f);
-            CameraRotation = new Vector3(camrot.Y, camrot.X, camrot.Z);
+            CameraRotation = new Vector3(camrot.X, camrot.Y, camrot.Z);
 
             StartDemo_DemoDuration += 1;
             if (StartDemo_DemoDuration > anim1.Duration + anim2.Duration)
