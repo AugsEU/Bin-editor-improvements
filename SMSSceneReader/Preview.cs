@@ -1277,7 +1277,7 @@ namespace SMSSceneReader
             if (StartDemo_DemoTimer != null && StartDemo_DemoTimer.Enabled)
                 StartDemo_DemoTimer.Stop();
             StartDemo_DemoTimer = new Timer();
-            StartDemo_DemoTimer.Interval = 16;
+            StartDemo_DemoTimer.Interval = 5;
             StartDemo_DemoTimer.Tick += DemoAnim_Tick;
             StartDemo_DemoTimer.Start();
 
@@ -1290,31 +1290,30 @@ namespace SMSSceneReader
             float rdur = StartDemo_DemoDuration;
             BckSection.BckANK1 sec = ((BckSection.BckANK1)demo.sections[0]);
 
-            BckSection.BckANK1.Animation anim1 = sec.GetJointAnimation(1);
-            BckSection.BckANK1.Animation anim2 = sec.GetJointAnimation(0);
-            BckSection.BckANK1.Animation canim = null;
-            if (StartDemo_DemoDuration > anim1.Duration)
-            {
-                //rdur = 0f;
-                canim = anim2;
-            }
-            else
-            {
-                canim = anim1;
+            BckSection.BckANK1.Animation LookAtAnim = sec.GetJointAnimation(0);
+            BckSection.BckANK1.Animation LookFromAnim = sec.GetJointAnimation(1);
 
-            }
-            Console.WriteLine(rdur);
-            CameraPosition = (DataVectorToVector3(canim.InterpolatePosition(rdur, BckSection.BckANK1.Animation.InterpolationType.Linear)))/10000f;
-            Vector3 camrot = (DataVectorToVector3(canim.InterpolateRotation(rdur, BckSection.BckANK1.Animation.InterpolationType.Linear)) * (float)Math.PI / 180f);
-            CameraRotation = new Vector3(camrot.X, camrot.Y, camrot.Z);
+            Vector3 AtPosition = (DataVectorToVector3(LookAtAnim.InterpolatePosition(rdur, BckSection.BckANK1.Animation.InterpolationType.Linear))) / 10000f;
+            Vector3 FromPosition = (DataVectorToVector3(LookFromAnim.InterpolatePosition(rdur, BckSection.BckANK1.Animation.InterpolationType.Linear)))/10000f;
 
+            CameraPosition = AtPosition + FromPosition;
+            LookAt(AtPosition);
             StartDemo_DemoDuration += 1;
-            if (StartDemo_DemoDuration > anim1.Duration + anim2.Duration)
+            if (StartDemo_DemoDuration > LookAtAnim.Duration)
                 StartDemo_DemoTimer.Stop();
 
             UpdateCamera();
             UpdateViewport();
             glControl1.Refresh();
+        }
+
+        private void LookAt(Vector3 Target)
+        {
+            Vector3 DisplacementFromTarget = Target - CameraPosition;
+            double OH = (DisplacementFromTarget.Y / DisplacementFromTarget.Length);
+            CameraRotation.Y = (float)Math.Asin(OH);
+            OH = (DisplacementFromTarget.Z / DisplacementFromTarget.Length);
+            CameraRotation.X = (float)Math.Asin(OH);
         }
 
         public void DrawDemo()
