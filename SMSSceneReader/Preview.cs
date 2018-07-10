@@ -121,7 +121,7 @@ namespace SMSSceneReader
 
         /* Debug */
         private Ray LastClick;
-        bool Debug_ShowLastMouse = true;
+        bool Debug_ShowLastMouse = false;
 
         /* Preview */
         public Preview(string sceneRoot)
@@ -1296,8 +1296,29 @@ namespace SMSSceneReader
             Vector3 AtPosition = (DataVectorToVector3(LookAtAnim.InterpolatePosition(rdur, BckSection.BckANK1.Animation.InterpolationType.Linear))) / 10000f;
             Vector3 FromPosition = (DataVectorToVector3(LookFromAnim.InterpolatePosition(rdur, BckSection.BckANK1.Animation.InterpolationType.Linear)))/10000f;
 
-            CameraPosition = AtPosition + FromPosition;
+            Vector3 AtRot = DataVectorToVector3(LookAtAnim.InterpolateRotation(rdur, BckSection.BckANK1.Animation.InterpolationType.Linear)) * (float)(Math.PI / 180f);
+
+
+
+            Matrix3 Rx = new Matrix3(
+                         new Vector3(1, 0                       , 0                        ),
+                         new Vector3(0, (float)Math.Cos(AtRot.X), (float)-Math.Sin(AtRot.X)),
+                         new Vector3(0, (float)Math.Sin(AtRot.X), (float)Math.Cos(AtRot.X)));
+
+            Matrix3 Ry = new Matrix3(
+                         new Vector3((float)Math.Cos(AtRot.Y) , 0, (float)Math.Sin(AtRot.Y)),
+                         new Vector3(0                        , 1, 0                       ),
+                         new Vector3(-(float)Math.Sin(AtRot.Y), 0, (float)Math.Cos(AtRot.Y)));
+
+            Matrix3 Rz = new Matrix3(
+                         new Vector3((float)Math.Cos(AtRot.Z), (float)-Math.Sin(AtRot.Z), 0),
+                         new Vector3((float)Math.Sin(AtRot.Z), (float)Math.Cos(AtRot.Z), 0),
+                         new Vector3(0                       ,         0               , 1));
+
+            CameraPosition = AtPosition + Rx*Ry*Rz*FromPosition;
             LookAt(AtPosition);
+
+
             StartDemo_DemoDuration += 1;
             if (StartDemo_DemoDuration > LookAtAnim.Duration)
                 StartDemo_DemoTimer.Stop();
