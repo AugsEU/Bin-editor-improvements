@@ -1,5 +1,0 @@
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\sms-binreader\bin\Release\BinReader.dll
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\sms-binreader\bin\Release\BinReader.pdb
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\sms-binreader\obj\Release\BinReader.csprojResolveAssemblyReference.cache
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\sms-binreader\obj\Release\BinReader.dll
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\sms-binreader\obj\Release\BinReader.pdb

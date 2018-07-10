@@ -1,8 +1,0 @@
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\BMDReader\bin\Release\BMDReader.dll
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\BMDReader\bin\Release\BMDReader.pdb
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\BMDReader\bin\Release\OpenTK.dll
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\BMDReader\bin\Release\OpenTK.GLControl.dll
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\BMDReader\bin\Release\OpenTK.xml
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\BMDReader\bin\Release\OpenTK.GLControl.xml
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\BMDReader\obj\Release\BMDReader.dll
-C:\Users\August\Downloads\Sunshine ROM hacking\Bin Editor 125\src\BMDReader\obj\Release\BMDReader.pdb
