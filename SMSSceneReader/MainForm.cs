@@ -39,6 +39,7 @@ namespace SMSSceneReader
         Find Find = new Find(); //Find form
         Preview ScenePreview = null;    //Preview form
         RallyForm RailForm = null;
+        CameraDemoEditor IntroEditor = null;
 
         ObjectParameters CurrentObjectParameters;   //Parameters of selected object
 
@@ -281,14 +282,16 @@ namespace SMSSceneReader
             bool railOpen = RailForm != null;
             if (railOpen)
                 RailForm.Close();
-
+            if (IntroEditor != null)
+            {
+                IntroEditor.Close();
+                IntroEditor = null;
+            }
             //Clear old files
             if (LoadedRails != null)
                 LoadedRails.UnLoad();
             if (LoadedMessages != null)
                 LoadedMessages.Close();
-            //if (LoadedDemo != null)
-            //    LoadedDemo.Close();
             if (LoadedSceneParameters != null)
                 foreach (PrmFile pf in LoadedSceneParameters)
                     pf.UnLoad();
@@ -2883,8 +2886,6 @@ namespace SMSSceneReader
             if (LoadedDemo == null)
                 return;
 
-            MessageBox.Show("Warning: This tool is still WIP and is neither accurate nor able to edit the camera demos.");
-
             if (ScenePreview != null)
             {
 
@@ -3351,6 +3352,22 @@ namespace SMSSceneReader
         private void createPatchToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void makeDemoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //RailForm.listBox2.SelectedIndexChanged += new EventHandler(RallyForm_SelectedFrame);
+            if (IntroEditor != null)
+                return;
+            IntroEditor = new CameraDemoEditor();
+            IntroEditor.FormClosed += new FormClosedEventHandler(IntroEditor_FormClosed);
+            IntroEditor.demo = LoadedDemo;
+            IntroEditor.Show();
+        }
+
+        private void IntroEditor_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            IntroEditor = null;
         }
     }
 }

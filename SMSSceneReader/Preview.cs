@@ -33,7 +33,7 @@ namespace SMSSceneReader
         private const string MAP_FILE = "map\\map\\map.bmd";    //Map model location
         private const string SKY_FILE = "map\\map\\sky.bmd";    //Map model location
         private const string SKYTEX_FILE = "map\\map\\sky.bmt";    //Map model location
-
+        
         /* Camera variables */
         /* Camera and Rendering based off of camera in LevelEditorForm.cs in Whitehole by StapleButter */
         /* Changed to free camera 1/24/15 */
@@ -99,16 +99,11 @@ namespace SMSSceneReader
 
         public bool ClickRail = false;
         public bool RenderRails = false;
-        public bool RenderDemo = false;
+        public bool RenderDemo = true;
         public int SelectedRail = -1;
         public int SelectedFrame = -1;
 
         public Vector3 CameraPos
-        {
-            get { return CameraPosition * 10000f; }
-        }
-
-        public Vector3 CameraOrigin
         {
             get { return CameraPosition * 10000f; }
         }
@@ -481,7 +476,7 @@ namespace SMSSceneReader
 
             glControl1.SwapBuffers();
 
-            label1.Text = "pos: (" + CameraPos.X + ", " + CameraPos.Y + ", " + CameraPos.Z + ") rot: (" + (CameraRotation.X / 2.0f) + ", " + (CameraRotation.Y / 2.0f) + ")";
+            label1.Text = "pos: (" + CameraPos.X + ", " + CameraPos.Y + ", " + CameraPos.Z + ") rot: (" + (CameraRotation.X) + ", " + (CameraRotation.Y) + ")";
             label1.Refresh();
         }
         private void glControl1_Resize(object sender, EventArgs e)
@@ -1162,6 +1157,22 @@ namespace SMSSceneReader
             GLLineCube(v1, v2);
         }
 
+        public static void GLLineCross(Vector3 center,float size)
+        {
+            size /= 2;
+            //Xdirection
+            GL.Vertex3(center.X + size, center.Y, center.Z);
+            GL.Vertex3(center.X - size, center.Y, center.Z);
+
+            //Ydirection
+            GL.Vertex3(center.X, center.Y + size, center.Z);
+            GL.Vertex3(center.X, center.Y - size, center.Z);
+
+            //Zdirection
+            GL.Vertex3(center.X, center.Y, center.Z + size);
+            GL.Vertex3(center.X, center.Y, center.Z - size);
+        }
+
         /* Creates a framed cube */
         public static void GLLineCamera(Vector3 v1, Vector3 v2, float length, float angle, float padding = 0.0f)
         {
@@ -1288,22 +1299,21 @@ namespace SMSSceneReader
         {
 
             float rdur = StartDemo_DemoDuration;
-            BckSection.BckANK1 sec = ((BckSection.BckANK1)demo.sections[0]);
+            BckSection.BckANK1 sec = ((BckSection.BckANK1)demo.sections[0]);//This cointains our joint anims
 
-            BckSection.BckANK1.Animation LookAtAnim = sec.GetJointAnimation(0);
-            BckSection.BckANK1.Animation LookFromAnim = sec.GetJointAnimation(1);
+            BckSection.BckANK1.Animation LookAtAnim = sec.GetJointAnimation(0);//This animation is where the camera will be looking
+            BckSection.BckANK1.Animation LookFromAnim = sec.GetJointAnimation(1);//This is the position of the camera. It's relative to the LookAt as that is the root of the animation.
 
-            Vector3 AtPosition = (DataVectorToVector3(LookAtAnim.InterpolatePosition(rdur, BckSection.BckANK1.Animation.InterpolationType.Linear))) / 10000f;
+            Vector3 AtPosition = (DataVectorToVector3(LookAtAnim.InterpolatePosition(rdur, BckSection.BckANK1.Animation.InterpolationType.Linear))) / 10000f;//This just gets the position. Divided by 10000f to convert to camera units
             Vector3 FromPosition = (DataVectorToVector3(LookFromAnim.InterpolatePosition(rdur, BckSection.BckANK1.Animation.InterpolationType.Linear)))/10000f;
 
-            Vector3 AtRot = DataVectorToVector3(LookAtAnim.InterpolateRotation(rdur, BckSection.BckANK1.Animation.InterpolationType.Linear)) * (float)(Math.PI / 180f);
+            Vector3 AtRot = DataVectorToVector3(LookAtAnim.InterpolateRotation(rdur, BckSection.BckANK1.Animation.InterpolationType.Linear)) * (float)(Math.PI / 180f);//This is the rotation of the lookat node. When it rotates the look from orbits around it. We also need to convert to radians
 
-
-
+            //Declare rotation matricies.
             Matrix3 Rx = new Matrix3(
                          new Vector3(1, 0                       , 0                        ),
-                         new Vector3(0, (float)Math.Cos(AtRot.X), (float)-Math.Sin(AtRot.X)),
-                         new Vector3(0, (float)Math.Sin(AtRot.X), (float)Math.Cos(AtRot.X)));
+                         new Vector3(0, (float)Math.Cos(AtRot.X), (float)Math.Sin(AtRot.X)),
+                         new Vector3(0, (float)-Math.Sin(AtRot.X), (float)Math.Cos(AtRot.X)));
 
             Matrix3 Ry = new Matrix3(
                          new Vector3((float)Math.Cos(AtRot.Y) , 0, (float)Math.Sin(AtRot.Y)),
@@ -1315,16 +1325,16 @@ namespace SMSSceneReader
                          new Vector3((float)Math.Sin(AtRot.Z), (float)Math.Cos(AtRot.Z), 0),
                          new Vector3(0                       ,         0               , 1));
 
-            CameraPosition = AtPosition + Rx*Ry*Rz*FromPosition;
-            LookAt(AtPosition);
+            CameraPosition = AtPosition + Rx*Ry*Rz*FromPosition;//Set camera position
+            LookAt(AtPosition);//
 
 
-            StartDemo_DemoDuration += 1;
-            if (StartDemo_DemoDuration > LookAtAnim.Duration)
+            StartDemo_DemoDuration += 1;//increase the frame count
+            if (StartDemo_DemoDuration > LookAtAnim.Duration)//End animation if we are past the duration.
                 StartDemo_DemoTimer.Stop();
 
             UpdateCamera();
-            UpdateViewport();
+            //UpdateViewport();
             glControl1.Refresh();
         }
 
@@ -1333,133 +1343,177 @@ namespace SMSSceneReader
             Vector3 DisplacementFromTarget = Target - CameraPosition;
             double OH = (DisplacementFromTarget.Y / DisplacementFromTarget.Length);
             CameraRotation.Y = (float)Math.Asin(OH);
-            OH = (DisplacementFromTarget.Z / DisplacementFromTarget.Length);
-            CameraRotation.X = (float)Math.Asin(OH);
+            CameraRotation.X = (float)Math.Atan2(DisplacementFromTarget.Z, DisplacementFromTarget.X);
         }
 
         public void DrawDemo()
         {   //Draws all rails and their paths
             if (demo == null)
                 return;
-            if (camera == null)
-                return;
 
-            Vector3 p0 = Vector3.Zero;
-            for (int i = 0; i < ((BckSection.BckANK1)demo.sections[0]).jointanims.Count; i++)
+            BckSection.BckANK1 sec = ((BckSection.BckANK1)demo.sections[0]);
+
+            BckSection.BckANK1.Animation LookAtAnim = sec.GetJointAnimation(0);
+            BckSection.BckANK1.Animation LookFromAnim = sec.GetJointAnimation(1);
+
+            List<float> PositionAtKeyFramesTimes = new List<float>();
+            for(int KFidx = 0; KFidx < (int)Math.Max(LookAtAnim.x.Count,Math.Max(LookAtAnim.y.Count,LookAtAnim.z.Count)); KFidx++)
             {
-                BckSection.BckANK1.Animation anim = ((BckSection.BckANK1)demo.sections[0]).GetJointAnimation(i);
+                int XIdx = (int)Math.Min(KFidx, LookAtAnim.x.Count-1);
+                if (!PositionAtKeyFramesTimes.Contains(LookAtAnim.x[XIdx].time))
+                    PositionAtKeyFramesTimes.Add(LookAtAnim.x[XIdx].time);
 
-                List<float> allKeys = new List<float>();
-                SortedDictionary<float, Vector3> pos = new SortedDictionary<float, Vector3>();
-                SortedDictionary<float, Vector3> rot = new SortedDictionary<float, Vector3>();
-                SortedDictionary<float, Vector3> scale = new SortedDictionary<float, Vector3>();
+                int YIdx = (int)Math.Min(KFidx, LookAtAnim.y.Count-1);
+                if (!PositionAtKeyFramesTimes.Contains(LookAtAnim.y[YIdx].time))
+                    PositionAtKeyFramesTimes.Add(LookAtAnim.y[YIdx].time);
 
-                Action<SortedDictionary<float, Vector3>, List<AnimKeyFrame>, List<AnimKeyFrame>, List<AnimKeyFrame>> FillNodeDict =
-                    (SortedDictionary<float, Vector3> dict, List<AnimKeyFrame> framex, List<AnimKeyFrame> framey, List<AnimKeyFrame> framez) =>
-                {
-                    for (int j = 0; j < framex.Count; j++)
-                        if (!dict.ContainsKey(framex[j].time)) dict.Add(framex[j].time, new Vector3(framex[j].value, float.NaN, float.NaN)); else dict[framex[j].time] = new Vector3(framex[j].value, dict[framex[j].time].Y, dict[framex[j].time].Z);
-                    for (int j = 0; j < framey.Count; j++)
-                        if (!dict.ContainsKey(framey[j].time)) dict.Add(framey[j].time, new Vector3(float.NaN, framey[j].value, float.NaN)); else dict[framey[j].time] = new Vector3(dict[framey[j].time].X, framey[j].value, dict[framey[j].time].Z);
-                    for (int j = 0; j < framez.Count; j++)
-                        if (!dict.ContainsKey(framez[j].time)) dict.Add(framez[j].time, new Vector3(float.NaN, float.NaN, framez[j].value)); else dict[framez[j].time] = new Vector3(dict[framez[j].time].X, dict[framez[j].time].Y, framez[j].value);
-
-                    for (int j = 0; j < framex.Count; j++)
-                        if (!allKeys.Contains(framex[j].time)) allKeys.Add(framex[j].time);
-                    for (int j = 0; j < framey.Count; j++)
-                        if (!allKeys.Contains(framey[j].time)) allKeys.Add(framey[j].time);
-                    for (int j = 0; j < framez.Count; j++)
-                        if (!allKeys.Contains(framez[j].time)) allKeys.Add(framez[j].time);
-                };
-
-                FillNodeDict(pos, anim.x, anim.y, anim.z);
-                FillNodeDict(rot, anim.rotationx, anim.rotationy, anim.rotationz);
-                FillNodeDict(scale, anim.scalex, anim.scaley, anim.scalez);
-
-                allKeys.Sort();
-
-                Vector3 lp = Vector3.Zero;
-                Vector3 p = Vector3.Zero;
-                Vector3 r = Vector3.Zero;
-                Vector3 s = Vector3.Zero;
-
-                //Draw Path
-                const int DEMOPATH_RESOLUTION = 8;
-                GL.LineWidth(4);
-                GL.Color3(Properties.Settings.Default.railNodeColor);
-
-                GL.PushMatrix();
-                GL.Begin(PrimitiveType.Lines);
-                for (int j = 0; j < allKeys.Count - 1; j++)
-                {
-                    float dtime = (allKeys[j + 1] - allKeys[j]) / DEMOPATH_RESOLUTION;
-                    for (int k = 0; k < DEMOPATH_RESOLUTION; k++)
-                    {
-                        Vector3 cur = DataVectorToVector3(anim.InterpolatePosition(allKeys[j] + (dtime * k), BckSection.BckANK1.Animation.InterpolationType.Linear));// + camera.Joints[i].Translation;
-                        GL.Vertex3(cur);
-                        if (j != 0 || k != 0)
-                            GL.Vertex3(cur);
-                    }
-                }
-                //GL.Vertex3(DataVectorToVector3(anim.InterpolatePosition(allKeys[allKeys.Count - 1])));
-                GL.End();
-
-                GL.PopMatrix();
-
-                //Draw Keyframes
-                GL.LineWidth(2);
-                for (int j = 0; j < allKeys.Count; j++)
-                {
-                    p = DataVectorToVector3(anim.InterpolatePosition(allKeys[j], BckSection.BckANK1.Animation.InterpolationType.Cubic)) + camera.Joints[i].Translation;
-                    r = DataVectorToVector3(anim.InterpolateRotation(allKeys[j], BckSection.BckANK1.Animation.InterpolationType.Cubic)) + camera.Joints[i].Rotation;
-                    s = DataVectorToVector3(anim.InterpolateScale(allKeys[j], BckSection.BckANK1.Animation.InterpolationType.Cubic));
-                    
-                    GL.PushMatrix();
-                    GL.Translate(p);
-                    GL.Rotate(r.Z, 0f, 0f, 1f);
-                    GL.Rotate(r.Y, 0f, 1f, 0f);
-                    GL.Rotate(r.X, 1f, 0f, 0f);
-
-                    GL.Color3(Properties.Settings.Default.railColor);
-
-                    if (j == 0 || j == allKeys.Count - 1 || rot.ContainsKey(allKeys[j]) || scale.ContainsKey(allKeys[j]))
-                    {
-                        GL.Begin(PrimitiveType.Lines);
-                        GLLineCamera(Vector3.Zero, 25f, 0.785398f, 64f);
-                        GL.End();
-                    }
-
-                    GL.PopMatrix();
-                    lp = p;
-                }
+                int ZIdx = (int)Math.Min(KFidx, LookAtAnim.z.Count-1);
+                if (!PositionAtKeyFramesTimes.Contains(LookAtAnim.z[ZIdx].time))
+                    PositionAtKeyFramesTimes.Add(LookAtAnim.z[ZIdx].time);
             }
 
-            GL.PushMatrix();
-
-            GL.Translate(camera.Joints[0].Translation);
-            GL.Rotate(camera.Joints[0].Rotation.Z, 0f, 0f, 1f);
-            GL.Rotate(camera.Joints[0].Rotation.Y, 0f, 1f, 0f);
-            GL.Rotate(camera.Joints[0].Rotation.X, 1f, 0f, 0f);
-
-            GL.Color3(Color.DarkRed);
+            PositionAtKeyFramesTimes.Sort();
+            Color Crimson = Color.FromArgb(1, 220, 40, 100);
+            Color Navy = Color.FromArgb(1, 50 , 50 , 220);
+            GL.LineWidth(2);
             GL.Begin(PrimitiveType.Lines);
-            GLLineCamera(Vector3.Zero, 25f, 0.785398f, 64f);
+
+            for (int i = 0; i < PositionAtKeyFramesTimes.Count;i++)//draw crosses
+            {
+                Vector3 AtPosition = DataVectorToVector3(LookAtAnim.InterpolatePosition(PositionAtKeyFramesTimes[i], BckSection.BckANK1.Animation.InterpolationType.Linear));
+                GL.Color3(Crimson);
+                GLLineCross(AtPosition, 100f);
+                Vector3 FromPosition = (DataVectorToVector3(LookFromAnim.InterpolatePosition(PositionAtKeyFramesTimes[i], BckSection.BckANK1.Animation.InterpolationType.Linear)));
+
+                Vector3 AtRot = DataVectorToVector3(LookAtAnim.InterpolateRotation(PositionAtKeyFramesTimes[i], BckSection.BckANK1.Animation.InterpolationType.Linear)) * (float)(Math.PI / 180f);
+
+                Matrix3 Rx = new Matrix3(
+                             new Vector3(1, 0, 0),
+                             new Vector3(0, (float)Math.Cos(AtRot.X), (float)Math.Sin(AtRot.X)),
+                             new Vector3(0, (float)-Math.Sin(AtRot.X), (float)Math.Cos(AtRot.X)));
+
+                Matrix3 Ry = new Matrix3(
+                             new Vector3((float)Math.Cos(AtRot.Y), 0, (float)Math.Sin(AtRot.Y)),
+                             new Vector3(0, 1, 0),
+                             new Vector3(-(float)Math.Sin(AtRot.Y), 0, (float)Math.Cos(AtRot.Y)));
+
+                Matrix3 Rz = new Matrix3(
+                             new Vector3((float)Math.Cos(AtRot.Z), (float)-Math.Sin(AtRot.Z), 0),
+                             new Vector3((float)Math.Sin(AtRot.Z), (float)Math.Cos(AtRot.Z), 0),
+                             new Vector3(0, 0, 1));
+
+                FromPosition = AtPosition + Rx * Ry * Rz * FromPosition;
+                GL.Color3(Navy);
+                GLLineCross(FromPosition, 100f);
+            }
+            GL.Color3((byte)120, (byte)10, (byte)10);
+
+            for (int i = 0; i < PositionAtKeyFramesTimes.Count; i++)//draw lines
+            {
+                Vector3 AtPosition = DataVectorToVector3(LookAtAnim.InterpolatePosition(PositionAtKeyFramesTimes[i], BckSection.BckANK1.Animation.InterpolationType.Linear));
+                GL.Vertex3(AtPosition);
+                if (i > 0 && i != PositionAtKeyFramesTimes.Count - 1)
+                    GL.Vertex3(AtPosition);
+            }
+            GL.Color3((byte)10, (byte)10, (byte)120);
+            for (int i = 0; i < PositionAtKeyFramesTimes.Count; i++)//draw lines
+            {
+                Vector3 AtPosition = DataVectorToVector3(LookAtAnim.InterpolatePosition(PositionAtKeyFramesTimes[i], BckSection.BckANK1.Animation.InterpolationType.Linear));
+                Vector3 FromPosition = (DataVectorToVector3(LookFromAnim.InterpolatePosition(PositionAtKeyFramesTimes[i], BckSection.BckANK1.Animation.InterpolationType.Linear)));
+
+                Vector3 AtRot = DataVectorToVector3(LookAtAnim.InterpolateRotation(PositionAtKeyFramesTimes[i], BckSection.BckANK1.Animation.InterpolationType.Linear)) * (float)(Math.PI / 180f);
+
+                Matrix3 Rx = new Matrix3(
+                             new Vector3(1, 0, 0),
+                             new Vector3(0, (float)Math.Cos(AtRot.X), (float)Math.Sin(AtRot.X)),
+                             new Vector3(0, (float)-Math.Sin(AtRot.X), (float)Math.Cos(AtRot.X)));
+
+                Matrix3 Ry = new Matrix3(
+                             new Vector3((float)Math.Cos(AtRot.Y), 0, (float)Math.Sin(AtRot.Y)),
+                             new Vector3(0, 1, 0),
+                             new Vector3(-(float)Math.Sin(AtRot.Y), 0, (float)Math.Cos(AtRot.Y)));
+
+                Matrix3 Rz = new Matrix3(
+                             new Vector3((float)Math.Cos(AtRot.Z), (float)-Math.Sin(AtRot.Z), 0),
+                             new Vector3((float)Math.Sin(AtRot.Z), (float)Math.Cos(AtRot.Z), 0),
+                             new Vector3(0, 0, 1));
+
+                FromPosition = AtPosition + Rx * Ry * Rz * FromPosition;
+                GL.Vertex3(FromPosition);
+                if (i > 0 && i != PositionAtKeyFramesTimes.Count - 1)
+                    GL.Vertex3(FromPosition);
+            }
             GL.End();
+        }
 
-            GL.PopMatrix();
-            GL.PushMatrix();
+        private Dictionary<float,Vector3> GetPositionKeyFrames(BckSection.BckANK1.Animation Animation)
+        {
+            Dictionary<float, Vector3> pos = new Dictionary<float, Vector3>();
+            for (int Xidx = 0; Xidx < Animation.x.Count; Xidx++)
+            {
+                pos.Add(Animation.x[Xidx].time, new Vector3(Animation.x[Xidx].value, float.NaN, float.NaN));//add initial values
+            }
 
-            GL.Translate(camera.Joints[1].Translation);
-            GL.Rotate(camera.Joints[1].Rotation.Z, 0f, 0f, 1f);
-            GL.Rotate(camera.Joints[1].Rotation.Y, 0f, 1f, 0f);
-            GL.Rotate(camera.Joints[1].Rotation.X, 1f, 0f, 0f);
+            for (int Yidx = 0; Yidx < Animation.y.Count; Yidx++)
+            {
+                if (pos.ContainsKey(Animation.y[Yidx].time))
+                {
+                    Vector3 VectorToModify = pos[Animation.y[Yidx].time];
+                    VectorToModify.Y = Animation.y[Yidx].value;
+                    pos[Animation.y[Yidx].time] = VectorToModify;
+                }
+                else
+                    pos.Add(Animation.y[Yidx].time, new Vector3(float.NaN, Animation.y[Yidx].value, float.NaN));//add initial values
+            }
 
-            GL.Color3(Color.Red);
-            GL.Begin(PrimitiveType.Lines);
-            GLLineCamera(Vector3.Zero, 25f, 0.785398f, 64f);
-            GL.End();
+            for (int Zidx = 0; Zidx < Animation.z.Count; Zidx++)
+            {
+                if (pos.ContainsKey(Animation.z[Zidx].time))
+                {
+                    Vector3 VectorToModify = pos[Animation.z[Zidx].time];
+                    VectorToModify.Z = Animation.z[Zidx].value;
+                    pos[Animation.z[Zidx].time] = VectorToModify;
+                }
+                else
+                    pos.Add(Animation.z[Zidx].time, new Vector3(float.NaN, float.NaN, Animation.z[Zidx].value));//add initial values
+            }
 
-            GL.PopMatrix();
+            return pos;
+        }
+
+        private Dictionary<float, Vector3> GetRotationKeyFrames(BckSection.BckANK1.Animation Animation)
+        {
+            Dictionary<float, Vector3> rot = new Dictionary<float, Vector3>();
+
+            for (int Xidx = 0; Xidx < Animation.rotationx.Count; Xidx++)
+            {
+                rot.Add(Animation.rotationx[Xidx].time, new Vector3(Animation.rotationx[Xidx].value, float.NaN, float.NaN));//add initial values
+            }
+
+            for (int Yidx = 0; Yidx < Animation.rotationy.Count; Yidx++)
+            {
+                if (rot.ContainsKey(Animation.rotationy[Yidx].time))
+                {
+                    Vector3 VectorToModify = rot[Animation.rotationy[Yidx].time];
+                    VectorToModify.Y = Animation.rotationy[Yidx].value;
+                    rot[Animation.rotationy[Yidx].time] = VectorToModify;
+                }
+                else
+                    rot.Add(Animation.rotationy[Yidx].time, new Vector3(float.NaN, Animation.rotationy[Yidx].value, float.NaN));//add initial values
+            }
+
+            for (int Zidx = 0; Zidx < Animation.rotationz.Count; Zidx++)
+            {
+                if (rot.ContainsKey(Animation.rotationz[Zidx].time))
+                {
+                    Vector3 VectorToModify = rot[Animation.rotationz[Zidx].time];
+                    VectorToModify.Z = Animation.rotationz[Zidx].value;
+                    rot[Animation.rotationz[Zidx].time] = VectorToModify;
+                }
+                else
+                    rot.Add(Animation.rotationz[Zidx].time, new Vector3(float.NaN, float.NaN, Animation.rotationz[Zidx].value));//add initial values
+            }
+            return rot;
         }
 
         public void ForceDraw()

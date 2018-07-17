@@ -90,6 +90,12 @@
     <Compile Include="BMGEditor.Designer.cs">
       <DependentUpon>BMGEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="CameraDemoEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CameraDemoEditor.Designer.cs">
+      <DependentUpon>CameraDemoEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Find.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +107,12 @@
     </Compile>
     <Compile Include="GameParamForm.Designer.cs">
       <DependentUpon>GameParamForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="KeyFramePrompt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KeyFramePrompt.Designer.cs">
+      <DependentUpon>KeyFramePrompt.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -191,11 +203,17 @@
     <EmbeddedResource Include="BMGEditor.resx">
       <DependentUpon>BMGEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="CameraDemoEditor.resx">
+      <DependentUpon>CameraDemoEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Find.resx">
       <DependentUpon>Find.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GameParamForm.resx">
       <DependentUpon>GameParamForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KeyFramePrompt.resx">
+      <DependentUpon>KeyFramePrompt.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
