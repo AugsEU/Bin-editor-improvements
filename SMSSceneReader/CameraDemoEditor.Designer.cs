@@ -103,6 +103,7 @@
             // 
             // XUpDn
             // 
+            this.XUpDn.DecimalPlaces = 3;
             this.XUpDn.Location = new System.Drawing.Point(35, 73);
             this.XUpDn.Maximum = new decimal(new int[] {
             65535,
@@ -121,6 +122,7 @@
             // 
             // YUpDn
             // 
+            this.YUpDn.DecimalPlaces = 3;
             this.YUpDn.Location = new System.Drawing.Point(35, 99);
             this.YUpDn.Maximum = new decimal(new int[] {
             65535,
@@ -139,6 +141,7 @@
             // 
             // ZUpDn
             // 
+            this.ZUpDn.DecimalPlaces = 3;
             this.ZUpDn.Location = new System.Drawing.Point(35, 125);
             this.ZUpDn.Maximum = new decimal(new int[] {
             65535,
@@ -236,7 +239,7 @@
             // 
             this.DurationUpDn.Location = new System.Drawing.Point(714, 39);
             this.DurationUpDn.Maximum = new decimal(new int[] {
-            65535,
+            65536,
             0,
             0,
             0});
@@ -331,22 +334,23 @@
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.openToolStripMenuItem.Text = "New";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // CameraDemoEditor
             // 
@@ -415,6 +419,6 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
     }
 }

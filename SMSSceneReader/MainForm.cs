@@ -125,7 +125,7 @@ namespace SMSSceneReader
                             MessageBox.Show("Update cancelled.");
                         break;
                     case "-file":
-                        if (File.Exists(args[++ptr])){
+                        if (File.Exists(args[++ptr])) {
                             try { LoadFile(args[ptr]); SavePath = args[ptr]; }
                             catch { newToolStripMenuItem_Click(this, new EventArgs()); }
                         }
@@ -146,9 +146,9 @@ namespace SMSSceneReader
                         makemp = true;
                         break;
                     default:
-                        if (File.Exists(args[ptr])){
-                            try{LoadFile(args[ptr]);}
-                            catch{newToolStripMenuItem_Click(this, new EventArgs());}
+                        if (File.Exists(args[ptr])) {
+                            try { LoadFile(args[ptr]); }
+                            catch { newToolStripMenuItem_Click(this, new EventArgs()); }
                         }
                         break;
                 }
@@ -197,7 +197,7 @@ namespace SMSSceneReader
                             ////mp3 = new GameObject("EMario", "MarMP3", 124);
                             ////mp3.Values = new byte[] { 69, 175, 0, 0, 66, 72, 0, 0, 197, 84, 128, 0, 0, 0, 0, 0, 66, 220, 0, 0, 0, 0, 0, 0, 63, 128, 0, 0, 63, 128, 0, 0, 63, 128, 0, 0, 0, 19, 131, 125, 131, 138, 131, 73, 131, 130, 131, 104, 131, 76, 32, 131, 76, 131, 131, 131, 137, 0, 0, 0, 0, 0, 24, 131, 125, 131, 138, 131, 73, 131, 130, 131, 104, 131, 76, 131, 125, 131, 108, 129, 91, 131, 87, 131, 131, 129, 91, 0, 11, 109, 97, 114, 105, 111, 109, 111, 100, 111, 107, 105, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 0, 255, 0, 0, 0, 255 };
                             //mp3.Parent = o;
-                            
+
                             //o.Grouped.Add(mp3);
                         }
                     }
@@ -529,7 +529,7 @@ namespace SMSSceneReader
                 return;
 
             UpdateDisplay2 = true;
-            
+
             //Prepare textbox for update
             paramTextBox.Enabled = false;
 
@@ -794,7 +794,7 @@ namespace SMSSceneReader
                 str += oData[i].ToString() + ",";
 
             //Put string into clipboard
-            Clipboard.SetText(str, TextDataFormat.CommaSeparatedValue); 
+            Clipboard.SetText(str, TextDataFormat.CommaSeparatedValue);
         }
 
         /* Paste object from clipboard */
@@ -2013,7 +2013,7 @@ namespace SMSSceneReader
         }
         public void CreateUndoSnapshot()
         {
-           if (undoPointer + 1 < undoDatabase.Length)
+            if (undoPointer + 1 < undoDatabase.Length)
             {
                 undoDatabase[undoPointer++] = LoadedScene.Clone();
                 for (int i = undoPointer; i < undoDatabase.Length; i++)
@@ -2101,7 +2101,7 @@ namespace SMSSceneReader
             if (o == null)
                 return null;
             List<GameObject> objects = new List<GameObject>();
-            foreach (GameObject obj in o.Grouped){
+            foreach (GameObject obj in o.Grouped) {
                 //Check values
                 bool objval = true;
                 if (objparams != null)
@@ -2239,7 +2239,7 @@ namespace SMSSceneReader
         }
         public GameObject GetObjectGroup()
         {
-            List<GameObject> group = GetChildObjects(GetStrategy(), "IdxGroup", null, new byte[]{ 0, 0, 0, 3 }, 0);
+            List<GameObject> group = GetChildObjects(GetStrategy(), "IdxGroup", null, new byte[] { 0, 0, 0, 3 }, 0);
             if (group == null || group.Count == 0)
                 return null;
             return group[0];
@@ -2268,7 +2268,7 @@ namespace SMSSceneReader
 
         private void decorationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void breakableToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3361,8 +3361,19 @@ namespace SMSSceneReader
                 return;
             IntroEditor = new CameraDemoEditor();
             IntroEditor.FormClosed += new FormClosedEventHandler(IntroEditor_FormClosed);
-            IntroEditor.demo = LoadedDemo;
+            IntroEditor.saveToolStripMenuItem.Click += new EventHandler(IntroSaved);
+            IntroEditor.ScenePath = SceneRoot;
             IntroEditor.Show();
+        }
+
+        private void IntroSaved(object sender, EventArgs e)
+        {
+            LoadedDemo = new BckFile(SceneRoot + DEMOPATH);
+            if (ScenePreview != null)
+            {
+                ScenePreview.InitDemo(CameraModel, LoadedDemo);
+                ScenePreview.ForceDraw();
+            }
         }
 
         private void IntroEditor_FormClosed(object sender, FormClosedEventArgs e)

@@ -768,7 +768,7 @@
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(735, 356);
             this.Name = "RallyForm";
-            this.Text = "SMS Rally Editor";
+            this.Text = "SMS Rail Editor";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.RallyForm_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.xUpDown)).EndInit();

@@ -66,9 +66,24 @@
             // TimeUpDn
             // 
             this.TimeUpDn.Location = new System.Drawing.Point(51, 116);
+            this.TimeUpDn.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.TimeUpDn.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.TimeUpDn.Name = "TimeUpDn";
             this.TimeUpDn.Size = new System.Drawing.Size(104, 20);
             this.TimeUpDn.TabIndex = 25;
+            this.TimeUpDn.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // AtPositionLbl
             // 
@@ -108,21 +123,54 @@
             // 
             // AtZUpDn
             // 
+            this.AtZUpDn.DecimalPlaces = 3;
             this.AtZUpDn.Location = new System.Drawing.Point(35, 77);
+            this.AtZUpDn.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.AtZUpDn.Minimum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            -2147483648});
             this.AtZUpDn.Name = "AtZUpDn";
             this.AtZUpDn.Size = new System.Drawing.Size(120, 20);
             this.AtZUpDn.TabIndex = 20;
             // 
             // AtYUpDn
             // 
+            this.AtYUpDn.DecimalPlaces = 3;
             this.AtYUpDn.Location = new System.Drawing.Point(35, 51);
+            this.AtYUpDn.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.AtYUpDn.Minimum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            -2147483648});
             this.AtYUpDn.Name = "AtYUpDn";
             this.AtYUpDn.Size = new System.Drawing.Size(120, 20);
             this.AtYUpDn.TabIndex = 19;
             // 
             // AtXUpDn
             // 
+            this.AtXUpDn.DecimalPlaces = 3;
             this.AtXUpDn.Location = new System.Drawing.Point(35, 25);
+            this.AtXUpDn.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.AtXUpDn.Minimum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            -2147483648});
             this.AtXUpDn.Name = "AtXUpDn";
             this.AtXUpDn.Size = new System.Drawing.Size(120, 20);
             this.AtXUpDn.TabIndex = 18;
@@ -176,21 +224,54 @@
             // 
             // FromZUpDn
             // 
+            this.FromZUpDn.DecimalPlaces = 3;
             this.FromZUpDn.Location = new System.Drawing.Point(191, 77);
+            this.FromZUpDn.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.FromZUpDn.Minimum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            -2147483648});
             this.FromZUpDn.Name = "FromZUpDn";
             this.FromZUpDn.Size = new System.Drawing.Size(120, 20);
             this.FromZUpDn.TabIndex = 30;
             // 
             // FromYUpDn
             // 
+            this.FromYUpDn.DecimalPlaces = 3;
             this.FromYUpDn.Location = new System.Drawing.Point(191, 51);
+            this.FromYUpDn.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.FromYUpDn.Minimum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            -2147483648});
             this.FromYUpDn.Name = "FromYUpDn";
             this.FromYUpDn.Size = new System.Drawing.Size(120, 20);
             this.FromYUpDn.TabIndex = 29;
             // 
             // FromXUpDn
             // 
+            this.FromXUpDn.DecimalPlaces = 3;
             this.FromXUpDn.Location = new System.Drawing.Point(191, 25);
+            this.FromXUpDn.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.FromXUpDn.Minimum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            -2147483648});
             this.FromXUpDn.Name = "FromXUpDn";
             this.FromXUpDn.Size = new System.Drawing.Size(120, 20);
             this.FromXUpDn.TabIndex = 28;

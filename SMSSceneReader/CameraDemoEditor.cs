@@ -7,8 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 using SMSReader;
 using OpenTK;
+using DataReader;
 
 namespace SMSSceneReader
 {
@@ -16,8 +18,10 @@ namespace SMSSceneReader
     {
         const int MAXKFWIDTH = 500;
         const int MINKFWIDTH = 20;
+        const string DEMOPATH = "map\\camera\\startcamera.bck";
 
-        public BckFile demo = null;
+        public string ScenePath;
+
 
         int KeyFrameWidth = 50;
         Dictionary<int, LookAtFromPair> CameraAnimation;//The int key is the time(frame) and the LookAtFromPair 
@@ -111,6 +115,11 @@ namespace SMSSceneReader
             DialogResult MyDialog = KFInput.ShowDialog();//Show dialog means we must get a response before we can change anything on this form.
             if (MyDialog != DialogResult.OK || CameraAnimation.ContainsKey(KFInput.time) || KFInput.time > DurationUpDn.Value - 1)//Cancel if no KF is put in or KF time is invalid
                 return;
+
+            if(CameraAnimation.Count == 3640)
+            {
+                MessageBox.Show("Key frame error", "You can't exceed the keyframe maximum of 3640",MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             CameraAnimation.Add(KFInput.time, new LookAtFromPair(KFInput.AtPosition, KFInput.FromPosition));//Add the new KF
             RefreshTimeLine();//Force draw
@@ -227,13 +236,14 @@ namespace SMSSceneReader
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (demo == null)
+            if (ScenePath == null)
                 return;
 
+            BckFile Demo = new BckFile(ScenePath + DEMOPATH);
             Init();
             CameraAnimation = new Dictionary<int, LookAtFromPair>();
 
-            BckSection.BckANK1 sec = ((BckSection.BckANK1)demo.sections[0]);
+            BckSection.BckANK1 sec = ((BckSection.BckANK1)Demo.sections[0]);
 
             BckSection.BckANK1.Animation LookAtAnim = sec.GetJointAnimation(0);
             BckSection.BckANK1.Animation LookFromAnim = sec.GetJointAnimation(1);
@@ -283,11 +293,156 @@ namespace SMSSceneReader
                 CameraAnimation.Add((int)PositionAtKeyFramesTimes[i], new LookAtFromPair(AtPosition, FromPosition));
             }
 
+
         }
 
         private Vector3 DataVectorToVector3(DataReader.Vector v)
         {
             return new Vector3(v.X, v.Y, v.Z);
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Stream FileStream = new FileStream(ScenePath + DEMOPATH, FileMode.Open, FileAccess.ReadWrite);
+            FileStream.SetLength(0);//Clear all data and start again.
+
+            //Write file header
+            Data.IsBigEndian = true;
+            Data.IsLittleEndian = false;
+            Data.WriteString(FileStream, "J3D1bck1");//Write file type
+            FileStream.Seek(8, SeekOrigin.Begin);
+            Data.WriteUInt32(FileStream, 0);//Write size as 0 for now, we will put the correct value later.
+            Data.WriteUInt32(FileStream, 1);//Write section count, it's always 1.
+            Data.WriteString(FileStream, "Discord:9HG8UMC"); //Padding also advert lol.
+            //End of file header
+
+            ushort DefactoDuration = (ushort)(CameraAnimation.Keys.Max() + 1);//If the player hasn't put key frames at the end chop off the duration.
+
+            //Start of ank section
+            long SectionOffset = FileStream.Position;
+            //Section header
+            Data.WriteString(FileStream, "ANK1");
+            FileStream.Seek(36, SeekOrigin.Begin);
+            Data.WriteUInt32(FileStream, 0);//Write size as 0 for now, we will put the correct value later.
+            Data.WriteByte(FileStream, 0);//Loopmode 0
+            Data.WriteByte(FileStream, 0);//Angle exp as 0
+            Data.WriteUInt16(FileStream, DefactoDuration);//Write duration
+            Data.WriteUInt16(FileStream, 2);//2 joint animations
+            Data.WriteUInt16(FileStream, 2);//scale count is 2
+            Data.WriteUInt16(FileStream, 1);//rotation count is 1
+            Data.WriteUInt16(FileStream, (ushort)(3*6*CameraAnimation.Count));//translation count is 3 per keyframe. There are 3 coordinates for the look at animation, and 3 for the look from anim. Add those and times it by the number of key frames to get the total kf length
+            Data.WriteUInt32(FileStream, 0); Data.WriteUInt32(FileStream, 0); Data.WriteUInt32(FileStream, 0); Data.WriteUInt32(FileStream, 0);//Write offsets as 0 until we know where they are
+            //End of section header
+            PadToNearest32(ref FileStream);
+
+            //Fill in joint anim offset
+            WriteSectionOffset(0x14, SectionOffset, ref FileStream);
+            //Write Joint Anims
+            for (int i = 0; i < 6; i++)//This is kind of dodgy but the fastest way to write this. We are looping through the 6 coordinate animations, the first 3 are the lookat animation and the last 3 and the lookfrom animation. The scale and rotations won't be used so we just set them to 1. Then the translation count is set to the same as before 3 per keyframe and they all have the same number of keyframes, which is cameraanimation.count.
+            {
+                //    scale
+                ushort firstidx = 0;
+                if (i >= 3)
+                    firstidx = 1;
+                Data.WriteUInt16(FileStream, 1);//count
+                Data.WriteUInt16(FileStream, firstidx);//first
+                Data.WriteUInt16(FileStream, 0);//u1
+                //    rotation
+                Data.WriteUInt16(FileStream, 1);//count
+                Data.WriteUInt16(FileStream, 0);//first
+                Data.WriteUInt16(FileStream, 0);//u1
+                //    translation
+                Data.WriteUInt16(FileStream, (ushort)(CameraAnimation.Count));//count
+                Data.WriteUInt16(FileStream, (ushort)(i * 3 * CameraAnimation.Count));//first
+                Data.WriteUInt16(FileStream, 0);//u1
+            }
+            PadToNearest32(ref FileStream);
+
+            //Fill in scale offset
+            WriteSectionOffset(0x18, SectionOffset, ref FileStream);
+
+            Data.WriteSingle(FileStream, 1f);
+            Data.WriteSingle(FileStream, 170f);//Write scales
+            PadToNearest32(ref FileStream);
+
+            //Fill in rotation offset
+            WriteSectionOffset(0x1C, SectionOffset, ref FileStream);
+            Data.WriteInt16(FileStream, 0);//Write rotation
+            PadToNearest32(ref FileStream);
+            //Fill in translation offset
+            WriteSectionOffset(0x20, SectionOffset, ref FileStream);
+            //Write translations
+            //Write lookat animation
+            //Write lookatX
+            foreach (KeyValuePair<int, LookAtFromPair> entry in CameraAnimation)
+            {
+                Data.WriteSingle(FileStream, entry.Key);
+                Data.WriteSingle(FileStream, entry.Value.LookAt.X);
+                Data.WriteSingle(FileStream, 0);
+            }
+            //Write lookatY
+            foreach (KeyValuePair<int, LookAtFromPair> entry in CameraAnimation)
+            {
+                Data.WriteSingle(FileStream, entry.Key);
+                Data.WriteSingle(FileStream, entry.Value.LookAt.Y);
+                Data.WriteSingle(FileStream, 0);
+            }
+            //Write lookatZ
+            foreach (KeyValuePair<int, LookAtFromPair> entry in CameraAnimation)
+            {
+                Data.WriteSingle(FileStream, entry.Key);
+                Data.WriteSingle(FileStream, entry.Value.LookAt.Z);
+                Data.WriteSingle(FileStream, 0);
+            }
+
+            //Write lookfrom animation
+            //Write lookfromX
+            foreach (KeyValuePair<int, LookAtFromPair> entry in CameraAnimation)
+            {
+                Data.WriteSingle(FileStream, entry.Key);
+                Data.WriteSingle(FileStream, entry.Value.LookFrom.X - entry.Value.LookAt.X);
+                Data.WriteSingle(FileStream, 0);
+            }
+            //Write lookfromY
+            foreach (KeyValuePair<int, LookAtFromPair> entry in CameraAnimation)
+            {
+                Data.WriteSingle(FileStream, entry.Key);
+                Data.WriteSingle(FileStream, entry.Value.LookFrom.Y - entry.Value.LookAt.Y);
+                Data.WriteSingle(FileStream, 0);
+            }
+            //Write lookfromZ
+            foreach (KeyValuePair<int, LookAtFromPair> entry in CameraAnimation)
+            {
+                Data.WriteSingle(FileStream, entry.Key);
+                Data.WriteSingle(FileStream, entry.Value.LookFrom.Z - entry.Value.LookAt.Z);
+                Data.WriteSingle(FileStream, 0);
+            }
+
+            PadToNearest32(ref FileStream);
+
+            long FileSize = FileStream.Position;
+            FileStream.Seek(8, SeekOrigin.Begin);
+            Data.WriteUInt32(FileStream, (uint)FileSize);
+            FileStream.Seek(SectionOffset + 4, SeekOrigin.Begin);
+            Data.WriteUInt32(FileStream, (uint)(FileSize-SectionOffset));
+
+            FileStream.Close();
+        }
+        
+        private void WriteSectionOffset(long OffsetOffset, long SectionOffset, ref Stream FS)
+        {
+            long PreviousPosition = FS.Position;
+            FS.Seek(SectionOffset + OffsetOffset, SeekOrigin.Begin);
+            Data.WriteUInt32(FS, (uint)(PreviousPosition - SectionOffset));
+            FS.Seek(PreviousPosition, SeekOrigin.Begin);
+        }
+
+        
+
+        private void PadToNearest32(ref Stream FS)
+        {
+            long Next32 = (long)Math.Ceiling((decimal)FS.Position / 32) * 32;
+            Data.WritePadding(FS, (int)(Next32 - FS.Position));
         }
     }
 
