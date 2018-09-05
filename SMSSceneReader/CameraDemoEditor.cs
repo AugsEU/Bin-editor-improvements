@@ -38,7 +38,7 @@ namespace SMSSceneReader
         private void Init()//Starts new timeline
         {
             CameraAnimation = new Dictionary<int, LookAtFromPair>();
-            CameraAnimation.Add(0, new LookAtFromPair(Vector3.UnitX, Vector3.Zero));//Add initial key frame. This key frame must not be moved or deleted
+            CameraAnimation.Add(0, new LookAtFromPair(Vector3.Zero, Vector3.Zero));//Add initial key frame. This key frame must not be moved or deleted
             DurationUpDn.Value = 1;
             SelectedFrame = Vector2.Zero;
             RefreshTimeLine();
@@ -238,6 +238,11 @@ namespace SMSSceneReader
         {
             if (ScenePath == null)
                 return;
+            if(!File.Exists(ScenePath + DEMOPATH))
+            {
+                MessageBox.Show("File doesn't exist", "File error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             BckFile Demo = new BckFile(ScenePath + DEMOPATH);
             Init();
@@ -303,7 +308,16 @@ namespace SMSSceneReader
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if(CameraAnimation.Count == 1)
+            {
+                MessageBox.Show("You must have at least 2 keyframes", "Animation error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (!File.Exists(ScenePath + DEMOPATH))
+                File.Create(ScenePath + DEMOPATH).Dispose();//Create new empty file.
+
             Stream FileStream = new FileStream(ScenePath + DEMOPATH, FileMode.Open, FileAccess.ReadWrite);
+            
             FileStream.SetLength(0);//Clear all data and start again.
 
             //Write file header
@@ -362,7 +376,7 @@ namespace SMSSceneReader
             WriteSectionOffset(0x18, SectionOffset, ref FileStream);
 
             Data.WriteSingle(FileStream, 1f);
-            Data.WriteSingle(FileStream, 170f);//Write scales
+            Data.WriteSingle(FileStream, 45f);//Write scales
             PadToNearest32(ref FileStream);
 
             //Fill in rotation offset

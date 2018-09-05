@@ -332,7 +332,7 @@ namespace BMDReader
             if (success == 0)
             {
                 string log = GL.GetShaderInfoLog(fragid);
-                throw new Exception("!Failed to compile fragment shader: " + log);
+                Console.WriteLine("!Failed to compile fragment shader: " + log);
                 // TODO: better error reporting/logging?
             }
             
@@ -347,7 +347,7 @@ namespace BMDReader
             if (success == 0)
             {
                 string log = GL.GetProgramInfoLog(sid);
-                throw new Exception("!Failed to link shader program: " + log);
+                Console.WriteLine("!Failed to link shader program: " + log);
                 // TODO: better error reporting/logging?
             }
 

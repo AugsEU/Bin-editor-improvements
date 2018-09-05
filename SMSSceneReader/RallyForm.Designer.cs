@@ -426,6 +426,7 @@
             // 
             // endUpDown
             // 
+            this.endUpDown.Enabled = false;
             this.endUpDown.Location = new System.Drawing.Point(610, 86);
             this.endUpDown.Maximum = new decimal(new int[] {
             65535,
@@ -452,6 +453,7 @@
             // 
             // startUpDown
             // 
+            this.startUpDown.Enabled = false;
             this.startUpDown.Location = new System.Drawing.Point(610, 60);
             this.startUpDown.Maximum = new decimal(new int[] {
             65535,
@@ -478,6 +480,7 @@
             // 
             // u7UpDown
             // 
+            this.u7UpDown.Enabled = false;
             this.u7UpDown.Location = new System.Drawing.Point(610, 217);
             this.u7UpDown.Maximum = new decimal(new int[] {
             65535,
@@ -504,6 +507,7 @@
             // 
             // u6UpDown
             // 
+            this.u6UpDown.Enabled = false;
             this.u6UpDown.Location = new System.Drawing.Point(610, 191);
             this.u6UpDown.Maximum = new decimal(new int[] {
             65535,
@@ -530,6 +534,7 @@
             // 
             // u5UpDown
             // 
+            this.u5UpDown.Enabled = false;
             this.u5UpDown.Location = new System.Drawing.Point(610, 165);
             this.u5UpDown.Maximum = new decimal(new int[] {
             65535,
@@ -565,6 +570,7 @@
             // 
             // u4UpDown
             // 
+            this.u4UpDown.Enabled = false;
             this.u4UpDown.Location = new System.Drawing.Point(610, 138);
             this.u4UpDown.Maximum = new decimal(new int[] {
             65535,
@@ -582,6 +588,7 @@
             // 
             // u3UpDown
             // 
+            this.u3UpDown.Enabled = false;
             this.u3UpDown.Location = new System.Drawing.Point(610, 112);
             this.u3UpDown.Maximum = new decimal(new int[] {
             65535,
@@ -608,6 +615,7 @@
             // 
             // u8UpDown
             // 
+            this.u8UpDown.Enabled = false;
             this.u8UpDown.Location = new System.Drawing.Point(610, 243);
             this.u8UpDown.Maximum = new decimal(new int[] {
             65535,

@@ -127,6 +127,8 @@ namespace SMSRallyEditor
 
         private void applyButton_Click(object sender, EventArgs e)
         {
+            if (listBox1.SelectedIndex == -1 || listBox2.SelectedIndex == -1)
+                return;
             KeyFrame rp = file.GetAllRails()[listBox1.SelectedIndex].frames[listBox2.SelectedIndex];
             rp.x = (short)xUpDown.Value;
             rp.y = (short)yUpDown.Value;
@@ -149,7 +151,7 @@ namespace SMSRallyEditor
             for(int i = 0;i < rp.periods.Length;i++)//Calculate distance values
             {
                 Vector rpPosition = new Vector(rp.x, rp.y, rp.z);
-                KeyFrame ConnectedFrame = file.GetAllRails()[listBox2.SelectedIndex].frames[rp.connections[i]];
+                KeyFrame ConnectedFrame = file.GetAllRails()[listBox1.SelectedIndex].frames[rp.connections[i]];
                 Vector ConnectionDisplacement = new Vector(rp.x - ConnectedFrame.x, rp.y - ConnectedFrame.y, rp.z - ConnectedFrame.z);
                 rp.periods[i] = ConnectionDisplacement.Length;
             }

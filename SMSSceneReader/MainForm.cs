@@ -350,9 +350,9 @@ namespace SMSSceneReader
                     rallyEditorToolStripMenuItem.Enabled = false;
 
                 if (LoadedDemo != null)
-                    cameraEditorToolStripMenuItem.Enabled = true;
+                    runDemoToolStripMenuItem.Enabled = true;
                 else
-                    cameraEditorToolStripMenuItem.Enabled = false;
+                    runDemoToolStripMenuItem.Enabled = false;
 
                 pRMEditorToolStripMenuItem.Enabled = true;
 

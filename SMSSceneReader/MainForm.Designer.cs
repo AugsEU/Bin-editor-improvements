@@ -84,6 +84,7 @@
             this.globalToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.cameraEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runDemoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.makeDemoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.warpFinderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem14 = new System.Windows.Forms.ToolStripSeparator();
             this.funToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -210,7 +211,6 @@
             this.bmgOpenFile = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.label8 = new System.Windows.Forms.Label();
-            this.makeDemoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.paramContextMenu.SuspendLayout();
             this.paramMenuStrip1.SuspendLayout();
             this.ParamBox.SuspendLayout();
@@ -715,7 +715,6 @@
             this.cameraEditorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.runDemoToolStripMenuItem,
             this.makeDemoToolStripMenuItem});
-            this.cameraEditorToolStripMenuItem.Enabled = false;
             this.cameraEditorToolStripMenuItem.Name = "cameraEditorToolStripMenuItem";
             this.cameraEditorToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
             this.cameraEditorToolStripMenuItem.Text = "Camera Editor";
@@ -723,10 +722,18 @@
             // 
             // runDemoToolStripMenuItem
             // 
+            this.runDemoToolStripMenuItem.Enabled = false;
             this.runDemoToolStripMenuItem.Name = "runDemoToolStripMenuItem";
             this.runDemoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.runDemoToolStripMenuItem.Text = "Run Demo";
             this.runDemoToolStripMenuItem.Click += new System.EventHandler(this.runDemoToolStripMenuItem_Click);
+            // 
+            // makeDemoToolStripMenuItem
+            // 
+            this.makeDemoToolStripMenuItem.Name = "makeDemoToolStripMenuItem";
+            this.makeDemoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.makeDemoToolStripMenuItem.Text = "Make Demo";
+            this.makeDemoToolStripMenuItem.Click += new System.EventHandler(this.makeDemoToolStripMenuItem_Click);
             // 
             // warpFinderToolStripMenuItem
             // 
@@ -1686,13 +1693,6 @@
             this.label8.TabIndex = 22;
             this.label8.Text = "Translate";
             this.label8.Click += new System.EventHandler(this.label8_Click);
-            // 
-            // makeDemoToolStripMenuItem
-            // 
-            this.makeDemoToolStripMenuItem.Name = "makeDemoToolStripMenuItem";
-            this.makeDemoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.makeDemoToolStripMenuItem.Text = "Make Demo";
-            this.makeDemoToolStripMenuItem.Click += new System.EventHandler(this.makeDemoToolStripMenuItem_Click);
             // 
             // MainForm
             // 

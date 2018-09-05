@@ -243,10 +243,12 @@ namespace SMSReader
                         case InterpolationType.Cubic:
                             if (prev.time != after.time)
                             {
-                                float t = (time - prev.time) / (after.time - prev.time);
-                                float a = 2 * (prev.value - after.value) + (1 * prev.tangent_out) + after.tangent_in;
-                                float b = 3 * (after.value - prev.value) - (2 * prev.tangent_out) - after.tangent_in;
-                                return ((a * t + b) * t + prev.tangent_out) * t + prev.value;
+                                float FramesBetweenKeys = prev.time - after.time;
+                                float fracx = (time - prev.time) / FramesBetweenKeys;
+                                return (2 * prev.value - 2 * after.value + prev.tangent_out * FramesBetweenKeys + after.tangent_in * FramesBetweenKeys) * fracx * fracx * fracx
+                                    + (3 * after.value - 3 * prev.value - after.tangent_in * FramesBetweenKeys - 2 * prev.tangent_out * FramesBetweenKeys) * fracx * fracx
+                                    + (prev.tangent_out * FramesBetweenKeys) * fracx
+                                    + prev.value;//hermite in one step. It's jank but it works so whatevs. This curve is created over the domain 0,1 hence why we scale the derivatives and use fracx.
                             }
                             else
                                 return prev.value;
@@ -257,7 +259,6 @@ namespace SMSReader
 
                 public Vector InterpolatePosition(float time, InterpolationType type = InterpolationType.Linear)
                 {
-                    InterpolateKeyFrameList(x, 257.5f, type);
                     Vector interpolation = new Vector(InterpolateKeyFrameList(x, time, type),
                                                       InterpolateKeyFrameList(y, time, type),
                                                       InterpolateKeyFrameList(z, time, type));
@@ -277,6 +278,8 @@ namespace SMSReader
                                                       InterpolateKeyFrameList(scalez, time, type));
                     return interpolation;
                 }
+
+                
             }
 
             public Header hdr;
