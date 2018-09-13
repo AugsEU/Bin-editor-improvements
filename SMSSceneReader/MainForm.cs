@@ -16,6 +16,7 @@ using SMSRallyEditor;
 using DataReader;
 using SMSReader;
 using BMDReader;
+using OpenTK;
 
 namespace SMSSceneReader
 {
@@ -2067,6 +2068,9 @@ namespace SMSSceneReader
                 AddObjectNodes(LoadedScene.Objects.ToArray());
             }
             TestUndo();
+            //Update preview
+            if (ScenePreview != null)
+                ScenePreview.UpdateAllObjects();
         }
         public void Redo()
         {
@@ -2077,6 +2081,9 @@ namespace SMSSceneReader
                 AddObjectNodes(LoadedScene.Objects.ToArray());
             }
             TestUndo();
+            //Update preview
+            if (ScenePreview != null)
+                ScenePreview.UpdateAllObjects();
         }
 
         private void undoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3379,6 +3386,57 @@ namespace SMSSceneReader
         private void IntroEditor_FormClosed(object sender, FormClosedEventArgs e)
         {
             IntroEditor = null;
+        }
+
+        private void arrayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!CurrentObjectParameters.ContainsParameter("X") || !CurrentObjectParameters.ContainsParameter("Y") || !CurrentObjectParameters.ContainsParameter("Z"))
+                return;
+
+            ArrayPrompt AInput = new ArrayPrompt();//This prompt is another form. Check that for reference.
+
+            DialogResult MyDialog = AInput.ShowDialog();//Show dialog means we must get a response before we can change anything on this form.
+            if (MyDialog != DialogResult.OK)//Cancel if no Array
+                return;
+
+            GameObject parent = (GameObject)treeView1.SelectedNode.Tag;
+            Changed = true;
+            CreateUndoSnapshot();
+
+            for (int i = 0; i < AInput.count; i++)
+            {
+                GameObject clone = parent.DeepCopy();
+                ObjectParameters op = new ObjectParameters();
+                op.ReadObjectParameters(clone);
+                Vector3 Pos = new Vector3((float)Convert.ToDecimal(op.GetParamValue("X", clone)), (float)Convert.ToDecimal(op.GetParamValue("Y", clone)), (float)Convert.ToDecimal(op.GetParamValue("Z", clone)));
+                Pos = Pos + (i+1) * AInput.Displacement;
+                op.SetParamValue("X", clone, Pos.X.ToString());
+                op.SetParamValue("Y", clone, Pos.Y.ToString());
+                op.SetParamValue("Z", clone, Pos.Z.ToString());
+
+                TreeNode cloneNode = new TreeNode(clone.Name);
+                cloneNode.Tag = clone;
+
+                if (parent.Parent == null)
+                {
+                    LoadedScene.Objects.Add(clone);
+                    treeView1.Nodes.Add(cloneNode);
+                }
+                else
+                {
+                    parent.Parent.Grouped.Add(clone);
+                    treeView1.SelectedNode.Parent.Nodes.Add(cloneNode);
+                }
+
+                LoadedScene.AllObjects.Add(clone);
+
+                treeView1.SelectedNode = cloneNode;
+
+                //Update preview
+                if (ScenePreview != null)
+                    ScenePreview.UpdateObject(clone);
+            }
+
         }
     }
 }

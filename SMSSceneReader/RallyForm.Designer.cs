@@ -81,6 +81,7 @@
             this.MovementPanel = new System.Windows.Forms.Panel();
             this.PositionPanel = new System.Windows.Forms.Panel();
             this.ConnectionsPanel = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.xUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.zUpDown)).BeginInit();
@@ -649,7 +650,7 @@
             this.DupBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.DupBtn.Location = new System.Drawing.Point(12, 282);
             this.DupBtn.Name = "DupBtn";
-            this.DupBtn.Size = new System.Drawing.Size(75, 23);
+            this.DupBtn.Size = new System.Drawing.Size(61, 23);
             this.DupBtn.TabIndex = 60;
             this.DupBtn.Text = "Duplicate";
             this.DupBtn.UseVisualStyleBackColor = true;
@@ -658,9 +659,9 @@
             // TranslateBtn
             // 
             this.TranslateBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.TranslateBtn.Location = new System.Drawing.Point(116, 282);
+            this.TranslateBtn.Location = new System.Drawing.Point(132, 282);
             this.TranslateBtn.Name = "TranslateBtn";
-            this.TranslateBtn.Size = new System.Drawing.Size(75, 23);
+            this.TranslateBtn.Size = new System.Drawing.Size(59, 23);
             this.TranslateBtn.TabIndex = 61;
             this.TranslateBtn.Text = "Translate";
             this.TranslateBtn.UseVisualStyleBackColor = true;
@@ -717,11 +718,23 @@
             this.ConnectionsPanel.Size = new System.Drawing.Size(170, 259);
             this.ConnectionsPanel.TabIndex = 67;
             // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button1.Location = new System.Drawing.Point(79, 282);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(47, 23);
+            this.button1.TabIndex = 68;
+            this.button1.Text = "Scale";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
             // RallyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(734, 317);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.ConnectionsLbl);
             this.Controls.Add(this.PositionLbl);
             this.Controls.Add(this.MovementLbl);
@@ -856,6 +869,7 @@
         private System.Windows.Forms.Panel MovementPanel;
         private System.Windows.Forms.Panel PositionPanel;
         private System.Windows.Forms.Panel ConnectionsPanel;
+        private System.Windows.Forms.Button button1;
     }
 }
 

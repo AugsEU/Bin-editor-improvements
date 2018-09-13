@@ -100,7 +100,7 @@ namespace SMSRallyEditor
 
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBox2.SelectedIndex == -1 || listBox2.Items.Count == 0)
+            if (listBox2.SelectedIndex == -1 || listBox2.Items.Count == 0 || listBox1.SelectedIndex == -1)
                 return;
 
             KeyFrame rp = file.GetAllRails()[listBox1.SelectedIndex].frames[listBox2.SelectedIndex];
@@ -148,12 +148,12 @@ namespace SMSRallyEditor
             rp.connections[5] = (short)u6UpDown.Value;
             rp.connections[6] = (short)u7UpDown.Value;
             rp.connections[7] = (short)u8UpDown.Value;
-            for(int i = 0;i < rp.periods.Length;i++)//Calculate distance values
+            for(int i = 0;i < rp.u1;i++)//Calculate distance values
             {
                 Vector rpPosition = new Vector(rp.x, rp.y, rp.z);
                 KeyFrame ConnectedFrame = file.GetAllRails()[listBox1.SelectedIndex].frames[rp.connections[i]];
                 Vector ConnectionDisplacement = new Vector(rp.x - ConnectedFrame.x, rp.y - ConnectedFrame.y, rp.z - ConnectedFrame.z);
-                rp.periods[i] = ConnectionDisplacement.Length;
+                rp.periods[i] = (float)Math.Sqrt(ConnectionDisplacement.Length);
             }
             file.GetAllRails()[listBox1.SelectedIndex].frames[listBox2.SelectedIndex] = rp;
         }
@@ -324,5 +324,37 @@ namespace SMSRallyEditor
             listBox2.SelectedIndex = OldFrameIndex;
         }
 
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            int RailIndex = listBox1.SelectedIndex;//Index of rail we are translating
+            int OldFrameIndex = listBox2.SelectedIndex;//Store this so we can set the selected index back at the end
+            if (RailIndex == -1 || listBox1.Items.Count == 0)//Make sure indicies make sense
+                return;
+
+            VectorInput VectorInput = new VectorInput();
+            if (VectorInput.ShowDialog() != DialogResult.OK)//Cancel if no vector is put in.
+                return;
+
+            Vector Centre = Vector.Zero;
+            int NumOfFrames = file.GetAllRails()[RailIndex].frames.Length;
+            for (int i = 0; i < NumOfFrames; i++)
+            {
+                Vector KFPos = new Vector(file.GetAllRails()[RailIndex].frames[i].x, file.GetAllRails()[RailIndex].frames[i].y, file.GetAllRails()[RailIndex].frames[i].z);
+                Centre = new Vector(KFPos.X + Centre.X, KFPos.Y + Centre.Y, KFPos.Z + Centre.Z);
+            }
+            Centre = new Vector(Centre.X / NumOfFrames, Centre.Y / NumOfFrames, Centre.Z / NumOfFrames);//Average position of Key frames
+
+            for (int i = 0; i < NumOfFrames; i++)
+            {
+                KeyFrame FrameToEdit = file.GetAllRails()[RailIndex].frames[i];
+                Vector KFPosToCentre = new Vector(file.GetAllRails()[RailIndex].frames[i].x - Centre.X, file.GetAllRails()[RailIndex].frames[i].y - Centre.Y, file.GetAllRails()[RailIndex].frames[i].z - Centre.Z);
+                FrameToEdit.x = (short)(Centre.X + VectorInput.X* KFPosToCentre.X);
+                FrameToEdit.y = (short)(Centre.Y + VectorInput.Y * KFPosToCentre.Y);
+                FrameToEdit.z = (short)(Centre.Z + VectorInput.Z * KFPosToCentre.Z);//Scale
+                file.GetAllRails()[RailIndex].frames[i] = FrameToEdit;
+                UpdateRails(RailIndex, i);
+            }
+            listBox2.SelectedIndex = OldFrameIndex;
+        }
     }
 }
