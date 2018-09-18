@@ -69,6 +69,8 @@
             this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem16 = new System.Windows.Forms.ToolStripSeparator();
             this.clearMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.objectToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.arrayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createParameterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findDisrepancyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -211,8 +213,7 @@
             this.bmgOpenFile = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.label8 = new System.Windows.Forms.Label();
-            this.objectToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.arrayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moveToCameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.paramContextMenu.SuspendLayout();
             this.paramMenuStrip1.SuspendLayout();
             this.ParamBox.SuspendLayout();
@@ -593,6 +594,23 @@
             this.clearMapToolStripMenuItem.Text = "Clear Map";
             this.clearMapToolStripMenuItem.Click += new System.EventHandler(this.clearMapToolStripMenuItem_Click);
             // 
+            // objectToolStripMenuItem1
+            // 
+            this.objectToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.arrayToolStripMenuItem,
+            this.moveToCameraToolStripMenuItem});
+            this.objectToolStripMenuItem1.Name = "objectToolStripMenuItem1";
+            this.objectToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.objectToolStripMenuItem1.Text = "Object";
+            // 
+            // arrayToolStripMenuItem
+            // 
+            this.arrayToolStripMenuItem.Name = "arrayToolStripMenuItem";
+            this.arrayToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
+            this.arrayToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.arrayToolStripMenuItem.Text = "Array";
+            this.arrayToolStripMenuItem.Click += new System.EventHandler(this.arrayToolStripMenuItem_Click);
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -849,7 +867,7 @@
             this.nPCToolStripMenuItem1,
             this.triggerToolStripMenuItem});
             this.createToolStripMenuItem.Name = "createToolStripMenuItem";
-            this.createToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.createToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.createToolStripMenuItem.Text = "Create";
             // 
             // decorationToolStripMenuItem
@@ -1355,7 +1373,7 @@
             this.modifyToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.makeMovingToolStripMenuItem});
             this.modifyToolStripMenuItem.Name = "modifyToolStripMenuItem";
-            this.modifyToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.modifyToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.modifyToolStripMenuItem.Text = "Modify";
             // 
             // makeMovingToolStripMenuItem
@@ -1371,7 +1389,7 @@
             this.lightingToolStripMenuItem,
             this.emptyMapToolStripMenuItem});
             this.mapToolStripMenuItem.Name = "mapToolStripMenuItem";
-            this.mapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.mapToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
             this.mapToolStripMenuItem.Text = "Map";
             // 
             // lightingToolStripMenuItem
@@ -1697,21 +1715,13 @@
             this.label8.Text = "Translate";
             this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
-            // objectToolStripMenuItem1
+            // moveToCameraToolStripMenuItem
             // 
-            this.objectToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.arrayToolStripMenuItem});
-            this.objectToolStripMenuItem1.Name = "objectToolStripMenuItem1";
-            this.objectToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-            this.objectToolStripMenuItem1.Text = "Object";
-            // 
-            // arrayToolStripMenuItem
-            // 
-            this.arrayToolStripMenuItem.Name = "arrayToolStripMenuItem";
-            this.arrayToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.arrayToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
-            this.arrayToolStripMenuItem.Text = "Array";
-            this.arrayToolStripMenuItem.Click += new System.EventHandler(this.arrayToolStripMenuItem_Click);
+            this.moveToCameraToolStripMenuItem.Name = "moveToCameraToolStripMenuItem";
+            this.moveToCameraToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.C)));
+            this.moveToCameraToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.moveToCameraToolStripMenuItem.Text = "Move to Camera";
+            this.moveToCameraToolStripMenuItem.Click += new System.EventHandler(this.moveToCameraToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -1941,6 +1951,7 @@
         private System.Windows.Forms.ToolStripMenuItem makeDemoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem objectToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem arrayToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem moveToCameraToolStripMenuItem;
     }
 }
 

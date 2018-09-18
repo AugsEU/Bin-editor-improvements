@@ -3438,5 +3438,21 @@ namespace SMSSceneReader
             }
 
         }
+
+        private void moveToCameraToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!CurrentObjectParameters.ContainsParameter("X") || !CurrentObjectParameters.ContainsParameter("Y") || !CurrentObjectParameters.ContainsParameter("Z"))
+                return;
+            if(ScenePreview == null)
+                return;
+            Vector3 CameraPos = ScenePreview.CameraPos;
+            GameObject MyGo = (GameObject)treeView1.SelectedNode.Tag;
+            Changed = true;
+            CreateUndoSnapshot();
+            CurrentObjectParameters.SetParamValue("X", MyGo, CameraPos.X.ToString());
+            CurrentObjectParameters.SetParamValue("Y", MyGo, CameraPos.Y.ToString());
+            CurrentObjectParameters.SetParamValue("Z", MyGo, CameraPos.Z.ToString());
+            ScenePreview.UpdateObject(MyGo);
+        }
     }
 }
