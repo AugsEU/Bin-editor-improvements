@@ -16,6 +16,6 @@ Miluaces made this editor, all I did was add a few features. So full credit to h
 
     Numpad5:switch in and out of orthogonal
 
-* Added "Duplicate" and "Translate" buttons to the bin editor and improved UI
+* Added "Duplicate" and "Translate" buttons to the bin editor and improved UI, also added a subdivide button.
 
 * Added Camera Intro editor(WIP)
