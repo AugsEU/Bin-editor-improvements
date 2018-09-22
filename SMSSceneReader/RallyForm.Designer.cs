@@ -82,6 +82,7 @@
             this.PositionPanel = new System.Windows.Forms.Panel();
             this.ConnectionsPanel = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
+            this.SubSurf = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.xUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.zUpDown)).BeginInit();
@@ -114,16 +115,16 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(13, 13);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(178, 238);
+            this.listBox1.Size = new System.Drawing.Size(178, 212);
             this.listBox1.TabIndex = 0;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // addButton
             // 
             this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.addButton.Location = new System.Drawing.Point(117, 253);
+            this.addButton.Location = new System.Drawing.Point(103, 231);
             this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(75, 23);
+            this.addButton.Size = new System.Drawing.Size(88, 23);
             this.addButton.TabIndex = 2;
             this.addButton.Text = "Add";
             this.addButton.UseVisualStyleBackColor = true;
@@ -132,9 +133,9 @@
             // remButton
             // 
             this.remButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.remButton.Location = new System.Drawing.Point(13, 253);
+            this.remButton.Location = new System.Drawing.Point(12, 231);
             this.remButton.Name = "remButton";
-            this.remButton.Size = new System.Drawing.Size(75, 23);
+            this.remButton.Size = new System.Drawing.Size(85, 23);
             this.remButton.TabIndex = 1;
             this.remButton.Text = "Remove";
             this.remButton.UseVisualStyleBackColor = true;
@@ -165,9 +166,9 @@
             // remButton2
             // 
             this.remButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.remButton2.Location = new System.Drawing.Point(198, 282);
+            this.remButton2.Location = new System.Drawing.Point(197, 289);
             this.remButton2.Name = "remButton2";
-            this.remButton2.Size = new System.Drawing.Size(75, 23);
+            this.remButton2.Size = new System.Drawing.Size(83, 23);
             this.remButton2.TabIndex = 4;
             this.remButton2.Text = "Remove";
             this.remButton2.UseVisualStyleBackColor = true;
@@ -176,9 +177,9 @@
             // addButton2
             // 
             this.addButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.addButton2.Location = new System.Drawing.Point(301, 282);
+            this.addButton2.Location = new System.Drawing.Point(287, 289);
             this.addButton2.Name = "addButton2";
-            this.addButton2.Size = new System.Drawing.Size(75, 23);
+            this.addButton2.Size = new System.Drawing.Size(89, 23);
             this.addButton2.TabIndex = 5;
             this.addButton2.Text = "Insert";
             this.addButton2.UseVisualStyleBackColor = true;
@@ -648,9 +649,9 @@
             // DupBtn
             // 
             this.DupBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.DupBtn.Location = new System.Drawing.Point(12, 282);
+            this.DupBtn.Location = new System.Drawing.Point(13, 260);
             this.DupBtn.Name = "DupBtn";
-            this.DupBtn.Size = new System.Drawing.Size(61, 23);
+            this.DupBtn.Size = new System.Drawing.Size(84, 23);
             this.DupBtn.TabIndex = 60;
             this.DupBtn.Text = "Duplicate";
             this.DupBtn.UseVisualStyleBackColor = true;
@@ -659,9 +660,9 @@
             // TranslateBtn
             // 
             this.TranslateBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.TranslateBtn.Location = new System.Drawing.Point(132, 282);
+            this.TranslateBtn.Location = new System.Drawing.Point(103, 260);
             this.TranslateBtn.Name = "TranslateBtn";
-            this.TranslateBtn.Size = new System.Drawing.Size(59, 23);
+            this.TranslateBtn.Size = new System.Drawing.Size(88, 23);
             this.TranslateBtn.TabIndex = 61;
             this.TranslateBtn.Text = "Translate";
             this.TranslateBtn.UseVisualStyleBackColor = true;
@@ -721,19 +722,31 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(79, 282);
+            this.button1.Location = new System.Drawing.Point(103, 289);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(47, 23);
+            this.button1.Size = new System.Drawing.Size(88, 23);
             this.button1.TabIndex = 68;
             this.button1.Text = "Scale";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // SubSurf
+            // 
+            this.SubSurf.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.SubSurf.Location = new System.Drawing.Point(13, 289);
+            this.SubSurf.Name = "SubSurf";
+            this.SubSurf.Size = new System.Drawing.Size(84, 23);
+            this.SubSurf.TabIndex = 69;
+            this.SubSurf.Text = "Subdivide";
+            this.SubSurf.UseVisualStyleBackColor = true;
+            this.SubSurf.Click += new System.EventHandler(this.SubSurf_Click);
             // 
             // RallyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(734, 317);
+            this.Controls.Add(this.SubSurf);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.ConnectionsLbl);
             this.Controls.Add(this.PositionLbl);
@@ -870,6 +883,7 @@
         private System.Windows.Forms.Panel PositionPanel;
         private System.Windows.Forms.Panel ConnectionsPanel;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button SubSurf;
     }
 }
 

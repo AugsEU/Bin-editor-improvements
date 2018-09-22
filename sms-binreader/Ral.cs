@@ -94,6 +94,29 @@ namespace SMSReader
                 Data.WriteSingle(file, periods[i]);
         }
 
+        public KeyFrame DeepCopy()
+        {
+            KeyFrame ReturnFrame = new KeyFrame();
+            ReturnFrame.connections = new short[8];
+            ReturnFrame.periods = new float[8];
+            for (int j = 0; j < u1; j++)
+            {
+                ReturnFrame.connections[j] = connections[j];
+                ReturnFrame.periods[j] = periods[j];
+            }
+
+            ReturnFrame.u1 = u1;
+            ReturnFrame.u2 = u2;
+            ReturnFrame.u3 = u3;
+            ReturnFrame.pitch = pitch;
+            ReturnFrame.yaw = yaw;
+            ReturnFrame.roll = roll;
+            ReturnFrame.x = x;
+            ReturnFrame.y = y;
+            ReturnFrame.z = z;
+            ReturnFrame.speed = speed;
+            return ReturnFrame;
+        }
         
     }
 
@@ -259,6 +282,18 @@ namespace SMSReader
         public long DataSize()
         {
             return 68 * frames.Length;
+        }
+
+        public Rail DeepCopy()
+        {
+            Rail ReturnRail = new Rail();
+            ReturnRail.name = name;
+            ReturnRail.frames = new KeyFrame[frames.Length];
+            for (int i = 0; i < frames.Length; i++)
+            {
+                ReturnRail.frames[i] = frames[i].DeepCopy();
+            }
+            return ReturnRail;
         }
     }
 

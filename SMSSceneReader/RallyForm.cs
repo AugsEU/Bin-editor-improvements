@@ -150,10 +150,17 @@ namespace SMSRallyEditor
             rp.connections[7] = (short)u8UpDown.Value;
             for(int i = 0;i < rp.u1;i++)//Calculate distance values
             {
-                Vector rpPosition = new Vector(rp.x, rp.y, rp.z);
-                KeyFrame ConnectedFrame = file.GetAllRails()[listBox1.SelectedIndex].frames[rp.connections[i]];
-                Vector ConnectionDisplacement = new Vector(rp.x - ConnectedFrame.x, rp.y - ConnectedFrame.y, rp.z - ConnectedFrame.z);
-                rp.periods[i] = (float)Math.Sqrt(ConnectionDisplacement.Length);
+                try
+                {
+                    Vector rpPosition = new Vector(rp.x, rp.y, rp.z);
+                    KeyFrame ConnectedFrame = file.GetAllRails()[listBox1.SelectedIndex].frames[rp.connections[i]];
+                    Vector ConnectionDisplacement = new Vector(rp.x - ConnectedFrame.x, rp.y - ConnectedFrame.y, rp.z - ConnectedFrame.z);
+                    rp.periods[i] = (float)Math.Sqrt(ConnectionDisplacement.Length);
+                }
+                catch
+                {
+                    rp.periods[i] = 0;
+                }
             }
             file.GetAllRails()[listBox1.SelectedIndex].frames[listBox2.SelectedIndex] = rp;
         }
@@ -168,11 +175,16 @@ namespace SMSRallyEditor
 
             file.GetAllRails()[listBox1.SelectedIndex].InsertFrame(rp, listBox2.SelectedIndex);
 
+            RefreshListBox2();
+        }
+
+        private void RefreshListBox2()
+        {
             listBox2.Items.Clear();
             for (int i = 0; i < file.GetAllRails()[listBox1.SelectedIndex].frames.Length; i++)
                 listBox2.Items.Add(i.ToString());
         }
-
+        
         private void remButton2_Click(object sender, EventArgs e)
         {
             if (listBox1.SelectedIndex == -1 || listBox1.Items.Count == 0)
@@ -319,8 +331,8 @@ namespace SMSRallyEditor
                 FrameToEdit.y += (short)VectorInput.Y;
                 FrameToEdit.z += (short)VectorInput.Z;//Translate
                 file.GetAllRails()[RailIndex].frames[i] = FrameToEdit;
-                UpdateRails(RailIndex, i);
             }
+            UpdateRails(RailIndex, 0);
             listBox2.SelectedIndex = OldFrameIndex;
         }
 
@@ -352,9 +364,79 @@ namespace SMSRallyEditor
                 FrameToEdit.y = (short)(Centre.Y + VectorInput.Y * KFPosToCentre.Y);
                 FrameToEdit.z = (short)(Centre.Z + VectorInput.Z * KFPosToCentre.Z);//Scale
                 file.GetAllRails()[RailIndex].frames[i] = FrameToEdit;
-                UpdateRails(RailIndex, i);
+                
             }
+            UpdateRails(RailIndex, 0);
             listBox2.SelectedIndex = OldFrameIndex;
         }
+
+        private void SubSurf_Click(object sender, EventArgs e)
+        {
+            int RailIndex = listBox1.SelectedIndex;//Index of rail we are translating
+            if (RailIndex == -1 || listBox1.Items.Count == 0)//Make sure indicies make sense
+                return;
+
+            Subdivide SubiInput = new Subdivide();
+            if (SubiInput.ShowDialog() != DialogResult.OK)//Cancel if no SubiInput is put in.
+                return;
+
+            if(SubiInput.SelectedScheme == "Chaikin")
+            {
+                for(int i = 0; i < SubiInput.Count; i++)
+                {
+                    ChaikinSub(RailIndex);
+                }
+            }
+
+            UpdateRails(RailIndex, 0);
+        }
+
+        private void ChaikinSub(int RailIndex)
+        {
+            Rail OldPath = file.GetAllRails()[RailIndex].DeepCopy();
+            Rail NewPath = file.GetAllRails()[RailIndex];
+
+            for (int i = 0; i < OldPath.frames.Length; i++)
+            {
+                if(OldPath.frames[i].u1 == 2)
+                {
+                    ChaikinSplit(OldPath, ref NewPath, i);
+                }
+            }
+
+            file.GetAllRails()[RailIndex] = NewPath;
+        }
+
+        private void ChaikinSplit(Rail OldPath, ref Rail NewPath, int Index)//lol
+        {
+            KeyFrame NewNode = NewPath.frames[Index].DeepCopy();
+            int NewNodeIndex = NewPath.frames.Length;
+            NewPath.InsertFrame(NewNode, NewPath.frames.Length);//Add node at the end to not change the indicies
+            KeyFrame MiddleKeyFrame = OldPath.frames[Index];
+            KeyFrame FirstKeyframe = OldPath.frames[MiddleKeyFrame.connections[0]];
+            KeyFrame LastKeyFrame = OldPath.frames[MiddleKeyFrame.connections[1]];
+            NewPath.frames[Index].x = (short)(0.25 * FirstKeyframe.x + 0.75 * MiddleKeyFrame.x);
+            NewPath.frames[Index].y = (short)(0.25 * FirstKeyframe.y + 0.75 * MiddleKeyFrame.y);
+            NewPath.frames[Index].z = (short)(0.25 * FirstKeyframe.z + 0.75 * MiddleKeyFrame.z);
+
+            NewPath.frames[NewNodeIndex].x = (short)(0.25 * LastKeyFrame.x + 0.75 * MiddleKeyFrame.x);
+            NewPath.frames[NewNodeIndex].y = (short)(0.25 * LastKeyFrame.y + 0.75 * MiddleKeyFrame.y);
+            NewPath.frames[NewNodeIndex].z = (short)(0.25 * LastKeyFrame.z + 0.75 * MiddleKeyFrame.z);
+
+            NewPath.frames[Index].connections[1] = (short)NewNodeIndex;
+            NewPath.frames[NewNodeIndex].connections[0] = (short)Index;
+            int ConnectToMiddleIndexOfIndex = -1;
+            for(int i = 0; i < LastKeyFrame.connections.Length; i++)
+            {
+                if (LastKeyFrame.connections[i] == (short)Index)
+                    ConnectToMiddleIndexOfIndex = i;
+            }
+            if(ConnectToMiddleIndexOfIndex != -1)
+            {
+                NewPath.frames[MiddleKeyFrame.connections[1]].connections[ConnectToMiddleIndexOfIndex] = (short)NewNodeIndex;
+            }
+        }
+
+        
     }
 }

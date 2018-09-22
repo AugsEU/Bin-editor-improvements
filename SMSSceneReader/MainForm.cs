@@ -3453,6 +3453,7 @@ namespace SMSSceneReader
             CurrentObjectParameters.SetParamValue("Y", MyGo, CameraPos.Y.ToString());
             CurrentObjectParameters.SetParamValue("Z", MyGo, CameraPos.Z.ToString());
             ScenePreview.UpdateObject(MyGo);
+            treeView1_AfterSelect(sender, new TreeViewEventArgs(treeView1.SelectedNode));
         }
     }
 }
