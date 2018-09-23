@@ -2047,6 +2047,9 @@ namespace SMSSceneReader
             } 
             else
                 Rotation = Vector3.Zero;
+            if (Parent.Name == "Mario")
+                Rotation.Y += 90f;
+
             if (op.ContainsParameter("ScaleX") && op.ContainsParameter("ScaleY") && op.ContainsParameter("ScaleZ"))
             {
                 float.TryParse(op.GetParamValue("ScaleX", Parent), out Scale.X);
