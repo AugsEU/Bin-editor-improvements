@@ -71,6 +71,7 @@
             this.clearMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.objectToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.arrayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moveToCameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createParameterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.findDisrepancyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -213,7 +214,6 @@
             this.bmgOpenFile = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.label8 = new System.Windows.Forms.Label();
-            this.moveToCameraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.paramContextMenu.SuspendLayout();
             this.paramMenuStrip1.SuspendLayout();
             this.ParamBox.SuspendLayout();
@@ -556,7 +556,7 @@
             this.undoToolStripMenuItem.Enabled = false;
             this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
             this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.undoToolStripMenuItem.Text = "Undo";
             this.undoToolStripMenuItem.Click += new System.EventHandler(this.undoToolStripMenuItem_Click);
             // 
@@ -565,32 +565,32 @@
             this.redoToolStripMenuItem.Enabled = false;
             this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
             this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.redoToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.redoToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.redoToolStripMenuItem.Text = "Redo";
             this.redoToolStripMenuItem.Click += new System.EventHandler(this.redoToolStripMenuItem_Click);
             // 
             // toolStripMenuItem17
             // 
             this.toolStripMenuItem17.Name = "toolStripMenuItem17";
-            this.toolStripMenuItem17.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem17.Size = new System.Drawing.Size(141, 6);
             // 
             // findToolStripMenuItem
             // 
             this.findToolStripMenuItem.Name = "findToolStripMenuItem";
             this.findToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this.findToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.findToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.findToolStripMenuItem.Text = "Find";
             this.findToolStripMenuItem.Click += new System.EventHandler(this.findToolStripMenuItem_Click);
             // 
             // toolStripMenuItem16
             // 
             this.toolStripMenuItem16.Name = "toolStripMenuItem16";
-            this.toolStripMenuItem16.Size = new System.Drawing.Size(149, 6);
+            this.toolStripMenuItem16.Size = new System.Drawing.Size(141, 6);
             // 
             // clearMapToolStripMenuItem
             // 
             this.clearMapToolStripMenuItem.Name = "clearMapToolStripMenuItem";
-            this.clearMapToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.clearMapToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.clearMapToolStripMenuItem.Text = "Clear Map";
             this.clearMapToolStripMenuItem.Click += new System.EventHandler(this.clearMapToolStripMenuItem_Click);
             // 
@@ -600,7 +600,7 @@
             this.arrayToolStripMenuItem,
             this.moveToCameraToolStripMenuItem});
             this.objectToolStripMenuItem1.Name = "objectToolStripMenuItem1";
-            this.objectToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.objectToolStripMenuItem1.Size = new System.Drawing.Size(144, 22);
             this.objectToolStripMenuItem1.Text = "Object";
             // 
             // arrayToolStripMenuItem
@@ -610,6 +610,14 @@
             this.arrayToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.arrayToolStripMenuItem.Text = "Array";
             this.arrayToolStripMenuItem.Click += new System.EventHandler(this.arrayToolStripMenuItem_Click);
+            // 
+            // moveToCameraToolStripMenuItem
+            // 
+            this.moveToCameraToolStripMenuItem.Name = "moveToCameraToolStripMenuItem";
+            this.moveToCameraToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.C)));
+            this.moveToCameraToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.moveToCameraToolStripMenuItem.Text = "Move to Camera";
+            this.moveToCameraToolStripMenuItem.Click += new System.EventHandler(this.moveToCameraToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
@@ -1715,14 +1723,6 @@
             this.label8.Text = "Translate";
             this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
-            // moveToCameraToolStripMenuItem
-            // 
-            this.moveToCameraToolStripMenuItem.Name = "moveToCameraToolStripMenuItem";
-            this.moveToCameraToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.C)));
-            this.moveToCameraToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.moveToCameraToolStripMenuItem.Text = "Move to Camera";
-            this.moveToCameraToolStripMenuItem.Click += new System.EventHandler(this.moveToCameraToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1745,7 +1745,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(510, 486);
             this.Name = "MainForm";
-            this.Text = "SMS Bin Editor 1.2.5 Beta";
+            this.Text = "SMS Bin Editor 1.3.1 Beta";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_Closing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.paramContextMenu.ResumeLayout(false);

@@ -1674,7 +1674,7 @@ namespace SMSSceneReader
             Vector3 minBox = Vector3.Zero;
             Vector3 maxBox = Vector3.Zero;
             GetRealBounds(out minBox, out maxBox);
-
+            
             //Create cube around bounds
             GL.NewList(BBList, ListMode.Compile);
             GL.Begin(PrimitiveType.Lines);
@@ -1729,6 +1729,13 @@ namespace SMSSceneReader
                     }
                 }
             }
+
+            if (float.IsInfinity(maxBox.Length) || float.IsInfinity(minBox.Length))
+            {
+                maxBox = Model.BBoxMax;
+                minBox = Model.BBoxMin;
+            }
+
         }
 
         public void UnLoad()
@@ -1974,6 +1981,8 @@ namespace SMSSceneReader
 
                 if (Model != null)
                     Model.GetRealBounds(out BBoxMin, out BBoxMax);
+
+
 
                 if (bmt != null)
                     bmt.Close();

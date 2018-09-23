@@ -389,6 +389,7 @@ namespace SMSRallyEditor
             }
 
             UpdateRails(RailIndex, 0);
+            RefreshListBox2();
         }
 
         private void ChaikinSub(int RailIndex)
@@ -437,6 +438,17 @@ namespace SMSRallyEditor
             }
         }
 
-        
+        private void InsAfter_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedIndex == -1 || listBox1.Items.Count == 0)
+                return;
+
+            KeyFrame rp = new KeyFrame();
+            rp.NullData();
+
+            file.GetAllRails()[listBox1.SelectedIndex].InsertFrame(rp, listBox2.SelectedIndex + 1);
+
+            RefreshListBox2();
+        }
     }
 }

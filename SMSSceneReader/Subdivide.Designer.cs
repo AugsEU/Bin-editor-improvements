@@ -88,6 +88,7 @@
             // SchemeType
             // 
             this.SchemeType.AutoSize = true;
+            this.SchemeType.Checked = true;
             this.SchemeType.Location = new System.Drawing.Point(3, 3);
             this.SchemeType.Name = "SchemeType";
             this.SchemeType.Size = new System.Drawing.Size(60, 17);
@@ -106,6 +107,7 @@
             this.RadioGroup.Name = "RadioGroup";
             this.RadioGroup.Size = new System.Drawing.Size(161, 41);
             this.RadioGroup.TabIndex = 8;
+            this.RadioGroup.UseWaitCursor = true;
             // 
             // label1
             // 

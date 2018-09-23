@@ -83,6 +83,7 @@
             this.ConnectionsPanel = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.SubSurf = new System.Windows.Forms.Button();
+            this.InsAfter = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.xUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.zUpDown)).BeginInit();
@@ -159,14 +160,14 @@
             this.listBox2.FormattingEnabled = true;
             this.listBox2.Location = new System.Drawing.Point(198, 13);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(178, 264);
+            this.listBox2.Size = new System.Drawing.Size(178, 238);
             this.listBox2.TabIndex = 3;
             this.listBox2.SelectedIndexChanged += new System.EventHandler(this.listBox2_SelectedIndexChanged);
             // 
             // remButton2
             // 
             this.remButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.remButton2.Location = new System.Drawing.Point(197, 289);
+            this.remButton2.Location = new System.Drawing.Point(197, 260);
             this.remButton2.Name = "remButton2";
             this.remButton2.Size = new System.Drawing.Size(83, 23);
             this.remButton2.TabIndex = 4;
@@ -177,11 +178,11 @@
             // addButton2
             // 
             this.addButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.addButton2.Location = new System.Drawing.Point(287, 289);
+            this.addButton2.Location = new System.Drawing.Point(286, 260);
             this.addButton2.Name = "addButton2";
             this.addButton2.Size = new System.Drawing.Size(89, 23);
             this.addButton2.TabIndex = 5;
-            this.addButton2.Text = "Insert";
+            this.addButton2.Text = "Insert Before";
             this.addButton2.UseVisualStyleBackColor = true;
             this.addButton2.Click += new System.EventHandler(this.addButton2_Click);
             // 
@@ -741,11 +742,23 @@
             this.SubSurf.UseVisualStyleBackColor = true;
             this.SubSurf.Click += new System.EventHandler(this.SubSurf_Click);
             // 
+            // InsAfter
+            // 
+            this.InsAfter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.InsAfter.Location = new System.Drawing.Point(286, 289);
+            this.InsAfter.Name = "InsAfter";
+            this.InsAfter.Size = new System.Drawing.Size(89, 23);
+            this.InsAfter.TabIndex = 70;
+            this.InsAfter.Text = "Insert After";
+            this.InsAfter.UseVisualStyleBackColor = true;
+            this.InsAfter.Click += new System.EventHandler(this.InsAfter_Click);
+            // 
             // RallyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(734, 317);
+            this.Controls.Add(this.InsAfter);
             this.Controls.Add(this.SubSurf);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.ConnectionsLbl);
@@ -884,6 +897,7 @@
         private System.Windows.Forms.Panel ConnectionsPanel;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button SubSurf;
+        private System.Windows.Forms.Button InsAfter;
     }
 }
 
