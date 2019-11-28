@@ -32,6 +32,7 @@ namespace SMSSceneReader
         private const string MAP_PATH = "map\\map\\";    //Map model location
         private const string MAP_FILE = "map\\map\\map.bmd";    //Map model location
         private const string SKY_FILE = "map\\map\\sky.bmd";    //Map model location
+        private const string SEA_FILE = "map\\map\\sea.bmd";    //Sea Model location
         private const string SKYTEX_FILE = "map\\map\\sky.bmt";    //Map model location
         
         /* Camera variables */
@@ -58,12 +59,15 @@ namespace SMSSceneReader
         private System.Timers.Timer DisplayTimer = new System.Timers.Timer();
 
         /* Free look controls */
-        private bool key_w = false;
-        private bool key_a = false;
-        private bool key_s = false;
-        private bool key_d = false;
-        private bool key_space = false;
-        private bool key_shift = false;
+        private bool Key_Forward = false;
+        private bool Key_Left = false;
+        private bool Key_Backward = false;
+        private bool Key_Right = false;
+        private bool Key_Up = false;
+        private bool Key_Down = false;
+
+        /*Other Controls*/
+        private bool Key_Drag = false;
 
         /* Axis stuff */
         bool LockKeyHeld;
@@ -78,7 +82,8 @@ namespace SMSSceneReader
         private Vector3 ClickOrigin;
 
         private bool startedMoving = false;
-
+        private int xPosition;
+        private int yPosition;
 
 
         private Point FormCenter
@@ -111,12 +116,14 @@ namespace SMSSceneReader
 
         int MapGList = 0;   //Map model list
         int SkyGList = 0;   //Map model list
+        int SeaGList = 0;   //Map model list
         Bmd scene;  //Map model
         Bmd sky;    //Sky
+        Bmd sea;    //Sea
         List<Bmd> otherModels;  //Others
 
         /* Debug */
-        private Ray LastClick;
+        private Ray LastClick = null;
         bool Debug_ShowLastMouse = false;
 
         /* Preview */
@@ -172,6 +179,7 @@ namespace SMSSceneReader
 
                 GL.DeleteLists(MapGList, 1);
                 GL.DeleteLists(SkyGList, 1);
+                GL.DeleteLists(SeaGList, 1);
                 BuildScene();
             }
 
@@ -193,6 +201,7 @@ namespace SMSSceneReader
             }
             else
                 scene = null;
+
             if (File.Exists(SceneRoot + SKY_FILE))
             {
                 fb.Stream = new FileStream(SceneRoot + SKY_FILE, FileMode.Open);
@@ -207,6 +216,16 @@ namespace SMSSceneReader
             }
             else
                 sky = null;
+
+            //if (File.Exists(SceneRoot + SEA_FILE))
+            //{
+                //fb.Stream = new FileStream(SceneRoot + SEA_FILE, FileMode.Open);
+                //sea = new Bmd(fb);
+                //sea.Materials[0] = sea.Materials[1];
+                //fb.Close();
+            //}
+            //else
+                sea = null;
 
             otherModels = new List<Bmd>();
             //Pointless
@@ -225,6 +244,7 @@ namespace SMSSceneReader
 
             MapGList = GL.GenLists(1);
             SkyGList = GL.GenLists(1);
+            SeaGList = GL.GenLists(1);
 
             GL.NewList(SkyGList, ListMode.Compile);
             if (sky != null)
@@ -243,6 +263,13 @@ namespace SMSSceneReader
                     DrawBMD(scene);
                 if ((Properties.Settings.Default.worldDrawMode | 0x02) == Properties.Settings.Default.worldDrawMode)
                     DrawBMD(scene, RenderMode.Translucent);
+            }
+            GL.EndList();
+
+            GL.NewList(SeaGList, ListMode.Compile);
+            if (sea != null)
+            {
+                DrawBMD(sea);
             }
             GL.EndList();
         }
@@ -334,7 +361,9 @@ namespace SMSSceneReader
                     so.Value.Select();
                 }
                 else if (so.Value.Selected == true)
+                {
                     so.Value.Deselect();
+                }
             }
 
             UpdateCamera();
@@ -566,16 +595,31 @@ namespace SMSSceneReader
         private void glControl1_MouseDown(object sender, MouseEventArgs e)
         {
             DidMove = false;
-            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            if (e.Button == MouseButtons.Right)
             {
-                MouseLook = true;
-                Cursor.Position = FormCenter;
-                DisplayTimer.Start();
+                if (!Key_Drag)
+                {
+                    MouseLook = true;
+                    Cursor.Position = FormCenter;
+                    DisplayTimer.Start();
 
-                Cursor.Hide();
+                    Cursor.Hide();
+                    return;
+                }
+                CancelMoveObject(true);
             }
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
             {
+                startedMoving = (xPosition != e.X || yPosition != e.Y);
+                xPosition = e.X;
+                yPosition = e.Y;
+                if (startedMoving)
+                    mainForm.CreateUndoSnapshot();
+                if (Key_Drag)
+                {
+                    CancelMoveObject(false);
+                    startedMoving = false;
+                }
                 ClickRail = false;
 
                 Ray r = ScreenToRay(glControl1.PointToClient(Cursor.Position));
@@ -729,12 +773,12 @@ namespace SMSSceneReader
                 MouseLook = false;
                 CameraVelocity = new Vector3(0f, 0f, 0f);
 
-                key_w = false;
-                key_s = false;
-                key_a = false;
-                key_d = false;
-                key_space = false;
-                key_shift = false;
+                Key_Forward = false;
+                Key_Backward = false;
+                Key_Left = false;
+                Key_Right = false;
+                Key_Up = false;
+                Key_Down = false;
 
                 Cursor.Show();
             }
@@ -778,147 +822,178 @@ namespace SMSSceneReader
                 UpdateCamera();
                 glControl1.Refresh();
             }
-            else if (e.Button == MouseButtons.Left)//Drag
+            else if (Key_Drag)
             {
-                if (!Orthographic)
+                MoveObject();
+            }
+            else if (startedMoving && e.Button == MouseButtons.Left)
+            {
+                MoveObject();
+            }
+        }
+
+        private void MoveObject()
+        {
+            if (!Orthographic)
+            {
+                Ray r = ScreenToRay(glControl1.PointToClient(Cursor.Position));
+
+                float num = Vector3.Dot(ClickPosition - CameraPos, ClickNormal);
+                float den = Vector3.Dot(r.Direction, ClickNormal);
+                float t = num / den;    //Distance from camera
+
+                Vector3 newpoint = CameraPos + (r.Direction * t);
+
+                if (LockKeyHeld || LockedAxis)
                 {
-                    Ray r = ScreenToRay(glControl1.PointToClient(Cursor.Position));
+                    Vector3 nY;
+                    Vector3 nX;
+                    float angle;
+                    Vector3 axis;
 
-                    float num = Vector3.Dot(ClickPosition - CameraPos, ClickNormal);
-                    float den = Vector3.Dot(r.Direction, ClickNormal);
-                    float t = num / den;    //Distance from camera
-
-                    Vector3 newpoint = CameraPos + (r.Direction * t);
-
-                    if (LockKeyHeld || LockedAxis)
+                    if (ClickNormal == new Vector3(0, 0, 1))
                     {
-                        Vector3 nY;
-                        Vector3 nX;
-                        float angle;
-                        Vector3 axis;
-
-                        if (ClickNormal == new Vector3(0, 0, 1))
-                        {
-                            angle = 0;
-                            axis = new Vector3(1, 0, 0);
-                        }
-                        else
-                        {
-                            angle = Vector3.Dot(new Vector3(0, 0, 1), ClickNormal);
-                            axis = Vector3.Cross(new Vector3(0, 0, 1), ClickNormal).Normalized();
-                        }
-
-                        if (angle != 0)
-                        {
-                            float c = angle;
-                            float s = (float)Math.Sqrt(1 - Math.Pow(angle, 2));
-                            float C = 1 - angle;
-                            float x = axis.X;
-                            float y = axis.Y;
-                            float z = axis.Z;
-
-                            Matrix3 rotmtx = new Matrix3(
-                                new Vector3(x * x * C + c, x * y * C - z * s, x * z * C + y * s),
-                                new Vector3(y * x * C + z * s, y * y * C + c, y * z * C - x * s),
-                                new Vector3(z * x * C - y * s, z * y * C + x * s, z * z * C + c));
-
-                            nX = rotmtx * new Vector3(1, 0, 0);
-                            nY = rotmtx * new Vector3(0, 1, 0);
-                        }
-                        else
-                        {
-                            nX = new Vector3(1, 0, 0);
-                            nY = new Vector3(0, 1, 0);
-                        }
-
-                        Vector3 pdif = (newpoint + ClickRelMouse) - ClickOrigin;
-                        float xdif = Vector3.Dot(pdif, nX);
-                        float ydif = Vector3.Dot(pdif, nY);
-
-                        if (LockedAxis)
-                            newpoint = (pdif * LastAxis.Direction) + LastAxis.Origin;
-                        else
-                        {
-                            if (xdif > ydif)
-                                LastAxis = new Ray(ClickOrigin, nX);
-                            else
-                                LastAxis = new Ray(ClickOrigin, nY);
-
-                            LockedAxis = true;
-                        }
-                    }
-                    if (!ClickRail)
-                    {
-                        if (!startedMoving)
-                        {
-                            startedMoving = true;
-                            mainForm.CreateUndoSnapshot();
-                            mainForm.Changed = true;
-                        }
-
-                        GameObject[] selected = GetSelectedObjects();
-                        //Update all selected objects
-                        foreach (GameObject go in selected)
-                        {
-                            ObjectParameters op = new ObjectParameters();
-                            op.ReadObjectParameters(go);
-                            Vector3 n = newpoint + ClickRelMouse;
-                            op.SetParamValue("X", go, n.X.ToString());
-                            op.SetParamValue("Y", go, n.Y.ToString());
-                            op.SetParamValue("Z", go, n.Z.ToString());
-
-                            UpdateObject(go);
-
-                            DidMove = true;
-                        }
+                        angle = 0;
+                        axis = new Vector3(1, 0, 0);
                     }
                     else
                     {
-                        rails.GetRail(SelectedRail).frames[SelectedFrame].x = (short)(ClickOrigin.X + (short)ClickRelMouse.X);
-                        rails.GetRail(SelectedRail).frames[SelectedFrame].y = (short)(ClickOrigin.Y + (short)ClickRelMouse.Y);
-                        rails.GetRail(SelectedRail).frames[SelectedFrame].z = (short)(ClickOrigin.Z + (short)ClickRelMouse.Z);
-                        mainForm.UpdateRailForm(SelectedRail, SelectedFrame);
+                        angle = Vector3.Dot(new Vector3(0, 0, 1), ClickNormal);
+                        axis = Vector3.Cross(new Vector3(0, 0, 1), ClickNormal).Normalized();
                     }
-                }
-                else
-                {
-                    Ray ClickLine = ScreenToRay(glControl1.PointToClient(Cursor.Position));
-                    Vector3 CameraUnitVector = new Vector3((float)(Math.Cos(CameraRotation.X) * Math.Cos(CameraRotation.Y)),
-                                                           (float)Math.Sin(CameraRotation.Y),
-                                                           (float)(Math.Sin(CameraRotation.X) * Math.Cos(CameraRotation.Y)));//Unit vector in camera direction. Also normal vector to plane of movement.
-                    GameObject[] selected = GetSelectedObjects();
-                    if(selected.Length != 0)
+
+                    if (angle != 0)
                     {
-                        ObjectParameters op = new ObjectParameters();
-                        op.ReadObjectParameters(selected[0]);
+                        float c = angle;
+                        float s = (float)Math.Sqrt(1 - Math.Pow(angle, 2));
+                        float C = 1 - angle;
+                        float x = axis.X;
+                        float y = axis.Y;
+                        float z = axis.Z;
 
-                        float x = 0f;
-                        float y = 0f;
-                        float z = 0f;
+                        Matrix3 rotmtx = new Matrix3(
+                            new Vector3(x * x * C + c, x * y * C - z * s, x * z * C + y * s),
+                            new Vector3(y * x * C + z * s, y * y * C + c, y * z * C - x * s),
+                            new Vector3(z * x * C - y * s, z * y * C + x * s, z * z * C + c));
 
-                        float.TryParse(op.GetParamValue("X", selected[0]), out x);
-                        float.TryParse(op.GetParamValue("Y", selected[0]), out y);
-                        float.TryParse(op.GetParamValue("Z", selected[0]), out z);
-
-                        Vector3 ObjectPosition = new Vector3(x,y,z);
-                        float t = Vector3.Dot(CameraUnitVector, ObjectPosition - ClickLine.Origin) / Vector3.Dot(CameraUnitVector, ClickLine.Direction);//Parameter for our line. This is in the form r=u+t*v where r,u, and v are vectors. and t is the scalar. This formula is from solving the vector eqn.
-                        Vector3 OutputPosition = ClickLine.Origin + t * ClickLine.Direction;
-                        if (!startedMoving)
-                        {
-                            startedMoving = true;
-                            mainForm.CreateUndoSnapshot();
-                            mainForm.Changed = true;
-                        }
-                        op.SetParamValue("X", selected[0], OutputPosition.X.ToString());
-                        op.SetParamValue("Y", selected[0], OutputPosition.Y.ToString());
-                        op.SetParamValue("Z", selected[0], OutputPosition.Z.ToString());
-                        UpdateObject(selected[0]);
-                        DidMove = true;//dodgy
+                        nX = rotmtx * new Vector3(1, 0, 0);
+                        nY = rotmtx * new Vector3(0, 1, 0);
                     }
-                    
+                    else
+                    {
+                        nX = new Vector3(1, 0, 0);
+                        nY = new Vector3(0, 1, 0);
+                    }
+
+                    Vector3 pdif = (newpoint + ClickRelMouse) - ClickOrigin;
+                    float xdif = Vector3.Dot(pdif, nX);
+                    float ydif = Vector3.Dot(pdif, nY);
+
+                    if (LockedAxis)
+                        newpoint = (pdif * LastAxis.Direction) + LastAxis.Origin;
+                    else
+                    {
+                        if (xdif > ydif)
+                            LastAxis = new Ray(ClickOrigin, nX);
+                        else
+                            LastAxis = new Ray(ClickOrigin, nY);
+
+                        LockedAxis = true;
+                    }
+                }
+                EndMove();
+            }
+            else
+            {
+                Ray ClickLine = ScreenToRay(glControl1.PointToClient(Cursor.Position));
+                Vector3 CameraUnitVector = new Vector3((float)(Math.Cos(CameraRotation.X) * Math.Cos(CameraRotation.Y)),
+                                                       (float)Math.Sin(CameraRotation.Y),
+                                                       (float)(Math.Sin(CameraRotation.X) * Math.Cos(CameraRotation.Y)));//Unit vector in camera direction. Also normal vector to plane of movement.
+                GameObject[] selected = GetSelectedObjects();
+                if (selected.Length != 0)
+                {
+                    ObjectParameters op = new ObjectParameters();
+                    op.ReadObjectParameters(selected[0]);
+
+                    float x = 0f;
+                    float y = 0f;
+                    float z = 0f;
+
+                    float.TryParse(op.GetParamValue("X", selected[0]), out x);
+                    float.TryParse(op.GetParamValue("Y", selected[0]), out y);
+                    float.TryParse(op.GetParamValue("Z", selected[0]), out z);
+
+                    Vector3 ObjectPosition = new Vector3(x, y, z);
+                    float t = Vector3.Dot(CameraUnitVector, ObjectPosition - ClickLine.Origin) / Vector3.Dot(CameraUnitVector, ClickLine.Direction);//Parameter for our line. This is in the form r=u+t*v where r,u, and v are vectors. and t is the scalar. This formula is from solving the vector eqn.
+                    Vector3 OutputPosition = ClickLine.Origin + t * ClickLine.Direction;
+                    if (!startedMoving)
+                    {
+                        startedMoving = true;
+                        mainForm.CreateUndoSnapshot();
+                        mainForm.Changed = true;
+                    }
+                    op.SetParamValue("X", selected[0], OutputPosition.X.ToString());
+                    op.SetParamValue("Y", selected[0], OutputPosition.Y.ToString());
+                    op.SetParamValue("Z", selected[0], OutputPosition.Z.ToString());
+                    UpdateObject(selected[0]);
+                    DidMove = true;//dodgy
                 }
 
-                glControl1.Invalidate();
+            }
+
+            glControl1.Invalidate();
+        }
+        private void EndMove()
+        {
+            Ray r = ScreenToRay(glControl1.PointToClient(Cursor.Position));
+
+            float num = Vector3.Dot(ClickPosition - CameraPos, ClickNormal);
+            float den = Vector3.Dot(r.Direction, ClickNormal);
+            float t = num / den;    //Distance from camera
+
+            Vector3 newpoint = CameraPos + (r.Direction * t);
+            if (!ClickRail)
+            {
+                if (!startedMoving)
+                {
+                    startedMoving = true;
+                    mainForm.CreateUndoSnapshot();
+                    mainForm.Changed = true;
+                }
+
+                GameObject[] selected = GetSelectedObjects();
+                //Update all selected objects
+                foreach (GameObject go in selected)
+                {
+                    ObjectParameters op = new ObjectParameters();
+                    op.ReadObjectParameters(go);
+                    Vector3 n = newpoint + ClickRelMouse;
+                    op.SetParamValue("X", go, n.X.ToString());
+                    op.SetParamValue("Y", go, n.Y.ToString());
+                    op.SetParamValue("Z", go, n.Z.ToString());
+
+                    UpdateObject(go);
+
+                    DidMove = true;
+                }
+            }
+            else
+            {
+                rails.GetRail(SelectedRail).frames[SelectedFrame].x = (short)(ClickOrigin.X + (short)ClickRelMouse.X);
+                rails.GetRail(SelectedRail).frames[SelectedFrame].y = (short)(ClickOrigin.Y + (short)ClickRelMouse.Y);
+                rails.GetRail(SelectedRail).frames[SelectedFrame].z = (short)(ClickOrigin.Z + (short)ClickRelMouse.Z);
+                mainForm.UpdateRailForm(SelectedRail, SelectedFrame);
+            }
+        }
+        private void CancelMoveObject(bool Undo)
+        {
+            if (Key_Drag)
+            {
+                EndMove();
+                Key_Drag = false;
+                if (Undo)
+                    undoToolStripMenuItem_Click(null, EventArgs.Empty);
+                return;
             }
         }
 
@@ -958,18 +1033,18 @@ namespace SMSSceneReader
         {
             if (MouseLook)
             {
-                if (e.KeyCode == Keys.W)
-                    key_w = true;
-                if (e.KeyCode == Keys.S)
-                    key_s = true;
-                if (e.KeyCode == Keys.A)
-                    key_a = true;
-                if (e.KeyCode == Keys.D)
-                    key_d = true;
-                if (e.KeyCode == Keys.Space)
-                    key_space = true;
-                if (e.KeyCode == Keys.ShiftKey)
-                    key_shift = true;
+                if (e.KeyCode == Properties.Settings.Default.KeyBindMoveForward)
+                    Key_Forward = true;
+                if (e.KeyCode == Properties.Settings.Default.KeyBindMoveBackward)
+                    Key_Backward = true;
+                if (e.KeyCode == Properties.Settings.Default.KeyBindMoveLeft)
+                    Key_Left = true;
+                if (e.KeyCode == Properties.Settings.Default.KeyBindMoveRight)
+                    Key_Right = true;
+                if (e.KeyCode == Properties.Settings.Default.KeyBindMoveUp)
+                    Key_Up = true;
+                if (e.KeyCode == Properties.Settings.Default.KeyBindMoveDown)
+                    Key_Down = true;
                 LockKeyHeld = false;
             }
             else
@@ -977,8 +1052,18 @@ namespace SMSSceneReader
                 if (e.KeyCode == Keys.ShiftKey)
                     LockKeyHeld = true;
             }
+            if (Key_Drag && e.KeyCode == Keys.Escape)
+            {
+                CancelMoveObject(true);
+            }
+            if (e.KeyCode == Properties.Settings.Default.KeyBindStartDrag)
+            {
+                Key_Drag = true;
+                return;
+            }
+
             //View angle shortcuts
-            if (e.KeyCode == Keys.NumPad1)//Front view
+            if (e.KeyCode == Properties.Settings.Default.KeyBindFrontView)//Front view
             {
                 CameraRotation.X = (float)Math.PI / 2;
                 CameraRotation.Y = 0f;
@@ -986,7 +1071,7 @@ namespace SMSSceneReader
                 UpdateCamera();
                 glControl1.Invalidate();
             }
-            if (e.KeyCode == Keys.NumPad3)//Right view
+            if (e.KeyCode == Properties.Settings.Default.KeyBindRightView)//Right view
             {
                 CameraRotation.X = (float)Math.PI;
                 CameraRotation.Y = 0f;
@@ -994,14 +1079,14 @@ namespace SMSSceneReader
                 UpdateCamera();
                 glControl1.Invalidate();
             }
-            if (e.KeyCode == Keys.NumPad5)
+            if (e.KeyCode == Properties.Settings.Default.KeyBindOrthoView)
             {
                 Orthographic = !Orthographic;
                 UpdateViewport();
                 UpdateCamera();
                 glControl1.Refresh();
             }
-            if (e.KeyCode == Keys.NumPad7)//Top view
+            if (e.KeyCode == Properties.Settings.Default.KeyBindTopView)//Top view
             {
                 CameraRotation.X = 0f;
                 CameraRotation.Y = (float)-Math.PI / 2;
@@ -1014,18 +1099,18 @@ namespace SMSSceneReader
         {
             if (MouseLook)
             {
-                if (e.KeyCode == Keys.W)
-                    key_w = false;
-                if (e.KeyCode == Keys.S)
-                    key_s = false;
-                if (e.KeyCode == Keys.A)
-                    key_a = false;
-                if (e.KeyCode == Keys.D)
-                    key_d = false;
-                if (e.KeyCode == Keys.Space)
-                    key_space = false;
-                if (e.KeyCode == Keys.ShiftKey)
-                    key_shift = false;
+                if (e.KeyCode == Properties.Settings.Default.KeyBindMoveForward)
+                    Key_Forward = false;
+                if (e.KeyCode == Properties.Settings.Default.KeyBindMoveBackward)
+                    Key_Backward = false;
+                if (e.KeyCode == Properties.Settings.Default.KeyBindMoveLeft)
+                    Key_Left = false;
+                if (e.KeyCode == Properties.Settings.Default.KeyBindMoveRight)
+                    Key_Right = false;
+                if (e.KeyCode == Properties.Settings.Default.KeyBindMoveUp)
+                    Key_Up = false;
+                if (e.KeyCode == Properties.Settings.Default.KeyBindMoveDown)
+                    Key_Down = false;
                 LockKeyHeld = false;
             }
             else
@@ -1070,9 +1155,9 @@ namespace SMSSceneReader
 
             //Set camera velocity according to key input
             CameraVelocity = new Vector3(0f, 0f, 0f);
-            CameraVelocity += ((key_w ? 1.0f : 0.0f) + (key_s ? -1.0f : 0.0f)) * f;
-            CameraVelocity += ((key_space ? 1.0f : 0.0f) + (key_shift ? -1.0f : 0.0f)) * u;
-            CameraVelocity += ((key_a ? 1.0f : 0.0f) + (key_d ? -1.0f : 0.0f)) * r;
+            CameraVelocity += ((Key_Forward ? 1.0f : 0.0f) + (Key_Backward ? -1.0f : 0.0f)) * f;
+            CameraVelocity += ((Key_Up ? 1.0f : 0.0f) + (Key_Down ? -1.0f : 0.0f)) * u;
+            CameraVelocity += ((Key_Left ? 1.0f : 0.0f) + (Key_Right ? -1.0f : 0.0f)) * r;
 
             CameraPosition += CameraVelocity * Properties.Settings.Default.cameraSpeed / 100f;
 

@@ -92,5 +92,38 @@
     <Setting Name="previewSizeY" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="KeyBindFrontView" Type="System.Windows.Forms.Keys" Scope="User">
+      <Value Profile="(Default)">NumPad1</Value>
+    </Setting>
+    <Setting Name="KeyBindRightView" Type="System.Windows.Forms.Keys" Scope="User">
+      <Value Profile="(Default)">NumPad3</Value>
+    </Setting>
+    <Setting Name="KeyBindOrthoView" Type="System.Windows.Forms.Keys" Scope="User">
+      <Value Profile="(Default)">NumPad5</Value>
+    </Setting>
+    <Setting Name="KeyBindTopView" Type="System.Windows.Forms.Keys" Scope="User">
+      <Value Profile="(Default)">NumPad7</Value>
+    </Setting>
+    <Setting Name="KeyBindMoveForward" Type="System.Windows.Forms.Keys" Scope="User">
+      <Value Profile="(Default)">W</Value>
+    </Setting>
+    <Setting Name="KeyBindMoveBackward" Type="System.Windows.Forms.Keys" Scope="User">
+      <Value Profile="(Default)">S</Value>
+    </Setting>
+    <Setting Name="KeyBindMoveLeft" Type="System.Windows.Forms.Keys" Scope="User">
+      <Value Profile="(Default)">A</Value>
+    </Setting>
+    <Setting Name="KeyBindMoveRight" Type="System.Windows.Forms.Keys" Scope="User">
+      <Value Profile="(Default)">D</Value>
+    </Setting>
+    <Setting Name="KeyBindMoveUp" Type="System.Windows.Forms.Keys" Scope="User">
+      <Value Profile="(Default)">E</Value>
+    </Setting>
+    <Setting Name="KeyBindMoveDown" Type="System.Windows.Forms.Keys" Scope="User">
+      <Value Profile="(Default)">Q</Value>
+    </Setting>
+    <Setting Name="KeyBindStartDrag" Type="System.Windows.Forms.Keys" Scope="User">
+      <Value Profile="(Default)">G</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

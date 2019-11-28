@@ -31,8 +31,9 @@
             this.cancelButton = new System.Windows.Forms.Button();
             this.applyButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.SettingsTabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.paramComBox = new System.Windows.Forms.CheckBox();
             this.loadSecondBox = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -80,11 +81,33 @@
             this.label1 = new System.Windows.Forms.Label();
             this.previewResetButton = new System.Windows.Forms.Button();
             this.previewLocBox = new System.Windows.Forms.CheckBox();
+            this.KeyBindTabPage = new System.Windows.Forms.TabPage();
+            this.FrontViewLabel = new System.Windows.Forms.Label();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.paramComBox = new System.Windows.Forms.CheckBox();
-            this.tabControl1.SuspendLayout();
+            this.FrontViewComboBox = new System.Windows.Forms.ComboBox();
+            this.RightViewComboBox = new System.Windows.Forms.ComboBox();
+            this.RightViewLabel = new System.Windows.Forms.Label();
+            this.TopViewComboBox = new System.Windows.Forms.ComboBox();
+            this.TopViewLabel = new System.Windows.Forms.Label();
+            this.OrthographicViewComboBox = new System.Windows.Forms.ComboBox();
+            this.OrthographicLabel = new System.Windows.Forms.Label();
+            this.MoveRightComboBox = new System.Windows.Forms.ComboBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.MoveLeftComboBox = new System.Windows.Forms.ComboBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.MoveBackwardComboBox = new System.Windows.Forms.ComboBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.MoveForwardComboBox = new System.Windows.Forms.ComboBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.MoveDownComboBox = new System.Windows.Forms.ComboBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.MoveUpComboBox = new System.Windows.Forms.ComboBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.StartDragComboBox = new System.Windows.Forms.ComboBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.SettingsTabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -99,6 +122,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.selObjPicture)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.objPicture)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.KeyBindTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // cancelButton
@@ -136,18 +160,19 @@
             this.okButton.UseVisualStyleBackColor = true;
             this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
-            // tabControl1
+            // SettingsTabControl
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.SettingsTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(13, 13);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(343, 448);
-            this.tabControl1.TabIndex = 3;
+            this.SettingsTabControl.Controls.Add(this.tabPage1);
+            this.SettingsTabControl.Controls.Add(this.tabPage2);
+            this.SettingsTabControl.Controls.Add(this.KeyBindTabPage);
+            this.SettingsTabControl.Location = new System.Drawing.Point(13, 13);
+            this.SettingsTabControl.Name = "SettingsTabControl";
+            this.SettingsTabControl.SelectedIndex = 0;
+            this.SettingsTabControl.Size = new System.Drawing.Size(343, 448);
+            this.SettingsTabControl.TabIndex = 3;
             // 
             // tabPage1
             // 
@@ -164,6 +189,17 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Editor";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // paramComBox
+            // 
+            this.paramComBox.AutoSize = true;
+            this.paramComBox.Location = new System.Drawing.Point(6, 76);
+            this.paramComBox.Name = "paramComBox";
+            this.paramComBox.Size = new System.Drawing.Size(151, 17);
+            this.paramComBox.TabIndex = 7;
+            this.paramComBox.Text = "Hide Parameter Comments";
+            this.paramComBox.UseVisualStyleBackColor = true;
+            this.paramComBox.CheckedChanged += new System.EventHandler(this.paramComBox_CheckedChanged);
             // 
             // loadSecondBox
             // 
@@ -682,21 +718,251 @@
             this.previewLocBox.Text = "Save Preview Location";
             this.previewLocBox.UseVisualStyleBackColor = true;
             // 
+            // KeyBindTabPage
+            // 
+            this.KeyBindTabPage.Controls.Add(this.StartDragComboBox);
+            this.KeyBindTabPage.Controls.Add(this.label21);
+            this.KeyBindTabPage.Controls.Add(this.MoveDownComboBox);
+            this.KeyBindTabPage.Controls.Add(this.label19);
+            this.KeyBindTabPage.Controls.Add(this.MoveUpComboBox);
+            this.KeyBindTabPage.Controls.Add(this.label20);
+            this.KeyBindTabPage.Controls.Add(this.MoveRightComboBox);
+            this.KeyBindTabPage.Controls.Add(this.label15);
+            this.KeyBindTabPage.Controls.Add(this.MoveLeftComboBox);
+            this.KeyBindTabPage.Controls.Add(this.label16);
+            this.KeyBindTabPage.Controls.Add(this.MoveBackwardComboBox);
+            this.KeyBindTabPage.Controls.Add(this.label17);
+            this.KeyBindTabPage.Controls.Add(this.MoveForwardComboBox);
+            this.KeyBindTabPage.Controls.Add(this.label18);
+            this.KeyBindTabPage.Controls.Add(this.TopViewComboBox);
+            this.KeyBindTabPage.Controls.Add(this.TopViewLabel);
+            this.KeyBindTabPage.Controls.Add(this.OrthographicViewComboBox);
+            this.KeyBindTabPage.Controls.Add(this.OrthographicLabel);
+            this.KeyBindTabPage.Controls.Add(this.RightViewComboBox);
+            this.KeyBindTabPage.Controls.Add(this.RightViewLabel);
+            this.KeyBindTabPage.Controls.Add(this.FrontViewComboBox);
+            this.KeyBindTabPage.Controls.Add(this.FrontViewLabel);
+            this.KeyBindTabPage.Location = new System.Drawing.Point(4, 22);
+            this.KeyBindTabPage.Name = "KeyBindTabPage";
+            this.KeyBindTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.KeyBindTabPage.Size = new System.Drawing.Size(335, 422);
+            this.KeyBindTabPage.TabIndex = 2;
+            this.KeyBindTabPage.Text = "Previewer Keybinds";
+            this.KeyBindTabPage.UseVisualStyleBackColor = true;
+            // 
+            // FrontViewLabel
+            // 
+            this.FrontViewLabel.AutoSize = true;
+            this.FrontViewLabel.Location = new System.Drawing.Point(6, 9);
+            this.FrontViewLabel.Name = "FrontViewLabel";
+            this.FrontViewLabel.Size = new System.Drawing.Size(60, 13);
+            this.FrontViewLabel.TabIndex = 0;
+            this.FrontViewLabel.Text = "Front View:";
+            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "stageArc.bin";
             this.openFileDialog1.Filter = "StageArc|stageArc.bin|Binary File|*.bin|All Files|*.*";
             // 
-            // paramComBox
+            // FrontViewComboBox
             // 
-            this.paramComBox.AutoSize = true;
-            this.paramComBox.Location = new System.Drawing.Point(6, 76);
-            this.paramComBox.Name = "paramComBox";
-            this.paramComBox.Size = new System.Drawing.Size(151, 17);
-            this.paramComBox.TabIndex = 7;
-            this.paramComBox.Text = "Hide Parameter Comments";
-            this.paramComBox.UseVisualStyleBackColor = true;
-            this.paramComBox.CheckedChanged += new System.EventHandler(this.paramComBox_CheckedChanged);
+            this.FrontViewComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.FrontViewComboBox.FormattingEnabled = true;
+            this.FrontViewComboBox.Location = new System.Drawing.Point(72, 6);
+            this.FrontViewComboBox.Name = "FrontViewComboBox";
+            this.FrontViewComboBox.Size = new System.Drawing.Size(90, 21);
+            this.FrontViewComboBox.TabIndex = 1;
+            this.FrontViewComboBox.SelectedIndexChanged += new System.EventHandler(this.FrontViewComboBox_SelectedIndexChanged);
+            // 
+            // RightViewComboBox
+            // 
+            this.RightViewComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.RightViewComboBox.FormattingEnabled = true;
+            this.RightViewComboBox.Location = new System.Drawing.Point(239, 6);
+            this.RightViewComboBox.Name = "RightViewComboBox";
+            this.RightViewComboBox.Size = new System.Drawing.Size(90, 21);
+            this.RightViewComboBox.TabIndex = 3;
+            this.RightViewComboBox.SelectedIndexChanged += new System.EventHandler(this.RightViewComboBox_SelectedIndexChanged);
+            // 
+            // RightViewLabel
+            // 
+            this.RightViewLabel.AutoSize = true;
+            this.RightViewLabel.Location = new System.Drawing.Point(173, 9);
+            this.RightViewLabel.Name = "RightViewLabel";
+            this.RightViewLabel.Size = new System.Drawing.Size(61, 13);
+            this.RightViewLabel.TabIndex = 2;
+            this.RightViewLabel.Text = "Right View:";
+            // 
+            // TopViewComboBox
+            // 
+            this.TopViewComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.TopViewComboBox.FormattingEnabled = true;
+            this.TopViewComboBox.Location = new System.Drawing.Point(239, 33);
+            this.TopViewComboBox.Name = "TopViewComboBox";
+            this.TopViewComboBox.Size = new System.Drawing.Size(90, 21);
+            this.TopViewComboBox.TabIndex = 7;
+            this.TopViewComboBox.SelectedIndexChanged += new System.EventHandler(this.TopViewComboBox_SelectedIndexChanged);
+            // 
+            // TopViewLabel
+            // 
+            this.TopViewLabel.AutoSize = true;
+            this.TopViewLabel.Location = new System.Drawing.Point(173, 36);
+            this.TopViewLabel.Name = "TopViewLabel";
+            this.TopViewLabel.Size = new System.Drawing.Size(55, 13);
+            this.TopViewLabel.TabIndex = 6;
+            this.TopViewLabel.Text = "Top View:";
+            // 
+            // OrthographicViewComboBox
+            // 
+            this.OrthographicViewComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.OrthographicViewComboBox.FormattingEnabled = true;
+            this.OrthographicViewComboBox.Location = new System.Drawing.Point(72, 33);
+            this.OrthographicViewComboBox.Name = "OrthographicViewComboBox";
+            this.OrthographicViewComboBox.Size = new System.Drawing.Size(90, 21);
+            this.OrthographicViewComboBox.TabIndex = 5;
+            this.OrthographicViewComboBox.SelectedIndexChanged += new System.EventHandler(this.OrthographicViewComboBox_SelectedIndexChanged);
+            // 
+            // OrthographicLabel
+            // 
+            this.OrthographicLabel.AutoSize = true;
+            this.OrthographicLabel.Location = new System.Drawing.Point(6, 36);
+            this.OrthographicLabel.Name = "OrthographicLabel";
+            this.OrthographicLabel.Size = new System.Drawing.Size(62, 13);
+            this.OrthographicLabel.TabIndex = 4;
+            this.OrthographicLabel.Text = "Ortho View:";
+            // 
+            // MoveRightComboBox
+            // 
+            this.MoveRightComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MoveRightComboBox.FormattingEnabled = true;
+            this.MoveRightComboBox.Location = new System.Drawing.Point(239, 87);
+            this.MoveRightComboBox.Name = "MoveRightComboBox";
+            this.MoveRightComboBox.Size = new System.Drawing.Size(90, 21);
+            this.MoveRightComboBox.TabIndex = 15;
+            this.MoveRightComboBox.SelectedIndexChanged += new System.EventHandler(this.MoveRightComboBox_SelectedIndexChanged);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(173, 90);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(35, 13);
+            this.label15.TabIndex = 14;
+            this.label15.Text = "Right:";
+            // 
+            // MoveLeftComboBox
+            // 
+            this.MoveLeftComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MoveLeftComboBox.FormattingEnabled = true;
+            this.MoveLeftComboBox.Location = new System.Drawing.Point(72, 87);
+            this.MoveLeftComboBox.Name = "MoveLeftComboBox";
+            this.MoveLeftComboBox.Size = new System.Drawing.Size(90, 21);
+            this.MoveLeftComboBox.TabIndex = 13;
+            this.MoveLeftComboBox.SelectedIndexChanged += new System.EventHandler(this.MoveLeftComboBox_SelectedIndexChanged);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(6, 90);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(28, 13);
+            this.label16.TabIndex = 12;
+            this.label16.Text = "Left:";
+            // 
+            // MoveBackwardComboBox
+            // 
+            this.MoveBackwardComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MoveBackwardComboBox.FormattingEnabled = true;
+            this.MoveBackwardComboBox.Location = new System.Drawing.Point(239, 60);
+            this.MoveBackwardComboBox.Name = "MoveBackwardComboBox";
+            this.MoveBackwardComboBox.Size = new System.Drawing.Size(90, 21);
+            this.MoveBackwardComboBox.TabIndex = 11;
+            this.MoveBackwardComboBox.SelectedIndexChanged += new System.EventHandler(this.MoveBackwardComboBox_SelectedIndexChanged);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(173, 63);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(58, 13);
+            this.label17.TabIndex = 10;
+            this.label17.Text = "Backward:";
+            // 
+            // MoveForwardComboBox
+            // 
+            this.MoveForwardComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MoveForwardComboBox.FormattingEnabled = true;
+            this.MoveForwardComboBox.Location = new System.Drawing.Point(72, 60);
+            this.MoveForwardComboBox.Name = "MoveForwardComboBox";
+            this.MoveForwardComboBox.Size = new System.Drawing.Size(90, 21);
+            this.MoveForwardComboBox.TabIndex = 9;
+            this.MoveForwardComboBox.SelectedIndexChanged += new System.EventHandler(this.MoveForwardComboBox_SelectedIndexChanged);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(6, 63);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(48, 13);
+            this.label18.TabIndex = 8;
+            this.label18.Text = "Forward:";
+            // 
+            // MoveDownComboBox
+            // 
+            this.MoveDownComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MoveDownComboBox.FormattingEnabled = true;
+            this.MoveDownComboBox.Location = new System.Drawing.Point(239, 114);
+            this.MoveDownComboBox.Name = "MoveDownComboBox";
+            this.MoveDownComboBox.Size = new System.Drawing.Size(90, 21);
+            this.MoveDownComboBox.TabIndex = 19;
+            this.MoveDownComboBox.SelectedIndexChanged += new System.EventHandler(this.MoveDownComboBox_SelectedIndexChanged);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(173, 117);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(38, 13);
+            this.label19.TabIndex = 18;
+            this.label19.Text = "Down:";
+            // 
+            // MoveUpComboBox
+            // 
+            this.MoveUpComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MoveUpComboBox.FormattingEnabled = true;
+            this.MoveUpComboBox.Location = new System.Drawing.Point(72, 114);
+            this.MoveUpComboBox.Name = "MoveUpComboBox";
+            this.MoveUpComboBox.Size = new System.Drawing.Size(90, 21);
+            this.MoveUpComboBox.TabIndex = 17;
+            this.MoveUpComboBox.SelectedIndexChanged += new System.EventHandler(this.MoveUpComboBox_SelectedIndexChanged);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(6, 117);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(24, 13);
+            this.label20.TabIndex = 16;
+            this.label20.Text = "Up:";
+            // 
+            // StartDragComboBox
+            // 
+            this.StartDragComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.StartDragComboBox.FormattingEnabled = true;
+            this.StartDragComboBox.Location = new System.Drawing.Point(72, 141);
+            this.StartDragComboBox.Name = "StartDragComboBox";
+            this.StartDragComboBox.Size = new System.Drawing.Size(90, 21);
+            this.StartDragComboBox.TabIndex = 21;
+            this.StartDragComboBox.SelectedIndexChanged += new System.EventHandler(this.StartDragComboBox_SelectedIndexChanged);
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(6, 144);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(52, 13);
+            this.label21.TabIndex = 20;
+            this.label21.Text = "Drag Obj:";
             // 
             // Settings
             // 
@@ -705,7 +971,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(368, 502);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.SettingsTabControl);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.applyButton);
             this.Controls.Add(this.cancelButton);
@@ -717,7 +983,7 @@
             this.Text = "Settings";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Settings_FormClosed);
             this.Load += new System.EventHandler(this.Settings_Load);
-            this.tabControl1.ResumeLayout(false);
+            this.SettingsTabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
@@ -737,6 +1003,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.objPicture)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.KeyBindTabPage.ResumeLayout(false);
+            this.KeyBindTabPage.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -746,7 +1014,7 @@
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button applyButton;
         private System.Windows.Forms.Button okButton;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl SettingsTabControl;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button previewResetButton;
@@ -799,5 +1067,28 @@
         private System.Windows.Forms.Button paramBrowse;
         private System.Windows.Forms.TextBox paramBox;
         private System.Windows.Forms.CheckBox paramComBox;
+        private System.Windows.Forms.TabPage KeyBindTabPage;
+        private System.Windows.Forms.Label FrontViewLabel;
+        private System.Windows.Forms.ComboBox FrontViewComboBox;
+        private System.Windows.Forms.ComboBox RightViewComboBox;
+        private System.Windows.Forms.Label RightViewLabel;
+        private System.Windows.Forms.ComboBox TopViewComboBox;
+        private System.Windows.Forms.Label TopViewLabel;
+        private System.Windows.Forms.ComboBox OrthographicViewComboBox;
+        private System.Windows.Forms.Label OrthographicLabel;
+        private System.Windows.Forms.ComboBox MoveRightComboBox;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.ComboBox MoveLeftComboBox;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.ComboBox MoveBackwardComboBox;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.ComboBox MoveForwardComboBox;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.ComboBox MoveDownComboBox;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.ComboBox MoveUpComboBox;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.ComboBox StartDragComboBox;
+        private System.Windows.Forms.Label label21;
     }
 }
