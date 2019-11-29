@@ -24,6 +24,15 @@ namespace SMSSceneReader
         Effects = 0x02,
         Both = 0x03
     }
+    public enum SelectionState : byte
+    {
+        MouseUp,
+        MouseDown,
+        SelectObject,
+        DragWait,
+        DragObject,
+        FreeLook
+    }
 
     public partial class Preview : Form
     {
@@ -84,7 +93,7 @@ namespace SMSSceneReader
         private bool startedMoving = false;
         private int xPosition;
         private int yPosition;
-
+        private SelectionState CurrentState = SelectionState.MouseUp;
 
         private Point FormCenter
         {
@@ -594,6 +603,7 @@ namespace SMSSceneReader
 
         private void glControl1_MouseDown(object sender, MouseEventArgs e)
         {
+            SelectionState prev = CurrentState;
             DidMove = false;
             if (e.Button == MouseButtons.Right)
             {
@@ -608,13 +618,9 @@ namespace SMSSceneReader
                 }
                 CancelMoveObject(true);
             }
-            if (e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left && (CurrentState == SelectionState.MouseUp || CurrentState == SelectionState.DragWait))
             {
-                startedMoving = (xPosition != e.X || yPosition != e.Y);
-                xPosition = e.X;
-                yPosition = e.Y;
-                if (startedMoving)
-                    mainForm.CreateUndoSnapshot();
+                CurrentState = SelectionState.MouseDown;
                 if (Key_Drag)
                 {
                     CancelMoveObject(false);
@@ -754,11 +760,31 @@ namespace SMSSceneReader
                     mainForm.UpdateRailForm(SelectedRail, SelectedFrame);
                 if (currentObject != null)
                 {
-                    SelectObject(currentObject);
-                    mainForm.GoToObject(currentObject);
+                    if (GetSelectedObjects().Length <= 0)
+                    {
+                        SelectObject(currentObject);
+                        mainForm.GoToObject(currentObject);
+                        CurrentState = SelectionState.SelectObject;
+                    }
+                    else
+                    {
+                        if (GetSelectedObjects()[0] == currentObject)
+                        {
+                            CurrentState = prev;
+                        }
+                        else
+                        {
+                            SelectObject(currentObject);
+                            mainForm.GoToObject(currentObject);
+                            CurrentState = SelectionState.SelectObject;
+                        }
+                    }
                 }
                 else
+                {
                     SelectObject(null);
+                    CurrentState = SelectionState.MouseUp;
+                }
 
                 UpdateCamera();
                 UpdateViewport();
@@ -789,6 +815,15 @@ namespace SMSSceneReader
             { 
                mainForm.UpdateObjectInfo();
                startedMoving = false;
+            }
+
+            if (CurrentState == SelectionState.SelectObject)
+            {
+                CurrentState = SelectionState.DragWait;
+            }
+            if (CurrentState == SelectionState.DragObject)
+            {
+                CurrentState = SelectionState.DragWait;
             }
         }
         private void glControl1_MouseMove(object sender, MouseEventArgs e)
@@ -826,8 +861,11 @@ namespace SMSSceneReader
             {
                 MoveObject();
             }
-            else if (startedMoving && e.Button == MouseButtons.Left)
+            else if ((CurrentState == SelectionState.DragWait || CurrentState == SelectionState.DragObject) && e.Button == MouseButtons.Left)
             {
+                if (CurrentState == SelectionState.DragWait)
+                    mainForm.CreateUndoSnapshot();
+                CurrentState = SelectionState.DragObject;
                 MoveObject();
             }
         }
