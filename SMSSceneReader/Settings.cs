@@ -14,6 +14,7 @@ namespace SMSSceneReader
     {
         bool restart = false;
         bool restart2 = false;
+        bool Loading = false;
 
         /* Boring settings stuff */
         public Settings()
@@ -23,6 +24,19 @@ namespace SMSSceneReader
 
         private void Settings_Load(object sender, EventArgs e)
         {
+            Loading = true;
+            FrontViewComboBox.DataSource = Enum.GetValues(typeof(Keys));
+            RightViewComboBox.DataSource = Enum.GetValues(typeof(Keys));
+            OrthographicViewComboBox.DataSource = Enum.GetValues(typeof(Keys));
+            TopViewComboBox.DataSource = Enum.GetValues(typeof(Keys));
+
+            MoveForwardComboBox.DataSource = Enum.GetValues(typeof(Keys));
+            MoveBackwardComboBox.DataSource = Enum.GetValues(typeof(Keys));
+            MoveLeftComboBox.DataSource = Enum.GetValues(typeof(Keys));
+            MoveRightComboBox.DataSource = Enum.GetValues(typeof(Keys));
+            MoveUpComboBox.DataSource = Enum.GetValues(typeof(Keys));
+            MoveDownComboBox.DataSource = Enum.GetValues(typeof(Keys));
+            StartDragComboBox.DataSource = Enum.GetValues(typeof(Keys));
             /* Main */
             startPreviewBox.Checked = Properties.Settings.Default.mainPreviewLoad;
             loadSecondBox.Checked = Properties.Settings.Default.mainLoadSeconds;
@@ -65,9 +79,25 @@ namespace SMSSceneReader
             moveYBox.Checked = Properties.Settings.Default.cameraMoveY;
             originBox.Checked = Properties.Settings.Default.previewOrigin;
 
+            /* Preview Keybinds*/
+            FrontViewComboBox.SelectedItem = Properties.Settings.Default.KeyBindFrontView;
+            RightViewComboBox.SelectedItem = Properties.Settings.Default.KeyBindRightView;
+            OrthographicViewComboBox.SelectedItem = Properties.Settings.Default.KeyBindOrthoView;
+            TopViewComboBox.SelectedItem = Properties.Settings.Default.KeyBindTopView;
+
+            MoveForwardComboBox.SelectedItem = Properties.Settings.Default.KeyBindMoveForward;
+            MoveBackwardComboBox.SelectedItem = Properties.Settings.Default.KeyBindMoveBackward;
+            MoveLeftComboBox.SelectedItem = Properties.Settings.Default.KeyBindMoveLeft;
+            MoveRightComboBox.SelectedItem = Properties.Settings.Default.KeyBindMoveRight;
+            MoveUpComboBox.SelectedItem = Properties.Settings.Default.KeyBindMoveUp;
+            MoveDownComboBox.SelectedItem = Properties.Settings.Default.KeyBindMoveDown;
+            StartDragComboBox.SelectedItem = Properties.Settings.Default.KeyBindStartDrag;
+
             applyButton.Enabled = false;
+
             restart = false;
             restart2 = false;
+            Loading = false;
         }
 
         private void previewResetButton_Click(object sender, EventArgs e)
@@ -172,7 +202,12 @@ namespace SMSSceneReader
 
             if (restart)
             {
-                MessageBox.Show("One or more of the settings you changed require you to restart the preview for changes to take effect.");
+                if (!MainForm.IsPreviewerOpen)
+                {
+                    restart = false;
+                    return;
+                }
+                MessageBox.Show("One or more of the settings you changed require you to restart the preview for changes to take effect.","Notice",MessageBoxButtons.OK,MessageBoxIcon.Information);
                 restart = false;
             }
             if (restart2)
@@ -364,6 +399,94 @@ namespace SMSSceneReader
         private void paramComBox_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.showParamInfo = !paramComBox.Checked;
+        }
+
+        private void FrontViewComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Loading)
+                return;
+            Properties.Settings.Default.KeyBindFrontView = (Keys)FrontViewComboBox.SelectedItem;
+            applyButton.Enabled = true;
+        }
+
+        private void RightViewComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Loading)
+                return;
+            Properties.Settings.Default.KeyBindRightView = (Keys)RightViewComboBox.SelectedItem;
+            applyButton.Enabled = true;
+        }
+
+        private void TopViewComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Loading)
+                return;
+            Properties.Settings.Default.KeyBindTopView = (Keys)TopViewComboBox.SelectedItem;
+            applyButton.Enabled = true;
+        }
+
+        private void OrthographicViewComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Loading)
+                return;
+            Properties.Settings.Default.KeyBindOrthoView = (Keys)OrthographicViewComboBox.SelectedItem;
+            applyButton.Enabled = true;
+        }
+
+        private void MoveForwardComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Loading)
+                return;
+            Properties.Settings.Default.KeyBindMoveForward = (Keys)MoveForwardComboBox.SelectedItem;
+            applyButton.Enabled = true;
+        }
+
+        private void MoveBackwardComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Loading)
+                return;
+            Properties.Settings.Default.KeyBindMoveBackward = (Keys)MoveBackwardComboBox.SelectedItem;
+            applyButton.Enabled = true;
+        }
+
+        private void MoveLeftComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Loading)
+                return;
+            Properties.Settings.Default.KeyBindMoveLeft = (Keys)MoveLeftComboBox.SelectedItem;
+            applyButton.Enabled = true;
+        }
+
+        private void MoveRightComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Loading)
+                return;
+            Properties.Settings.Default.KeyBindMoveRight = (Keys)MoveRightComboBox.SelectedItem;
+            applyButton.Enabled = true;
+        }
+
+        private void MoveUpComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Loading)
+                return;
+            Properties.Settings.Default.KeyBindMoveUp = (Keys)MoveUpComboBox.SelectedItem;
+            applyButton.Enabled = true;
+        }
+
+        private void MoveDownComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Loading)
+                return;
+            Properties.Settings.Default.KeyBindMoveDown = (Keys)MoveDownComboBox.SelectedItem;
+            applyButton.Enabled = true;
+        }
+
+        private void StartDragComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Loading)
+                return;
+            Properties.Settings.Default.KeyBindStartDrag = (Keys)StartDragComboBox.SelectedItem;
+            applyButton.Enabled = true;
         }
     }
 }

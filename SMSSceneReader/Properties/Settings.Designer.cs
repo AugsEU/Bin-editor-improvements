@@ -7,12 +7,12 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-using System;
+
 namespace SMSSceneReader.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -208,8 +208,7 @@ namespace SMSSceneReader.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool needsUpgrade {
             get {
-                Console.WriteLine(this["objSelColor"]);
-                return (Convert.ToBoolean(this["needsUpgrade"]));
+                return ((bool)(this["needsUpgrade"]));
             }
             set {
                 this["needsUpgrade"] = value;
@@ -381,6 +380,138 @@ namespace SMSSceneReader.Properties {
             }
             set {
                 this["previewSizeY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NumPad1")]
+        public global::System.Windows.Forms.Keys KeyBindFrontView {
+            get {
+                return ((global::System.Windows.Forms.Keys)(this["KeyBindFrontView"]));
+            }
+            set {
+                this["KeyBindFrontView"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NumPad3")]
+        public global::System.Windows.Forms.Keys KeyBindRightView {
+            get {
+                return ((global::System.Windows.Forms.Keys)(this["KeyBindRightView"]));
+            }
+            set {
+                this["KeyBindRightView"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NumPad5")]
+        public global::System.Windows.Forms.Keys KeyBindOrthoView {
+            get {
+                return ((global::System.Windows.Forms.Keys)(this["KeyBindOrthoView"]));
+            }
+            set {
+                this["KeyBindOrthoView"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NumPad7")]
+        public global::System.Windows.Forms.Keys KeyBindTopView {
+            get {
+                return ((global::System.Windows.Forms.Keys)(this["KeyBindTopView"]));
+            }
+            set {
+                this["KeyBindTopView"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("W")]
+        public global::System.Windows.Forms.Keys KeyBindMoveForward {
+            get {
+                return ((global::System.Windows.Forms.Keys)(this["KeyBindMoveForward"]));
+            }
+            set {
+                this["KeyBindMoveForward"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("S")]
+        public global::System.Windows.Forms.Keys KeyBindMoveBackward {
+            get {
+                return ((global::System.Windows.Forms.Keys)(this["KeyBindMoveBackward"]));
+            }
+            set {
+                this["KeyBindMoveBackward"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("A")]
+        public global::System.Windows.Forms.Keys KeyBindMoveLeft {
+            get {
+                return ((global::System.Windows.Forms.Keys)(this["KeyBindMoveLeft"]));
+            }
+            set {
+                this["KeyBindMoveLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D")]
+        public global::System.Windows.Forms.Keys KeyBindMoveRight {
+            get {
+                return ((global::System.Windows.Forms.Keys)(this["KeyBindMoveRight"]));
+            }
+            set {
+                this["KeyBindMoveRight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("E")]
+        public global::System.Windows.Forms.Keys KeyBindMoveUp {
+            get {
+                return ((global::System.Windows.Forms.Keys)(this["KeyBindMoveUp"]));
+            }
+            set {
+                this["KeyBindMoveUp"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Q")]
+        public global::System.Windows.Forms.Keys KeyBindMoveDown {
+            get {
+                return ((global::System.Windows.Forms.Keys)(this["KeyBindMoveDown"]));
+            }
+            set {
+                this["KeyBindMoveDown"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("G")]
+        public global::System.Windows.Forms.Keys KeyBindStartDrag {
+            get {
+                return ((global::System.Windows.Forms.Keys)(this["KeyBindStartDrag"]));
+            }
+            set {
+                this["KeyBindStartDrag"] = value;
             }
         }
     }

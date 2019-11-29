@@ -29,6 +29,7 @@ namespace SMSSceneReader
         const string PRMPATH = "map\\params\\";
         const string DEMOPATH = "map\\camera\\startcamera.bck";
         const string HASHFILE = "./hash.dat";
+        private const string ApplicationType = "Beta";
 
         public bool Changed = false;   //Whether or not something has changed (for save alert)
 
@@ -38,7 +39,8 @@ namespace SMSSceneReader
         string SavePath;    //Path to save
 
         Find Find = new Find(); //Find form
-        Preview ScenePreview = null;    //Preview form
+        static Preview ScenePreview = null;    //Preview form
+        public static bool IsPreviewerOpen { get => ScenePreview != null; }
         RallyForm RailForm = null;
         CameraDemoEditor IntroEditor = null;
 
@@ -219,6 +221,8 @@ namespace SMSSceneReader
         /* Form Load - Initialize stuff */
         private void Form1_Load(object sender, EventArgs e)
         {
+            Text += $" {Application.ProductVersion} {ApplicationType}";
+
             paramTextBox.Enabled = false;
             createParameterToolStripMenuItem.Enabled = true;
             listBox2.ContextMenuStrip.Items[0].Enabled = false;
@@ -410,9 +414,9 @@ namespace SMSSceneReader
             if (previousNode == null)
             {
                 //Progress bar
-                toolStripProgressBar1.Value = 0;
-                toolStripProgressBar1.Maximum = LoadedScene.AllObjects.Count;
-                toolStripStatusLabel1.Text = "Adding Labels...";
+                MainToolStripProgressBar.Value = 0;
+                MainToolStripProgressBar.Maximum = LoadedScene.AllObjects.Count;
+                MainToolStripStatusLabel.Text = "Adding Labels...";
 
                 //Clear treeview
                 treeView1.Nodes.Clear();
@@ -430,8 +434,8 @@ namespace SMSSceneReader
                 AddObjectNodes(g.Grouped.ToArray(), node);  //Add children
 
                 //Update progress bar
-                if (toolStripProgressBar1.Value < toolStripProgressBar1.Maximum)
-                    toolStripProgressBar1.Value++;
+                if (MainToolStripProgressBar.Value < MainToolStripProgressBar.Maximum)
+                    MainToolStripProgressBar.Value++;
             }
             if (previousNode == null)
             {
@@ -439,9 +443,9 @@ namespace SMSSceneReader
                 treeView1.ExpandAll();
 
                 //Progress bar complete
-                toolStripProgressBar1.Value = 0;
-                toolStripProgressBar1.Maximum = 100;
-                toolStripStatusLabel1.Text = "Ready";
+                MainToolStripProgressBar.Value = 0;
+                MainToolStripProgressBar.Maximum = 100;
+                MainToolStripStatusLabel.Text = "Ready";
             }
         }
 
@@ -1152,8 +1156,9 @@ namespace SMSSceneReader
         /* Show help */
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string url = "https://egaddsworkshop.com/forums/showthread.php?tid=28";
-            System.Diagnostics.Process.Start(url);
+            //string url = "https://egaddsworkshop.com/forums/showthread.php?tid=28";
+            //System.Diagnostics.Process.Start(url);
+            MessageBox.Show("Currently unavailible", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         /* Show about */
@@ -1486,23 +1491,24 @@ namespace SMSSceneReader
 
         private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            System.Diagnostics.Process.Start("https://github.com/AugsEU/Bin-editor-improvements/releases");
             string latest = null;
-            try
-            {
-                WebClient update = new WebClient();
-                StreamReader stream = new StreamReader(update.OpenRead("http://blastsoftstudios.com/downloads/smsedit.txt"));
-                latest = stream.ReadLine();
-                stream.Close();
-            }
-            catch { MessageBox.Show("Unable to connect to update server.", "Update"); return; }
+            //try
+            //{
+            //    WebClient update = new WebClient();
+            //    StreamReader stream = new StreamReader(update.OpenRead("http://blastsoftstudios.com/downloads/smsedit.txt"));
+            //    latest = stream.ReadLine();
+            //    stream.Close();
+            //}
+            //catch { MessageBox.Show("Unable to connect to update server.", "Update"); return; }
 
-            if (Application.ProductVersion != latest)
-            {
-                if (MessageBox.Show("A new update is available. Would you like to download it now?", "Update", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    System.Diagnostics.Process.Start("http://www.blastsoftstudios.com/downloads/smsedit.html");
-            }
-            else
-                MessageBox.Show("You have the latest version.", "Update");
+            //if (Application.ProductVersion != latest)
+            //{
+            //    if (MessageBox.Show("A new update is available. Would you like to download it now?", "Update", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            //        System.Diagnostics.Process.Start("http://www.blastsoftstudios.com/downloads/smsedit.html");
+            //}
+            //else
+            //    MessageBox.Show("You have the latest version.", "Update");
         }
 
         private bool HasManager(string name)
@@ -2829,7 +2835,7 @@ namespace SMSSceneReader
 
         private void reportBugToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://smsrealm.net/board/thread.php?id=4");
+            System.Diagnostics.Process.Start("https://github.com/AugsEU/Bin-editor-improvements/issues");
         }
 
         private void hexadecimalToolStripMenuItem_Click(object sender, EventArgs e)
