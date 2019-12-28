@@ -45,7 +45,7 @@ namespace SMSSceneReader
         CameraDemoEditor IntroEditor = null;
 
         ObjectParameters CurrentObjectParameters;   //Parameters of selected object
-
+        int ParameterList_TopIndex = 0;
         public SMSScene LoadedScene;   //Current loaded scene
         RalFile LoadedRails;    //Rails
         BmgFile LoadedMessages; //Messages
@@ -426,9 +426,9 @@ namespace SMSSceneReader
                 //Create node and add, then add children
                 TreeNode node;
                 if (previousNode == null)
-                    node = treeView1.Nodes.Add(g.Name);
+                    node = treeView1.Nodes.Add(g.Name+" ("+g.Description+")");
                 else
-                    node = previousNode.Nodes.Add(g.Name);
+                    node = previousNode.Nodes.Add(g.Name+" ("+g.Description+")");
 
                 node.Tag = g;
                 AddObjectNodes(g.Grouped.ToArray(), node);  //Add children
@@ -446,6 +446,50 @@ namespace SMSSceneReader
                 MainToolStripProgressBar.Value = 0;
                 MainToolStripProgressBar.Maximum = 100;
                 MainToolStripStatusLabel.Text = "Ready";
+            }
+        }
+
+        /* Set an object's parameter data in hex in color*/
+        private void SetHexParamData(GameObject gObject) {
+            if (gObject.Values.Length > 256*8)
+                Values.Text = "Too Long";   //Prevents lag
+            else
+            {
+                Color[] colors = {Color.Red, Color.Green, Color.Blue};
+                int lastpos = -1;
+                int currpos = 0;
+                int curritem = 0;
+                //foreach (int datapos in CurrentObjectParameters.DataPositions) {
+                for (int j = 0; j < CurrentObjectParameters.DataNames.Length; j++) {
+                    //int datapos = CurrentObjectParameters.DataPositions[j];
+                    if (true) {
+                        int size = CurrentObjectParameters.GetParamLength(j, gObject);
+                        System.Diagnostics.Debug.Assert(size >= 0);
+                        if (size < 0 || currpos+size > gObject.Values.Length) {
+                            //MessageBox.Show("Invalid data positions in parameter data detected. Your parameter definitions might be wrong! (You set a parameter as string that shouldn't be a string?)",
+                            //    "Warning");
+                            break;
+                        }
+
+                        for (int i = 0; i < size; i++) {
+                            byte b = gObject.Values[currpos+i];
+                            Values.SelectionStart = Values.TextLength;
+                            Values.SelectionLength = 0;
+                            Values.SelectionColor = colors[curritem % 3];
+                            Values.AppendText(b.ToString("X2") + " ");
+                            Values.SelectionColor = Values.ForeColor;
+                        }
+
+                        currpos += size;
+
+                    }
+                    curritem += 1;
+                }
+
+                for (int i = currpos; i < gObject.Values.Length; i++) {
+                    byte b = gObject.Values[i];
+                    Values.AppendText(b.ToString("X2") + " ");
+                }
             }
         }
 
@@ -468,26 +512,56 @@ namespace SMSSceneReader
             ID.Value = gObject.Hash;
             ObjName.Text = gObject.Name;
             Flags.Text = gObject.DescHash.ToString();
-            if (gObject.Values.Length > 256)
-                Values.Text = "Too Long";   //Prevents lag
-            else
-            {
-                if (Properties.Settings.Default.paramHex)
-                {
-                    foreach (byte b in gObject.Values)
-                        Values.Text += b.ToString("X2") + " ";
-                }
-                else
-                {
-                    foreach (byte b in gObject.Values)
-                        Values.Text += b.ToString() + " ";
-                }
-            }
-            stringValue.Text = gObject.Description;
-
+            
+            ParameterList_TopIndex = listBox2.TopIndex;
             //Fill up parameter list
             listBox2.Items.Clear();
             CurrentObjectParameters.ReadObjectParameters(gObject);
+            /*
+            if (gObject.Values.Length > 256*8)
+                Values.Text = "Too Long";   //Prevents lag
+            else
+            {
+                Color[] colors = {Color.Red, Color.Green, Color.Blue};
+                int lastpos = -1;
+                int currpos = 0;
+                int curritem = 0;
+                //foreach (int datapos in CurrentObjectParameters.DataPositions) {
+                for (int j = 0; j < CurrentObjectParameters.DataNames.Length; j++) {
+                    //int datapos = CurrentObjectParameters.DataPositions[j];
+                    if (true) {
+                        int size = CurrentObjectParameters.GetParamLength(j, gObject);
+                        System.Diagnostics.Debug.Assert(size >= 0);
+                        if (size < 0 || currpos+size > gObject.Values.Length) {
+                            MessageBox.Show("Invalid data positions in parameter data detected. Your parameter definitions might be wrong! (You set a parameter as string that shouldn't be a string?)",
+                                "Warning");
+                            break;
+                        }
+
+                        for (int i = 0; i < size; i++) {
+                            byte b = gObject.Values[currpos+i];
+                            Values.SelectionStart = Values.TextLength;
+                            Values.SelectionLength = 0;
+                            Values.SelectionColor = colors[curritem % 3];
+                            Values.AppendText(b.ToString("X2") + " ");
+                            Values.SelectionColor = Values.ForeColor;
+                        }
+
+                        currpos += size;
+
+                    }
+                    curritem += 1;
+                }
+
+                for (int i = currpos; i < gObject.Values.Length; i++) {
+                    byte b = gObject.Values[i];
+                    Values.AppendText(b.ToString("X2") + " ");
+                }
+            }*/
+            SetHexParamData(gObject);
+            stringValue.Text = gObject.Description;
+
+
             for (int i = 0; i < CurrentObjectParameters.DataNames.Length; i++)
             {
                 if (CurrentObjectParameters.DataTypes[i] != ParameterDataTypes.COMMENT)
@@ -506,7 +580,7 @@ namespace SMSSceneReader
             createParameterToolStripMenuItem.Enabled = true;
             listBox2.ContextMenuStrip.Items[0].Enabled = true;
             treeView1.ContextMenuStrip.Enabled = true;
-
+            listBox2.TopIndex = ParameterList_TopIndex;
             UpdateDisplay = false;
         }
 
@@ -700,7 +774,7 @@ namespace SMSSceneReader
 
             //Update values string
             Values.Text = "";
-
+            /*
             if (Properties.Settings.Default.paramHex)
             {
                 foreach (byte b in gObject.Values)
@@ -710,7 +784,8 @@ namespace SMSSceneReader
             {
                 foreach (byte b in gObject.Values)
                     Values.Text += b.ToString() + " ";
-            }
+            }*/
+            SetHexParamData(gObject);
 
             UpdateInfo = true;
 
@@ -779,6 +854,7 @@ namespace SMSSceneReader
             ((GameObject)treeView1.SelectedNode.Tag).Description = stringValue.Text;
             ((GameObject)treeView1.SelectedNode.Tag).DescHash = GCN.CreateHash(stringValue.Text);   //Update hash too
             Flags.Value = ((GameObject)treeView1.SelectedNode.Tag).DescHash;
+            treeView1.SelectedNode.Text = ((GameObject)treeView1.SelectedNode.Tag).Name + " (" + ((GameObject)treeView1.SelectedNode.Tag).Description + ")"; 
         }
 
         /* Copy object to clipboard */
@@ -1006,7 +1082,20 @@ namespace SMSSceneReader
         {
             foreach (TreeNode n in startNodes)
             {
-                n.Text = ((GameObject)n.Tag).Name;
+                GameObject obj = (GameObject)n.Tag;
+                n.Text = obj.Name;// + " ("+ obj.Description+")";
+                UpdateObjectNames(n.Nodes);
+            }
+        }
+
+        public void UpdateObjectName(TreeNodeCollection startNodes, GameObject toupdate)
+        {
+            foreach (TreeNode n in startNodes)
+            {
+                GameObject obj = (GameObject)n.Tag;
+                if (Object.ReferenceEquals(toupdate, obj)){
+                    n.Text = obj.Name + " ("+ obj.Description+")";
+                }
                 UpdateObjectNames(n.Nodes);
             }
         }
@@ -1195,7 +1284,8 @@ namespace SMSSceneReader
             obj.Hash = GCN.CreateHash(obj.Name);    //Update hash
             ID.Value = obj.Hash;
 
-            UpdateNames = true;
+            //UpdateNames = true;
+            treeView1.SelectedNode.Text = obj.Name + " ("+ obj.Description + ")";
         }
 
         /* On hash value changed -- No longer used */

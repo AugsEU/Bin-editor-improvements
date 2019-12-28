@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.ObjName = new System.Windows.Forms.TextBox();
-            this.Values = new System.Windows.Forms.TextBox();
+            this.Values = new System.Windows.Forms.RichTextBox();
             this.paramContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.asTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -224,6 +224,9 @@
             this.statusStrip1.SuspendLayout();
             this.treeNodeContextMenu.SuspendLayout();
             this.SuspendLayout();
+
+            Values.Font = new System.Drawing.Font("Consolas", Values.Font.Size+1);
+            Values.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
             // 
             // ObjName
             // 
@@ -1772,7 +1775,7 @@
         #endregion
 
         private System.Windows.Forms.TextBox ObjName;
-        private System.Windows.Forms.TextBox Values;
+        private System.Windows.Forms.RichTextBox Values;
         private System.Windows.Forms.ListBox listBox2;
         private System.Windows.Forms.Label paramLabel;
         private System.Windows.Forms.GroupBox ParamBox;
