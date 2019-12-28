@@ -260,6 +260,8 @@ namespace BMDReader
                 c = a_inputregs[mat.TevStage[i].AlphaIn[2]];
                 d = a_inputregsD[mat.TevStage[i].AlphaIn[3]];
 
+                bool simpleOperation = false;
+
                 switch (mat.TevStage[i].AlphaOp)
                 {
                     case 0:
@@ -274,12 +276,21 @@ namespace BMDReader
 
                     default:
                         operation = "    {0} = 1.0;";
-                        throw new Exception("!alphaop " + mat.TevStage[i].AlphaOp.ToString());
+                        simpleOperation = true;
+                        Console.WriteLine("Unsupported Alpha Op: {0}", mat.TevStage[i].AlphaOp);
+                        break;
+                        //throw new Exception("!alphaop " + mat.TevStage[i].AlphaOp.ToString());
                 }
+                if (!simpleOperation) {
+                    operation = string.Format(operation,
+                        rout, a, b, c, d, tevbias[mat.TevStage[i].AlphaBias],
+                        tevscale[mat.TevStage[i].AlphaScale]);
+                }
+                else {
+                    operation = string.Format(operation,
+                        rout);
 
-                operation = string.Format(operation,
-                    rout, a, b, c, d, tevbias[mat.TevStage[i].AlphaBias],
-                    tevscale[mat.TevStage[i].AlphaScale]);
+                }
                 frag.AppendLine(operation);
             }
 
