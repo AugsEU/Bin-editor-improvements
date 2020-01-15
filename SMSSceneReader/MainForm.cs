@@ -1102,6 +1102,24 @@ namespace SMSSceneReader
             }
         }
 
+        public TreeNode FindNodeForObject(TreeNodeCollection startNodes, GameObject findobject)
+        {
+            TreeNode result = null;
+            foreach (TreeNode n in startNodes)
+            {
+                GameObject obj = (GameObject)n.Tag;
+                if (Object.ReferenceEquals(findobject, obj)){
+                    result = n;
+                    break;
+                }
+                result = FindNodeForObject(n.Nodes, findobject);
+                if (result != null) {
+                    break;
+                }
+            }
+            return result;
+        }
+
         #region QuickKeys
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -1657,7 +1675,23 @@ namespace SMSSceneReader
             GameObject gObject = op.CreateEmpty();
             op.Adjust(gObject);
 
+            TreeNode top = treeView1.TopNode;
+            GameObject topobject = null;
+            if (top != null) {
+                topobject = (GameObject)top.Tag;
+            }
+
             AddObject(treeView1.SelectedNode, gObject, op);
+            TreeNode node = FindNodeForObject(treeView1.Nodes, gObject);
+            top = FindNodeForObject(treeView1.Nodes, topobject);
+            if (node != null) {
+                if (top != null) {
+                    top.EnsureVisible();
+                }
+                node.EnsureVisible();
+                treeView1.SelectedNode = node;
+            }
+
         }
 
         /* Resize object */
@@ -2269,7 +2303,7 @@ namespace SMSSceneReader
             if (ScenePreview != null)
                 ScenePreview.RemoveObject((GameObject)node.Tag);
         }
-        public void AddObject(TreeNode node, GameObject gObject, ObjectParameters op)
+        public TreeNode AddObject(TreeNode node, GameObject gObject, ObjectParameters op)
         {
             Changed = true;
             CreateUndoSnapshot();
@@ -2318,6 +2352,7 @@ namespace SMSSceneReader
             //Update preview
             if (ScenePreview != null)
                 ScenePreview.UpdateObject(gObject);
+            return node;
         }
         public GameObject GetScene()
         {
