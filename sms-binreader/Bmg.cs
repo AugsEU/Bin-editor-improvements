@@ -396,7 +396,7 @@ namespace SMSReader
         /* Sets sound effect id for string at index */
         public void SetSoundEffectID(int id, byte flag)
         {
-            if (id >= StringFlags.Count)
+            if (id < 0 || id >= StringFlags.Count)
                 return;
             BMGFlags flg = StringFlags[id];
             flg.SetFlag(4, flag);
@@ -406,7 +406,7 @@ namespace SMSReader
         /* Add / Remove */
         public void RemoveAt(int id)
         {
-            if (id >= StringTable.Count)
+            if (id < 0 || id >= StringTable.Count)
                 return;
             StringTable.RemoveAt(id);
             StringFlags.RemoveAt(id);
@@ -418,7 +418,7 @@ namespace SMSReader
         }
         public void Insert(int pos, string str, UInt16 val1 = 0, UInt16 val2 = 0, UInt16 val3 = 0, UInt16 val4 = 0)
         {
-            if (pos >= StringTable.Count)
+            if (pos < 0 || pos >= StringTable.Count)
                 return;
             StringTable.Insert(pos, str);
             StringFlags.Insert(pos, new BMGFlags(new byte[8]));
