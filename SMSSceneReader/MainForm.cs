@@ -606,6 +606,8 @@ namespace SMSSceneReader
         {
             if (listBox2.SelectedIndex == -1)
                 return;
+            if (treeView1.SelectedNode == null)
+                return;
 
             UpdateDisplay2 = true;
 
