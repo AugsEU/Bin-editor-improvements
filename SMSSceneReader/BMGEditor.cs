@@ -84,8 +84,10 @@ namespace SMSSceneReader
         /* Removes selected message */
         private void removeButton_Click(object sender, EventArgs e)
         {
+            int index = listBox1.SelectedIndex;
             bmgFile.RemoveAt(listBox1.SelectedIndex);
             BMGEditor_Load(sender, e);
+            listBox1.SelectedIndex = index;
         }
     }
 }
