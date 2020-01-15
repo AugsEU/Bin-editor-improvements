@@ -87,7 +87,12 @@ namespace SMSSceneReader
             int index = listBox1.SelectedIndex;
             bmgFile.RemoveAt(listBox1.SelectedIndex);
             BMGEditor_Load(sender, e);
-            listBox1.SelectedIndex = index;
+            if (index >= listBox1.Items.Count) {
+                listBox1.SelectedIndex = listBox1.Items.Count - 1;
+            }
+            else {
+                listBox1.SelectedIndex = index;
+            }
         }
     }
 }
