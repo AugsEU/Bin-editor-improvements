@@ -44,39 +44,40 @@
             // 
             this.XLbl.AutoSize = true;
             this.XLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.XLbl.Location = new System.Drawing.Point(12, 9);
+            this.XLbl.Location = new System.Drawing.Point(16, 11);
+            this.XLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.XLbl.Name = "XLbl";
-            this.XLbl.Size = new System.Drawing.Size(32, 25);
+            this.XLbl.Size = new System.Drawing.Size(37, 29);
             this.XLbl.TabIndex = 0;
             this.XLbl.Text = "X:";
-            this.XLbl.UseWaitCursor = true;
             // 
             // YLbl
             // 
             this.YLbl.AutoSize = true;
             this.YLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.YLbl.Location = new System.Drawing.Point(12, 35);
+            this.YLbl.Location = new System.Drawing.Point(16, 43);
+            this.YLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.YLbl.Name = "YLbl";
-            this.YLbl.Size = new System.Drawing.Size(31, 25);
+            this.YLbl.Size = new System.Drawing.Size(36, 29);
             this.YLbl.TabIndex = 1;
             this.YLbl.Text = "Y:";
-            this.YLbl.UseWaitCursor = true;
             // 
             // ZLbl
             // 
             this.ZLbl.AutoSize = true;
             this.ZLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ZLbl.Location = new System.Drawing.Point(12, 62);
+            this.ZLbl.Location = new System.Drawing.Point(16, 76);
+            this.ZLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.ZLbl.Name = "ZLbl";
-            this.ZLbl.Size = new System.Drawing.Size(30, 25);
+            this.ZLbl.Size = new System.Drawing.Size(35, 29);
             this.ZLbl.TabIndex = 2;
             this.ZLbl.Text = "Z:";
-            this.ZLbl.UseWaitCursor = true;
             // 
             // XUpDown
             // 
             this.XUpDown.DecimalPlaces = 4;
-            this.XUpDown.Location = new System.Drawing.Point(50, 12);
+            this.XUpDown.Location = new System.Drawing.Point(67, 15);
+            this.XUpDown.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.XUpDown.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -88,14 +89,14 @@
             0,
             -2147483648});
             this.XUpDown.Name = "XUpDown";
-            this.XUpDown.Size = new System.Drawing.Size(120, 20);
+            this.XUpDown.Size = new System.Drawing.Size(160, 22);
             this.XUpDown.TabIndex = 3;
-            this.XUpDown.UseWaitCursor = true;
             // 
             // YUpDown
             // 
             this.YUpDown.DecimalPlaces = 4;
-            this.YUpDown.Location = new System.Drawing.Point(50, 38);
+            this.YUpDown.Location = new System.Drawing.Point(67, 47);
+            this.YUpDown.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.YUpDown.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -107,14 +108,14 @@
             0,
             -2147483648});
             this.YUpDown.Name = "YUpDown";
-            this.YUpDown.Size = new System.Drawing.Size(120, 20);
+            this.YUpDown.Size = new System.Drawing.Size(160, 22);
             this.YUpDown.TabIndex = 4;
-            this.YUpDown.UseWaitCursor = true;
             // 
             // ZUpDown
             // 
             this.ZUpDown.DecimalPlaces = 4;
-            this.ZUpDown.Location = new System.Drawing.Point(50, 64);
+            this.ZUpDown.Location = new System.Drawing.Point(67, 79);
+            this.ZUpDown.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ZUpDown.Maximum = new decimal(new int[] {
             32767,
             0,
@@ -126,28 +127,27 @@
             0,
             -2147483648});
             this.ZUpDown.Name = "ZUpDown";
-            this.ZUpDown.Size = new System.Drawing.Size(120, 20);
+            this.ZUpDown.Size = new System.Drawing.Size(160, 22);
             this.ZUpDown.TabIndex = 5;
-            this.ZUpDown.UseWaitCursor = true;
             // 
             // OKBtn
             // 
             this.OKBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.OKBtn.Location = new System.Drawing.Point(102, 90);
+            this.OKBtn.Location = new System.Drawing.Point(136, 111);
+            this.OKBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.OKBtn.Name = "OKBtn";
-            this.OKBtn.Size = new System.Drawing.Size(75, 23);
+            this.OKBtn.Size = new System.Drawing.Size(100, 28);
             this.OKBtn.TabIndex = 6;
             this.OKBtn.Text = "OK";
             this.OKBtn.UseVisualStyleBackColor = true;
-            this.OKBtn.UseWaitCursor = true;
             this.OKBtn.Click += new System.EventHandler(this.OKBtn_Click);
             // 
             // VectorInput
             // 
             this.AcceptButton = this.OKBtn;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(189, 124);
+            this.ClientSize = new System.Drawing.Size(252, 153);
             this.Controls.Add(this.OKBtn);
             this.Controls.Add(this.ZUpDown);
             this.Controls.Add(this.YUpDown);
@@ -156,10 +156,10 @@
             this.Controls.Add(this.YLbl);
             this.Controls.Add(this.XLbl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MinimizeBox = false;
             this.Name = "VectorInput";
             this.Text = "Input vector";
-            this.UseWaitCursor = true;
             ((System.ComponentModel.ISupportInitialize)(this.XUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.YUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZUpDown)).EndInit();

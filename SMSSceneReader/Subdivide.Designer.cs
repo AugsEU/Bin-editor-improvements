@@ -42,17 +42,18 @@
             // 
             this.ZLbl.AutoSize = true;
             this.ZLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ZLbl.Location = new System.Drawing.Point(6, 80);
+            this.ZLbl.Location = new System.Drawing.Point(8, 98);
+            this.ZLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.ZLbl.Name = "ZLbl";
-            this.ZLbl.Size = new System.Drawing.Size(38, 13);
+            this.ZLbl.Size = new System.Drawing.Size(49, 17);
             this.ZLbl.TabIndex = 2;
             this.ZLbl.Text = "Count:";
             this.ZLbl.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.ZLbl.UseWaitCursor = true;
             // 
             // CountUpDown
             // 
-            this.CountUpDown.Location = new System.Drawing.Point(42, 78);
+            this.CountUpDown.Location = new System.Drawing.Point(56, 96);
+            this.CountUpDown.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CountUpDown.Maximum = new decimal(new int[] {
             10,
             0,
@@ -64,9 +65,8 @@
             0,
             0});
             this.CountUpDown.Name = "CountUpDown";
-            this.CountUpDown.Size = new System.Drawing.Size(47, 20);
+            this.CountUpDown.Size = new System.Drawing.Size(63, 22);
             this.CountUpDown.TabIndex = 5;
-            this.CountUpDown.UseWaitCursor = true;
             this.CountUpDown.Value = new decimal(new int[] {
             1,
             0,
@@ -76,67 +76,67 @@
             // OKBtn
             // 
             this.OKBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.OKBtn.Location = new System.Drawing.Point(95, 75);
+            this.OKBtn.Location = new System.Drawing.Point(127, 92);
+            this.OKBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.OKBtn.Name = "OKBtn";
-            this.OKBtn.Size = new System.Drawing.Size(75, 23);
+            this.OKBtn.Size = new System.Drawing.Size(100, 28);
             this.OKBtn.TabIndex = 6;
             this.OKBtn.Text = "OK";
             this.OKBtn.UseVisualStyleBackColor = true;
-            this.OKBtn.UseWaitCursor = true;
             this.OKBtn.Click += new System.EventHandler(this.OKBtn_Click);
             // 
             // SchemeType
             // 
             this.SchemeType.AutoSize = true;
             this.SchemeType.Checked = true;
-            this.SchemeType.Location = new System.Drawing.Point(3, 3);
+            this.SchemeType.Location = new System.Drawing.Point(4, 4);
+            this.SchemeType.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.SchemeType.Name = "SchemeType";
-            this.SchemeType.Size = new System.Drawing.Size(60, 17);
+            this.SchemeType.Size = new System.Drawing.Size(75, 21);
             this.SchemeType.TabIndex = 7;
             this.SchemeType.TabStop = true;
             this.SchemeType.Text = "Chaikin";
             this.SchemeType.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.SchemeType.UseVisualStyleBackColor = true;
-            this.SchemeType.UseWaitCursor = true;
             // 
             // RadioGroup
             // 
             this.RadioGroup.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.RadioGroup.Controls.Add(this.SchemeType);
-            this.RadioGroup.Location = new System.Drawing.Point(9, 28);
+            this.RadioGroup.Location = new System.Drawing.Point(12, 34);
+            this.RadioGroup.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.RadioGroup.Name = "RadioGroup";
-            this.RadioGroup.Size = new System.Drawing.Size(161, 41);
+            this.RadioGroup.Size = new System.Drawing.Size(213, 50);
             this.RadioGroup.TabIndex = 8;
-            this.RadioGroup.UseWaitCursor = true;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(6, 9);
+            this.label1.Location = new System.Drawing.Point(8, 11);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(106, 13);
+            this.label1.Size = new System.Drawing.Size(139, 17);
             this.label1.TabIndex = 9;
             this.label1.Text = "Subdivision Scheme:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.label1.UseWaitCursor = true;
             // 
             // Subdivide
             // 
             this.AcceptButton = this.OKBtn;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(176, 105);
+            this.ClientSize = new System.Drawing.Size(235, 129);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.RadioGroup);
             this.Controls.Add(this.OKBtn);
             this.Controls.Add(this.CountUpDown);
             this.Controls.Add(this.ZLbl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MinimizeBox = false;
             this.Name = "Subdivide";
             this.Text = "Sub surf\'s up";
-            this.UseWaitCursor = true;
             ((System.ComponentModel.ISupportInitialize)(this.CountUpDown)).EndInit();
             this.RadioGroup.ResumeLayout(false);
             this.RadioGroup.PerformLayout();
