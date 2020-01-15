@@ -2164,6 +2164,7 @@ namespace SMSSceneReader
                 listBox2.SelectedIndex = -1;
                 LoadedScene = undoDatabase[--undoPointer];
                 AddObjectNodes(LoadedScene.Objects.ToArray());
+                Changed = true;
             }
             TestUndo();
             //Update preview
@@ -2177,6 +2178,7 @@ namespace SMSSceneReader
                 listBox2.SelectedIndex = -1;
                 LoadedScene = undoDatabase[undoPointer++];
                 AddObjectNodes(LoadedScene.Objects.ToArray());
+                Changed = true;
             }
             TestUndo();
             //Update preview
