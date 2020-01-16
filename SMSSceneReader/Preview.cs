@@ -83,6 +83,10 @@ namespace SMSSceneReader
         bool LockedAxis;
         Ray LastAxis;
 
+        bool xAxisLock = false;
+        bool yAxisLock = false;
+        bool zAxisLock = false;
+
         /* Mouse stuff */
         private bool DidMove;
         private Vector3 ClickRelMouse;
@@ -927,8 +931,13 @@ namespace SMSSceneReader
                     float xdif = Vector3.Dot(pdif, nX);
                     float ydif = Vector3.Dot(pdif, nY);
 
-                    if (LockedAxis)
+                    if (LockedAxis) {
+                        
                         newpoint = (pdif * LastAxis.Direction) + LastAxis.Origin;
+                        newpoint = LastAxis.Origin;
+                        
+                        
+                    }
                     else
                     {
                         if (xdif > ydif)
@@ -970,6 +979,9 @@ namespace SMSSceneReader
                         mainForm.CreateUndoSnapshot();
                         mainForm.Changed = true;
                     }
+
+
+
                     op.SetParamValue("X", selected[0], OutputPosition.X.ToString());
                     op.SetParamValue("Y", selected[0], OutputPosition.Y.ToString());
                     op.SetParamValue("Z", selected[0], OutputPosition.Z.ToString());
@@ -998,14 +1010,49 @@ namespace SMSSceneReader
                     mainForm.CreateUndoSnapshot();
                     mainForm.Changed = true;
                 }
-
+                Console.WriteLine("{0}, {1}, {2}", xAxisLock, yAxisLock, zAxisLock);
+                if (xAxisLock) {
+                    ClickRelMouse.Y = 0.0f;
+                    ClickRelMouse.Z = 0.0f;
+                }
+                    
+                if (yAxisLock) {
+                    ClickRelMouse.Y = 0.0f;
+                    ClickRelMouse.Z = 0.0f;
+                }
+                    
+                if (zAxisLock) {
+                    ClickRelMouse.Y = 0.0f;
+                    ClickRelMouse.Z = 0.0f;
+                }
                 GameObject[] selected = GetSelectedObjects();
                 //Update all selected objects
                 foreach (GameObject go in selected)
                 {
                     ObjectParameters op = new ObjectParameters();
                     op.ReadObjectParameters(go);
-                    Vector3 n = newpoint + ClickRelMouse;
+                    //Vector3 n = newpoint;// + ClickRelMouse;
+                    
+                    Vector3 original = new Vector3(Convert.ToSingle(op.GetParamValue("X", go)), 
+                        Convert.ToSingle(op.GetParamValue("Y", go)), 
+                        Convert.ToSingle(op.GetParamValue("Z", go)));
+                    Vector3 diff = newpoint - original;
+
+                    if (xAxisLock) {
+                        diff.Y = 0.0f;
+                        diff.Z = 0.0f;
+                    }
+                    if (yAxisLock) {
+                        diff.X = 0.0f;
+                        diff.Z = 0.0f;
+                    }
+                    if (zAxisLock) {
+                        diff.X = 0.0f;
+                        diff.Y = 0.0f;
+                    }
+
+                    Vector3 n = original + diff;
+
                     op.SetParamValue("X", go, n.X.ToString());
                     op.SetParamValue("Y", go, n.Y.ToString());
                     op.SetParamValue("Z", go, n.Z.ToString());
@@ -1087,6 +1134,15 @@ namespace SMSSceneReader
             }
             else
             {
+                if (e.KeyCode == Keys.X) {
+                    xAxisLock = true;
+                }
+                if (e.KeyCode == Keys.Y) {
+                    yAxisLock = true;
+                }
+                if (e.KeyCode == Keys.Z) {
+                    zAxisLock = true;
+                }
                 if (e.KeyCode == Keys.ShiftKey)
                     LockKeyHeld = true;
             }
@@ -1153,6 +1209,15 @@ namespace SMSSceneReader
             }
             else
             {
+                if (e.KeyCode == Keys.X) {
+                    xAxisLock = false;
+                }
+                if (e.KeyCode == Keys.Y) {
+                    yAxisLock = false;
+                }
+                if (e.KeyCode == Keys.Z) {
+                    zAxisLock = false;
+                }
                 if (e.KeyCode == Keys.ShiftKey)
                     LockKeyHeld = false;
             }
