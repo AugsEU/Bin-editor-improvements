@@ -1505,7 +1505,7 @@ namespace SMSSceneReader
             }
             if (RailForm == null)
             {
-                RailForm = new RallyForm(LoadedRails);
+                RailForm = new RallyForm(LoadedRails, ScenePreview);
                 RailForm.Show();
 
                 RailForm.FormClosed += new FormClosedEventHandler(RallyForm_FormClosed);

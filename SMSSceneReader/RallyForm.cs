@@ -16,11 +16,14 @@ namespace SMSRallyEditor
     public partial class RallyForm : Form
     {
         RalFile file;
+        SMSSceneReader.Preview preview;
 
-        public RallyForm(RalFile loadFile)
+        public RallyForm(RalFile loadFile, SMSSceneReader.Preview preview)
         {
             InitializeComponent();
             file = loadFile;
+
+            this.preview = preview;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -449,6 +452,17 @@ namespace SMSRallyEditor
             file.GetAllRails()[listBox1.SelectedIndex].InsertFrame(rp, listBox2.SelectedIndex + 1);
 
             RefreshListBox2();
+        }
+
+        private void button2_Click_1(object sender, EventArgs e) {
+            if (preview != null) {
+                xUpDown.Value = (decimal)preview.CameraPos.X;
+                yUpDown.Value = (decimal)preview.CameraPos.Y;
+                zUpDown.Value = (decimal)preview.CameraPos.Z;
+                applyButton_Click(sender, e);
+                preview.ForceDraw();
+            }
+
         }
     }
 }
