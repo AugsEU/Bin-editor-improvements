@@ -1036,7 +1036,7 @@ namespace SMSSceneReader
                     Vector3 original = new Vector3(Convert.ToSingle(op.GetParamValue("X", go)), 
                         Convert.ToSingle(op.GetParamValue("Y", go)), 
                         Convert.ToSingle(op.GetParamValue("Z", go)));
-                    Vector3 diff = newpoint - original;
+                    Vector3 diff = (newpoint+ClickRelMouse) - original;
 
                     if (xAxisLock) {
                         diff.Y = 0.0f;
