@@ -16,14 +16,11 @@ namespace SMSRallyEditor
     public partial class RallyForm : Form
     {
         RalFile file;
-        SMSSceneReader.Preview preview;
 
-        public RallyForm(RalFile loadFile, SMSSceneReader.Preview preview)
+        public RallyForm(RalFile loadFile)
         {
             InitializeComponent();
             file = loadFile;
-
-            this.preview = preview;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -455,6 +452,7 @@ namespace SMSRallyEditor
         }
 
         private void button2_Click_1(object sender, EventArgs e) {
+            SMSSceneReader.Preview preview = SMSSceneReader.MainForm.ScenePreview;
             if (preview != null) {
                 xUpDown.Value = (decimal)preview.CameraPos.X;
                 yUpDown.Value = (decimal)preview.CameraPos.Y;

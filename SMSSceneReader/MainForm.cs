@@ -39,7 +39,7 @@ namespace SMSSceneReader
         string SavePath;    //Path to save
 
         Find Find = new Find(); //Find form
-        static Preview ScenePreview = null;    //Preview form
+        public static Preview ScenePreview = null;    //Preview form
         public static bool IsPreviewerOpen { get => ScenePreview != null; }
         RallyForm RailForm = null;
         CameraDemoEditor IntroEditor = null;
@@ -1505,7 +1505,7 @@ namespace SMSSceneReader
             }
             if (RailForm == null)
             {
-                RailForm = new RallyForm(LoadedRails, ScenePreview);
+                RailForm = new RallyForm(LoadedRails);
                 RailForm.Show();
 
                 RailForm.FormClosed += new FormClosedEventHandler(RallyForm_FormClosed);

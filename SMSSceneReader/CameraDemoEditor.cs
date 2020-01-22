@@ -22,7 +22,6 @@ namespace SMSSceneReader
 
         public string ScenePath;
 
-
         int KeyFrameWidth = 50;
         Dictionary<int, LookAtFromPair> CameraAnimation;//The int key is the time(frame) and the LookAtFromPair 
         Vector2 SelectedFrame = Vector2.Zero;
@@ -111,10 +110,14 @@ namespace SMSSceneReader
 
         private void AddLookBtn_Click(object sender, EventArgs e)
         {
-            KeyFramePrompt KFInput = new KeyFramePrompt();//This prompt is another form. Check that for reference.
-            DialogResult MyDialog = KFInput.ShowDialog();//Show dialog means we must get a response before we can change anything on this form.
-            if (MyDialog != DialogResult.OK || CameraAnimation.ContainsKey(KFInput.time) || KFInput.time > DurationUpDn.Value - 1)//Cancel if no KF is put in or KF time is invalid
+            KeyFramePrompt KFInput = new KeyFramePrompt(this);//This prompt is another form. Check that for reference.
+            KFInput.Show(); // Show Keyframe input and allow other windows to be used
+        }
+
+        public void AddKeyframeFromPrompt(KeyFramePrompt KFInput) {
+            if (CameraAnimation.ContainsKey(KFInput.time) || KFInput.time > DurationUpDn.Value - 1) {
                 return;
+            }
 
             if(CameraAnimation.Count == 3640)
             {
@@ -122,7 +125,7 @@ namespace SMSSceneReader
             }
 
             CameraAnimation.Add(KFInput.time, new LookAtFromPair(KFInput.AtPosition, KFInput.FromPosition));//Add the new KF
-            RefreshTimeLine();//Force draw
+            RefreshTimeLine();
         }
 
         private void TimeLine_MouseDown(object sender, MouseEventArgs e)
@@ -457,6 +460,17 @@ namespace SMSSceneReader
         {
             long Next32 = (long)Math.Ceiling((decimal)FS.Position / 32) * 32;
             Data.WritePadding(FS, (int)(Next32 - FS.Position));
+        }
+
+        private void SetPositionToCamera_Click(object sender, EventArgs e) {
+            SMSSceneReader.Preview preview = MainForm.ScenePreview;
+            if (preview != null && CameraAnimation.ContainsKey((int)SelectedFrame.X)) {
+                XUpDn.Value = (decimal)preview.CameraPos.X;
+                YUpDn.Value = (decimal)preview.CameraPos.Y;
+                ZUpDn.Value = (decimal)preview.CameraPos.Z;
+                //applyButton_Click(sender, e);
+                //preview.ForceDraw();
+            }
         }
     }
 

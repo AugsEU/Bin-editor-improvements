@@ -45,6 +45,8 @@
             this.FromZUpDn = new System.Windows.Forms.NumericUpDown();
             this.FromYUpDn = new System.Windows.Forms.NumericUpDown();
             this.FromXUpDn = new System.Windows.Forms.NumericUpDown();
+            this.LookAtToCamera = new System.Windows.Forms.Button();
+            this.LookFromToCamera = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TimeUpDn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AtZUpDn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AtYUpDn)).BeginInit();
@@ -57,15 +59,17 @@
             // TimeLbl
             // 
             this.TimeLbl.AutoSize = true;
-            this.TimeLbl.Location = new System.Drawing.Point(12, 118);
+            this.TimeLbl.Location = new System.Drawing.Point(17, 190);
+            this.TimeLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.TimeLbl.Name = "TimeLbl";
-            this.TimeLbl.Size = new System.Drawing.Size(33, 13);
+            this.TimeLbl.Size = new System.Drawing.Size(43, 17);
             this.TimeLbl.TabIndex = 26;
             this.TimeLbl.Text = "Time:";
             // 
             // TimeUpDn
             // 
-            this.TimeUpDn.Location = new System.Drawing.Point(51, 116);
+            this.TimeUpDn.Location = new System.Drawing.Point(68, 190);
+            this.TimeUpDn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.TimeUpDn.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -77,7 +81,7 @@
             0,
             0});
             this.TimeUpDn.Name = "TimeUpDn";
-            this.TimeUpDn.Size = new System.Drawing.Size(104, 20);
+            this.TimeUpDn.Size = new System.Drawing.Size(139, 22);
             this.TimeUpDn.TabIndex = 25;
             this.TimeUpDn.Value = new decimal(new int[] {
             1,
@@ -88,43 +92,48 @@
             // AtPositionLbl
             // 
             this.AtPositionLbl.AutoSize = true;
-            this.AtPositionLbl.Location = new System.Drawing.Point(12, 9);
+            this.AtPositionLbl.Location = new System.Drawing.Point(16, 11);
+            this.AtPositionLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.AtPositionLbl.Name = "AtPositionLbl";
-            this.AtPositionLbl.Size = new System.Drawing.Size(91, 13);
+            this.AtPositionLbl.Size = new System.Drawing.Size(120, 17);
             this.AtPositionLbl.TabIndex = 24;
             this.AtPositionLbl.Text = "\'Look At\' Position:";
             // 
             // AtZLbl
             // 
             this.AtZLbl.AutoSize = true;
-            this.AtZLbl.Location = new System.Drawing.Point(12, 79);
+            this.AtZLbl.Location = new System.Drawing.Point(16, 97);
+            this.AtZLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.AtZLbl.Name = "AtZLbl";
-            this.AtZLbl.Size = new System.Drawing.Size(17, 13);
+            this.AtZLbl.Size = new System.Drawing.Size(21, 17);
             this.AtZLbl.TabIndex = 23;
             this.AtZLbl.Text = "Z:";
             // 
             // AtYLbl
             // 
             this.AtYLbl.AutoSize = true;
-            this.AtYLbl.Location = new System.Drawing.Point(12, 53);
+            this.AtYLbl.Location = new System.Drawing.Point(16, 65);
+            this.AtYLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.AtYLbl.Name = "AtYLbl";
-            this.AtYLbl.Size = new System.Drawing.Size(17, 13);
+            this.AtYLbl.Size = new System.Drawing.Size(21, 17);
             this.AtYLbl.TabIndex = 22;
             this.AtYLbl.Text = "Y:";
             // 
             // AtXLbl
             // 
             this.AtXLbl.AutoSize = true;
-            this.AtXLbl.Location = new System.Drawing.Point(12, 27);
+            this.AtXLbl.Location = new System.Drawing.Point(16, 33);
+            this.AtXLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.AtXLbl.Name = "AtXLbl";
-            this.AtXLbl.Size = new System.Drawing.Size(17, 13);
+            this.AtXLbl.Size = new System.Drawing.Size(21, 17);
             this.AtXLbl.TabIndex = 21;
             this.AtXLbl.Text = "X:";
             // 
             // AtZUpDn
             // 
             this.AtZUpDn.DecimalPlaces = 3;
-            this.AtZUpDn.Location = new System.Drawing.Point(35, 77);
+            this.AtZUpDn.Location = new System.Drawing.Point(47, 95);
+            this.AtZUpDn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.AtZUpDn.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -136,13 +145,14 @@
             0,
             -2147483648});
             this.AtZUpDn.Name = "AtZUpDn";
-            this.AtZUpDn.Size = new System.Drawing.Size(120, 20);
+            this.AtZUpDn.Size = new System.Drawing.Size(160, 22);
             this.AtZUpDn.TabIndex = 20;
             // 
             // AtYUpDn
             // 
             this.AtYUpDn.DecimalPlaces = 3;
-            this.AtYUpDn.Location = new System.Drawing.Point(35, 51);
+            this.AtYUpDn.Location = new System.Drawing.Point(47, 63);
+            this.AtYUpDn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.AtYUpDn.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -154,13 +164,14 @@
             0,
             -2147483648});
             this.AtYUpDn.Name = "AtYUpDn";
-            this.AtYUpDn.Size = new System.Drawing.Size(120, 20);
+            this.AtYUpDn.Size = new System.Drawing.Size(160, 22);
             this.AtYUpDn.TabIndex = 19;
             // 
             // AtXUpDn
             // 
             this.AtXUpDn.DecimalPlaces = 3;
-            this.AtXUpDn.Location = new System.Drawing.Point(35, 25);
+            this.AtXUpDn.Location = new System.Drawing.Point(47, 31);
+            this.AtXUpDn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.AtXUpDn.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -172,15 +183,16 @@
             0,
             -2147483648});
             this.AtXUpDn.Name = "AtXUpDn";
-            this.AtXUpDn.Size = new System.Drawing.Size(120, 20);
+            this.AtXUpDn.Size = new System.Drawing.Size(160, 22);
             this.AtXUpDn.TabIndex = 18;
             // 
             // OKBtn
             // 
             this.OKBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.OKBtn.Location = new System.Drawing.Point(236, 116);
+            this.OKBtn.Location = new System.Drawing.Point(319, 190);
+            this.OKBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.OKBtn.Name = "OKBtn";
-            this.OKBtn.Size = new System.Drawing.Size(75, 23);
+            this.OKBtn.Size = new System.Drawing.Size(100, 28);
             this.OKBtn.TabIndex = 27;
             this.OKBtn.Text = "OK";
             this.OKBtn.UseVisualStyleBackColor = true;
@@ -189,43 +201,48 @@
             // FromPositionLbl
             // 
             this.FromPositionLbl.AutoSize = true;
-            this.FromPositionLbl.Location = new System.Drawing.Point(168, 9);
+            this.FromPositionLbl.Location = new System.Drawing.Point(224, 11);
+            this.FromPositionLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.FromPositionLbl.Name = "FromPositionLbl";
-            this.FromPositionLbl.Size = new System.Drawing.Size(104, 13);
+            this.FromPositionLbl.Size = new System.Drawing.Size(139, 17);
             this.FromPositionLbl.TabIndex = 34;
             this.FromPositionLbl.Text = "\'Look From\' Position:";
             // 
             // FromZLbl
             // 
             this.FromZLbl.AutoSize = true;
-            this.FromZLbl.Location = new System.Drawing.Point(168, 79);
+            this.FromZLbl.Location = new System.Drawing.Point(224, 97);
+            this.FromZLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.FromZLbl.Name = "FromZLbl";
-            this.FromZLbl.Size = new System.Drawing.Size(17, 13);
+            this.FromZLbl.Size = new System.Drawing.Size(21, 17);
             this.FromZLbl.TabIndex = 33;
             this.FromZLbl.Text = "Z:";
             // 
             // FromYLbl
             // 
             this.FromYLbl.AutoSize = true;
-            this.FromYLbl.Location = new System.Drawing.Point(168, 53);
+            this.FromYLbl.Location = new System.Drawing.Point(224, 65);
+            this.FromYLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.FromYLbl.Name = "FromYLbl";
-            this.FromYLbl.Size = new System.Drawing.Size(17, 13);
+            this.FromYLbl.Size = new System.Drawing.Size(21, 17);
             this.FromYLbl.TabIndex = 32;
             this.FromYLbl.Text = "Y:";
             // 
             // FromXLbl
             // 
             this.FromXLbl.AutoSize = true;
-            this.FromXLbl.Location = new System.Drawing.Point(168, 27);
+            this.FromXLbl.Location = new System.Drawing.Point(224, 33);
+            this.FromXLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.FromXLbl.Name = "FromXLbl";
-            this.FromXLbl.Size = new System.Drawing.Size(17, 13);
+            this.FromXLbl.Size = new System.Drawing.Size(21, 17);
             this.FromXLbl.TabIndex = 31;
             this.FromXLbl.Text = "X:";
             // 
             // FromZUpDn
             // 
             this.FromZUpDn.DecimalPlaces = 3;
-            this.FromZUpDn.Location = new System.Drawing.Point(191, 77);
+            this.FromZUpDn.Location = new System.Drawing.Point(255, 95);
+            this.FromZUpDn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.FromZUpDn.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -237,13 +254,14 @@
             0,
             -2147483648});
             this.FromZUpDn.Name = "FromZUpDn";
-            this.FromZUpDn.Size = new System.Drawing.Size(120, 20);
+            this.FromZUpDn.Size = new System.Drawing.Size(160, 22);
             this.FromZUpDn.TabIndex = 30;
             // 
             // FromYUpDn
             // 
             this.FromYUpDn.DecimalPlaces = 3;
-            this.FromYUpDn.Location = new System.Drawing.Point(191, 51);
+            this.FromYUpDn.Location = new System.Drawing.Point(255, 63);
+            this.FromYUpDn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.FromYUpDn.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -255,13 +273,14 @@
             0,
             -2147483648});
             this.FromYUpDn.Name = "FromYUpDn";
-            this.FromYUpDn.Size = new System.Drawing.Size(120, 20);
+            this.FromYUpDn.Size = new System.Drawing.Size(160, 22);
             this.FromYUpDn.TabIndex = 29;
             // 
             // FromXUpDn
             // 
             this.FromXUpDn.DecimalPlaces = 3;
-            this.FromXUpDn.Location = new System.Drawing.Point(191, 25);
+            this.FromXUpDn.Location = new System.Drawing.Point(255, 31);
+            this.FromXUpDn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.FromXUpDn.Maximum = new decimal(new int[] {
             65535,
             0,
@@ -273,15 +292,37 @@
             0,
             -2147483648});
             this.FromXUpDn.Name = "FromXUpDn";
-            this.FromXUpDn.Size = new System.Drawing.Size(120, 20);
+            this.FromXUpDn.Size = new System.Drawing.Size(160, 22);
             this.FromXUpDn.TabIndex = 28;
+            // 
+            // LookAtToCamera
+            // 
+            this.LookAtToCamera.Location = new System.Drawing.Point(19, 139);
+            this.LookAtToCamera.Name = "LookAtToCamera";
+            this.LookAtToCamera.Size = new System.Drawing.Size(188, 23);
+            this.LookAtToCamera.TabIndex = 35;
+            this.LookAtToCamera.Text = "Set LookAt to Camera";
+            this.LookAtToCamera.UseVisualStyleBackColor = true;
+            this.LookAtToCamera.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // LookFromToCamera
+            // 
+            this.LookFromToCamera.Location = new System.Drawing.Point(227, 139);
+            this.LookFromToCamera.Name = "LookFromToCamera";
+            this.LookFromToCamera.Size = new System.Drawing.Size(188, 23);
+            this.LookFromToCamera.TabIndex = 36;
+            this.LookFromToCamera.Text = "Set LookFrom to Camera";
+            this.LookFromToCamera.UseVisualStyleBackColor = true;
+            this.LookFromToCamera.Click += new System.EventHandler(this.LookFromToCamera_Click);
             // 
             // KeyFramePrompt
             // 
             this.AcceptButton = this.OKBtn;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(324, 151);
+            this.ClientSize = new System.Drawing.Size(432, 231);
+            this.Controls.Add(this.LookFromToCamera);
+            this.Controls.Add(this.LookAtToCamera);
             this.Controls.Add(this.FromPositionLbl);
             this.Controls.Add(this.FromZLbl);
             this.Controls.Add(this.FromYLbl);
@@ -300,6 +341,7 @@
             this.Controls.Add(this.AtYUpDn);
             this.Controls.Add(this.AtXUpDn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "KeyFramePrompt";
             this.Text = "Enter initial data...";
             ((System.ComponentModel.ISupportInitialize)(this.TimeUpDn)).EndInit();
@@ -333,5 +375,7 @@
         private System.Windows.Forms.NumericUpDown FromZUpDn;
         private System.Windows.Forms.NumericUpDown FromYUpDn;
         private System.Windows.Forms.NumericUpDown FromXUpDn;
+        private System.Windows.Forms.Button LookAtToCamera;
+        private System.Windows.Forms.Button LookFromToCamera;
     }
 }
