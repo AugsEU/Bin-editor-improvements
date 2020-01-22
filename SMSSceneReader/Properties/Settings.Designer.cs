@@ -514,5 +514,18 @@ namespace SMSSceneReader.Properties {
                 this["KeyBindStartDrag"] = value;
             }
         }
+
+                [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SimplerRendering {
+            get {
+                return ((bool)(this["SimplerRendering"]));
+            }
+            set {
+                this["SimplerRendering"] = value;
+            }
+        }
+
     }
 }
