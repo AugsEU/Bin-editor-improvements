@@ -22,6 +22,7 @@ namespace BMDReader
 {
     public class BmdRenderer : RendererBase
     {
+        bool m_simpleRendering;
         private void UploadTexture(int id)
         {
             TextureWrapMode[] wrapmodes = { TextureWrapMode.ClampToEdge, TextureWrapMode.Repeat, TextureWrapMode.MirroredRepeat };
@@ -71,6 +72,8 @@ namespace BMDReader
         {
             CultureInfo forceusa = new CultureInfo("en-US");
 
+
+
             string[] texgensrc = { "normalize(gl_Vertex)", "vec4(gl_Normal,1.0)", "argh", "argh",
                                      "gl_MultiTexCoord0", "gl_MultiTexCoord1", "gl_MultiTexCoord2", "gl_MultiTexCoord3",
                                      "gl_MultiTexCoord4", "gl_MultiTexCoord5", "gl_MultiTexCoord6", "gl_MultiTexCoord7" };
@@ -117,27 +120,48 @@ namespace BMDReader
             Bmd.Material mat = m_Model.Materials[matid];
 
             StringBuilder vert = new StringBuilder();
-            vert.AppendLine("#version 120");
-            vert.AppendLine("");
-            vert.AppendLine("void main()");
-            vert.AppendLine("{");
-            vert.AppendLine("    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;");
-            vert.AppendLine("    gl_FrontColor = gl_Color;");
-            vert.AppendLine("    gl_FrontSecondaryColor = gl_SecondaryColor;");
-            for (int i = 0; i < mat.NumTexgens; i++)
-            {
-                //Ignore unknown texture sources. Modified 1/22/15
-                if (mat.TexGen[i].Src > texgensrc.Length)
-                    continue;
-
-                /*if (mat.TexGen[i].Src == 1) vert.AppendFormat("    gl_TexCoord[{0}].st = gl_Normal.xy;\n", i);
-                else if (mat.TexGen[i].Src != 4 + i) throw new Exception("!texgen " + mat.TexGen[i].Src.ToString());
-                else
-                vert.AppendFormat("    gl_TexCoord[{0}] = gl_MultiTexCoord{0};\n", i);*/
-                // TODO matrices
-                vert.AppendFormat("    gl_TexCoord[{0}] = {1};\n", i, texgensrc[mat.TexGen[i].Src]);
+            if (m_simpleRendering) {
+                vert.AppendLine("#version 120");
+                vert.AppendLine("");
+                vert.AppendLine("void main()");
+                vert.AppendLine("{");
+                vert.AppendLine("    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;");
+                vert.AppendLine("    gl_FrontColor = gl_Color;");
+                vert.AppendLine("    gl_FrontSecondaryColor = gl_SecondaryColor;");
+                //vert.AppendLine("    gl_Normal ")
+                
+                for (int i = 0; i < Math.Min(mat.NumTexgens, 1); i++)
+                {
+                    //Ignore unknown texture sources. Modified 1/22/15
+                    if (mat.TexGen[i].Src > texgensrc.Length)
+                        continue;
+                    vert.AppendFormat("    gl_TexCoord[{0}] = {1};\n", i, texgensrc[mat.TexGen[i].Src]);
+                }
+                vert.AppendLine("}");
             }
-            vert.AppendLine("}");
+            else {
+                vert.AppendLine("#version 120");
+                vert.AppendLine("");
+                vert.AppendLine("void main()");
+                vert.AppendLine("{");
+                vert.AppendLine("    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;");
+                vert.AppendLine("    gl_FrontColor = gl_Color;");
+                vert.AppendLine("    gl_FrontSecondaryColor = gl_SecondaryColor;");
+                for (int i = 0; i < mat.NumTexgens; i++)
+                {
+                    //Ignore unknown texture sources. Modified 1/22/15
+                    if (mat.TexGen[i].Src > texgensrc.Length)
+                        continue;
+
+                    /*if (mat.TexGen[i].Src == 1) vert.AppendFormat("    gl_TexCoord[{0}].st = gl_Normal.xy;\n", i);
+                    else if (mat.TexGen[i].Src != 4 + i) throw new Exception("!texgen " + mat.TexGen[i].Src.ToString());
+                    else
+                    vert.AppendFormat("    gl_TexCoord[{0}] = gl_MultiTexCoord{0};\n", i);*/
+                    // TODO matrices
+                    vert.AppendFormat("    gl_TexCoord[{0}] = {1};\n", i, texgensrc[mat.TexGen[i].Src]);
+                }
+                vert.AppendLine("}");
+            }
 
             int vertid = GL.CreateShader(ShaderType.VertexShader);
             m_Shaders[matid].VertexShader = vertid;
@@ -153,187 +177,222 @@ namespace BMDReader
             }
             
             StringBuilder frag = new StringBuilder();
-            frag.AppendLine("#version 120");
-            frag.AppendLine("");
+            if (m_simpleRendering) {
+                frag.AppendLine("#version 120");
+                frag.AppendLine("");
 
-            for (int i = 0; i < 8; i++)
-            {
-                if (mat.TexStages[i] == 0xFFFF) continue;
-                frag.AppendLine("uniform sampler2D texture" + i.ToString() + ";");
-            }
-            
-            frag.AppendLine("");
-            frag.AppendLine("float truncc1(float c)");
-            frag.AppendLine("{");
-            frag.AppendLine("    return (c == 0.0) ? 0.0 : ((fract(c) == 0.0) ? 1.0 : fract(c));");
-            frag.AppendLine("}");
-            frag.AppendLine("");
-            frag.AppendLine("vec3 truncc3(vec3 c)");
-            frag.AppendLine("{");
-            frag.AppendLine("    return vec3(truncc1(c.r), truncc1(c.g), truncc1(c.b));");
-            frag.AppendLine("}");
-            frag.AppendLine("");
-            frag.AppendLine("void main()");
-            frag.AppendLine("{");
-
-            for (int i = 0; i < 4; i++)
-            {
-                int _i = (i == 0) ? 3 : i - 1; // ???
-                frag.AppendFormat(forceusa, "    vec4 {0} = vec4({1}, {2}, {3}, {4});\n",
-                    outputregs[i],
-                    (float)mat.ColorS10[_i].R / 255f, (float)mat.ColorS10[_i].G / 255f,
-                    (float)mat.ColorS10[_i].B / 255f, (float)mat.ColorS10[_i].A / 255f);
-            }
-
-            for (int i = 0; i < 4; i++)
-            {
-                frag.AppendFormat(forceusa, "    vec4 k{0} = vec4({1}, {2}, {3}, {4});\n",
-                    i,
-                    (float)mat.ConstColors[i].R / 255f, (float)mat.ConstColors[i].G / 255f,
-                    (float)mat.ConstColors[i].B / 255f, (float)mat.ConstColors[i].A / 255f);
-            }
-            
-            frag.AppendLine("    vec4 texcolor, rascolor, konst;");
-
-            for (int i = 0; i < mat.NumTevStages; i++)
-            {
-                frag.AppendLine("\n    // TEV stage " + i.ToString());
-
-                // TEV inputs
-                // for registers prev/0/1/2: use fract() to emulate truncation
-                // if they're selected into a, b or c
-                string rout, a, b, c, d, operation = "";
-
-                frag.AppendLine("    konst.rgb = " + c_konstsel[mat.ConstColorSel[i]] + ";");
-                frag.AppendLine("    konst.a = " + a_konstsel[mat.ConstAlphaSel[i]] + ";");
-                if (mat.TevOrder[i].TexMap != 0xFF && mat.TevOrder[i].TexcoordId != 0xFF)
-                    frag.AppendFormat("    texcolor = texture2D(texture{0}, gl_TexCoord[{1}].st);\n",
-                        mat.TevOrder[i].TexMap, mat.TevOrder[i].TexcoordId);
-                frag.AppendLine("    rascolor = gl_Color;");
-                // TODO: take mat.TevOrder[i].ChanId into account
-                // TODO: tex/ras swizzle? (important or not?)
-                //mat.TevSwapMode[0].
-
-                //Commented out 1/22/15
-                //if (mat.TevOrder[i].ChanID != 4)
-                //    throw new Exception("!UNSUPPORTED CHANID " + mat.TevOrder[i].ChanID.ToString());
-
-                rout = outputregs[mat.TevStage[i].ColorRegID] + ".rgb";
-                a = c_inputregs[mat.TevStage[i].ColorIn[0]];
-                b = c_inputregs[mat.TevStage[i].ColorIn[1]];
-                c = c_inputregs[mat.TevStage[i].ColorIn[2]];
-                d = c_inputregsD[mat.TevStage[i].ColorIn[3]];
-
-                switch (mat.TevStage[i].ColorOp)
+                for (int i = 0; i < 1; i++)
                 {
-                    case 0:
-                        operation = "    {0} = ({4} + mix({1},{2},{3}) + vec3({5},{5},{5})) * vec3({6},{6},{6});";
-                        if (mat.TevStage[i].ColorClamp != 0) operation += "\n    {0} = clamp({0}, vec3(0.0,0.0,0.0), vec3(1.0,1.0,1.0));";
-                        break;
-
-                    case 1:
-                        operation = "    {0} = ({4} - mix({1},{2},{3}) + vec3({5},{5},{5})) * vec3({6},{6},{6});";
-                        if (mat.TevStage[i].ColorClamp != 0) operation += "\n    {0} = clamp({0}, vec3(0.0,0.0,0.0), vec3(1.0,1.0,1.0));";
-                        break;
-
-                    case 8:
-                        operation = "    {0} = {4} + ((({1}).r > ({2}).r) ? {3} : vec(0.0,0.0,0.0));";
-                        break;
-
-                    default:
-                        //operation = "    {0} = vec3(1.0,0.0,1.0);";
-                        //throw new Exception("!colorop " + mat.TevStage[i].ColorOp.ToString());
-                        continue; // Modified 1/22/15
+                    if (mat.TexStages[i] == 0xFFFF) continue;
+                    frag.AppendLine("uniform sampler2D texture" + i.ToString() + ";");
                 }
-
-                if (mat.TevStage[i].ColorBias >= tevbias.Length)
-                    continue;
-
-                operation = string.Format(operation, 
-                    rout, a, b, c, d, tevbias[mat.TevStage[i].ColorBias],
-                    tevscale[mat.TevStage[i].ColorScale]);
-                frag.AppendLine(operation);
-
-                rout = outputregs[mat.TevStage[i].AlphaRegID] + ".a";
-                a = a_inputregs[mat.TevStage[i].AlphaIn[0]];
-                b = a_inputregs[mat.TevStage[i].AlphaIn[1]];
-                c = a_inputregs[mat.TevStage[i].AlphaIn[2]];
-                d = a_inputregsD[mat.TevStage[i].AlphaIn[3]];
-
-                bool simpleOperation = false;
-
-                switch (mat.TevStage[i].AlphaOp)
-                {
-                    case 0:
-                        operation = "    {0} = ({4} + mix({1},{2},{3}) + {5}) * {6};";
-                        if (mat.TevStage[i].AlphaClamp != 0) operation += "\n   {0} = clamp({0}, 0.0, 1.0);";
-                        break;
-
-                    case 1:
-                        operation = "    {0} = ({4} - mix({1},{2},{3}) + {5}) * {6};";
-                        if (mat.TevStage[i].AlphaClamp != 0) operation += "\n   {0} = clamp({0}, 0.0, 1.0);";
-                        break;
-
-                    default:
-                        operation = "    {0} = 1.0;";
-                        simpleOperation = true;
-                        Console.WriteLine("Unsupported Alpha Op: {0}", mat.TevStage[i].AlphaOp);
-                        break;
-                        //throw new Exception("!alphaop " + mat.TevStage[i].AlphaOp.ToString());
-                }
-                if (!simpleOperation) {
-                    operation = string.Format(operation,
-                        rout, a, b, c, d, tevbias[mat.TevStage[i].AlphaBias],
-                        tevscale[mat.TevStage[i].AlphaScale]);
+            
+                frag.AppendLine("");
+                frag.AppendLine("float truncc1(float c)");
+                frag.AppendLine("{");
+                frag.AppendLine("    return (c == 0.0) ? 0.0 : ((fract(c) == 0.0) ? 1.0 : fract(c));");
+                frag.AppendLine("}");
+                frag.AppendLine("");
+                frag.AppendLine("vec3 truncc3(vec3 c)");
+                frag.AppendLine("{");
+                frag.AppendLine("    return vec3(truncc1(c.r), truncc1(c.g), truncc1(c.b));");
+                frag.AppendLine("}");
+                frag.AppendLine("vec4 texcolor;");
+                frag.AppendLine("void main()");
+                frag.AppendLine("{");
+                if (mat.TexStages[0] != 0xFFFF) {
+                    frag.AppendLine("   texcolor = texture2D(texture0, gl_TexCoord[0].st);");
                 }
                 else {
-                    operation = string.Format(operation,
-                        rout);
-
+                    frag.AppendLine("   texcolor = vec4(1.0, 1.0, 1.0, 1.0);");
                 }
-                frag.AppendLine(operation);
+                frag.AppendLine("   gl_FragColor = texcolor*gl_FrontColor;");
+                frag.AppendLine("}");
+                //frag.AppendLine("   gl_FragColor.a = truncc1(rprev.a);");
             }
+            else {
+                frag.AppendLine("#version 120");
+                frag.AppendLine("");
 
-            frag.AppendLine("");
-            frag.AppendLine("   gl_FragColor.rgb = truncc3(rprev.rgb);");
-            frag.AppendLine("   gl_FragColor.a = truncc1(rprev.a);");
-            frag.AppendLine("");
-
-            frag.AppendLine("    // Alpha test");
-            if (mat.AlphaComp.MergeFunc == 1 && (mat.AlphaComp.Func0 == 7 || mat.AlphaComp.Func1 == 7))
-            {
-                // always pass -- do nothing :)
-            }
-            else if (mat.AlphaComp.MergeFunc == 0 && (mat.AlphaComp.Func0 == 0 || mat.AlphaComp.Func1 == 0))
-            {
-                // never pass
-                // (we did all those color/alpha calculations for uh, nothing ;_; )
-                frag.AppendLine("    discard;");
-            }
-            else
-            {
-                string compare0 = string.Format(forceusa, alphacompare[mat.AlphaComp.Func0], "gl_FragColor.a", (float)mat.AlphaComp.Ref0 / 255f);
-                string compare1 = string.Format(forceusa, alphacompare[mat.AlphaComp.Func1], "gl_FragColor.a", (float)mat.AlphaComp.Ref1 / 255f);
-                string fullcompare = "";
-
-                if (mat.AlphaComp.MergeFunc == 1)
+                for (int i = 0; i < 8; i++)
                 {
-                    if (mat.AlphaComp.Func0 == 0) fullcompare = compare1;
-                    else if (mat.AlphaComp.Func1 == 0) fullcompare = compare0;
+                    if (mat.TexStages[i] == 0xFFFF) continue;
+                    frag.AppendLine("uniform sampler2D texture" + i.ToString() + ";");
                 }
-                else if (mat.AlphaComp.MergeFunc == 0)
-                {
-                    if (mat.AlphaComp.Func0 == 7) fullcompare = compare1;
-                    else if (mat.AlphaComp.Func1 == 7) fullcompare = compare0;
-                }
-
-                if (fullcompare == "") fullcompare = string.Format(alphacombine[mat.AlphaComp.MergeFunc], compare0, compare1);
-
-                frag.AppendLine("    if (!(" + fullcompare + ")) discard;");
-            }
-
-            frag.AppendLine("}");
             
+                frag.AppendLine("");
+                frag.AppendLine("float truncc1(float c)");
+                frag.AppendLine("{");
+                frag.AppendLine("    return (c == 0.0) ? 0.0 : ((fract(c) == 0.0) ? 1.0 : fract(c));");
+                frag.AppendLine("}");
+                frag.AppendLine("");
+                frag.AppendLine("vec3 truncc3(vec3 c)");
+                frag.AppendLine("{");
+                frag.AppendLine("    return vec3(truncc1(c.r), truncc1(c.g), truncc1(c.b));");
+                frag.AppendLine("}");
+                frag.AppendLine("");
+                frag.AppendLine("void main()");
+                frag.AppendLine("{");
+
+                for (int i = 0; i < 4; i++)
+                {
+                    int _i = (i == 0) ? 3 : i - 1; // ???
+                    frag.AppendFormat(forceusa, "    vec4 {0} = vec4({1}, {2}, {3}, {4});\n",
+                        outputregs[i],
+                        (float)mat.ColorS10[_i].R / 255f, (float)mat.ColorS10[_i].G / 255f,
+                        (float)mat.ColorS10[_i].B / 255f, (float)mat.ColorS10[_i].A / 255f);
+                }
+
+                for (int i = 0; i < 4; i++)
+                {
+                    frag.AppendFormat(forceusa, "    vec4 k{0} = vec4({1}, {2}, {3}, {4});\n",
+                        i,
+                        (float)mat.ConstColors[i].R / 255f, (float)mat.ConstColors[i].G / 255f,
+                        (float)mat.ConstColors[i].B / 255f, (float)mat.ConstColors[i].A / 255f);
+                }
+            
+                frag.AppendLine("    vec4 texcolor, rascolor, konst;");
+
+                for (int i = 0; i < mat.NumTevStages; i++)
+                {
+                    frag.AppendLine("\n    // TEV stage " + i.ToString());
+
+                    // TEV inputs
+                    // for registers prev/0/1/2: use fract() to emulate truncation
+                    // if they're selected into a, b or c
+                    string rout, a, b, c, d, operation = "";
+
+                    frag.AppendLine("    konst.rgb = " + c_konstsel[mat.ConstColorSel[i]] + ";");
+                    frag.AppendLine("    konst.a = " + a_konstsel[mat.ConstAlphaSel[i]] + ";");
+                    if (mat.TevOrder[i].TexMap != 0xFF && mat.TevOrder[i].TexcoordId != 0xFF)
+                        frag.AppendFormat("    texcolor = texture2D(texture{0}, gl_TexCoord[{1}].st);\n",
+                            mat.TevOrder[i].TexMap, mat.TevOrder[i].TexcoordId);
+                    frag.AppendLine("    rascolor = gl_Color;");
+                    // TODO: take mat.TevOrder[i].ChanId into account
+                    // TODO: tex/ras swizzle? (important or not?)
+                    //mat.TevSwapMode[0].
+
+                    //Commented out 1/22/15
+                    //if (mat.TevOrder[i].ChanID != 4)
+                    //    throw new Exception("!UNSUPPORTED CHANID " + mat.TevOrder[i].ChanID.ToString());
+
+                    rout = outputregs[mat.TevStage[i].ColorRegID] + ".rgb";
+                    a = c_inputregs[mat.TevStage[i].ColorIn[0]];
+                    b = c_inputregs[mat.TevStage[i].ColorIn[1]];
+                    c = c_inputregs[mat.TevStage[i].ColorIn[2]];
+                    d = c_inputregsD[mat.TevStage[i].ColorIn[3]];
+
+                    switch (mat.TevStage[i].ColorOp)
+                    {
+                        case 0:
+                            operation = "    {0} = ({4} + mix({1},{2},{3}) + vec3({5},{5},{5})) * vec3({6},{6},{6});";
+                            if (mat.TevStage[i].ColorClamp != 0) operation += "\n    {0} = clamp({0}, vec3(0.0,0.0,0.0), vec3(1.0,1.0,1.0));";
+                            break;
+
+                        case 1:
+                            operation = "    {0} = ({4} - mix({1},{2},{3}) + vec3({5},{5},{5})) * vec3({6},{6},{6});";
+                            if (mat.TevStage[i].ColorClamp != 0) operation += "\n    {0} = clamp({0}, vec3(0.0,0.0,0.0), vec3(1.0,1.0,1.0));";
+                            break;
+
+                        case 8:
+                            operation = "    {0} = {4} + ((({1}).r > ({2}).r) ? {3} : vec(0.0,0.0,0.0));";
+                            break;
+
+                        default:
+                            //operation = "    {0} = vec3(1.0,0.0,1.0);";
+                            //throw new Exception("!colorop " + mat.TevStage[i].ColorOp.ToString());
+                            continue; // Modified 1/22/15
+                    }
+
+                    if (mat.TevStage[i].ColorBias >= tevbias.Length)
+                        continue;
+
+                    operation = string.Format(operation, 
+                        rout, a, b, c, d, tevbias[mat.TevStage[i].ColorBias],
+                        tevscale[mat.TevStage[i].ColorScale]);
+                    frag.AppendLine(operation);
+
+                    rout = outputregs[mat.TevStage[i].AlphaRegID] + ".a";
+                    a = a_inputregs[mat.TevStage[i].AlphaIn[0]];
+                    b = a_inputregs[mat.TevStage[i].AlphaIn[1]];
+                    c = a_inputregs[mat.TevStage[i].AlphaIn[2]];
+                    d = a_inputregsD[mat.TevStage[i].AlphaIn[3]];
+
+                    bool simpleOperation = false;
+
+                    switch (mat.TevStage[i].AlphaOp)
+                    {
+                        case 0:
+                            operation = "    {0} = ({4} + mix({1},{2},{3}) + {5}) * {6};";
+                            if (mat.TevStage[i].AlphaClamp != 0) operation += "\n   {0} = clamp({0}, 0.0, 1.0);";
+                            break;
+
+                        case 1:
+                            operation = "    {0} = ({4} - mix({1},{2},{3}) + {5}) * {6};";
+                            if (mat.TevStage[i].AlphaClamp != 0) operation += "\n   {0} = clamp({0}, 0.0, 1.0);";
+                            break;
+
+                        default:
+                            operation = "    {0} = 1.0;";
+                            simpleOperation = true;
+                            Console.WriteLine("Unsupported Alpha Op: {0}", mat.TevStage[i].AlphaOp);
+                            break;
+                            //throw new Exception("!alphaop " + mat.TevStage[i].AlphaOp.ToString());
+                    }
+                    if (!simpleOperation) {
+                        operation = string.Format(operation,
+                            rout, a, b, c, d, tevbias[mat.TevStage[i].AlphaBias],
+                            tevscale[mat.TevStage[i].AlphaScale]);
+                    }
+                    else {
+                        operation = string.Format(operation,
+                            rout);
+
+                    }
+                    frag.AppendLine(operation);
+                }
+
+                frag.AppendLine("");
+                frag.AppendLine("   gl_FragColor.rgb = truncc3(rprev.rgb);");
+                frag.AppendLine("   gl_FragColor.a = truncc1(rprev.a);");
+                frag.AppendLine("");
+
+                frag.AppendLine("    // Alpha test");
+                if (mat.AlphaComp.MergeFunc == 1 && (mat.AlphaComp.Func0 == 7 || mat.AlphaComp.Func1 == 7))
+                {
+                    // always pass -- do nothing :)
+                }
+                else if (mat.AlphaComp.MergeFunc == 0 && (mat.AlphaComp.Func0 == 0 || mat.AlphaComp.Func1 == 0))
+                {
+                    // never pass
+                    // (we did all those color/alpha calculations for uh, nothing ;_; )
+                    frag.AppendLine("    discard;");
+                }
+                else
+                {
+                    string compare0 = string.Format(forceusa, alphacompare[mat.AlphaComp.Func0], "gl_FragColor.a", (float)mat.AlphaComp.Ref0 / 255f);
+                    string compare1 = string.Format(forceusa, alphacompare[mat.AlphaComp.Func1], "gl_FragColor.a", (float)mat.AlphaComp.Ref1 / 255f);
+                    string fullcompare = "";
+
+                    if (mat.AlphaComp.MergeFunc == 1)
+                    {
+                        if (mat.AlphaComp.Func0 == 0) fullcompare = compare1;
+                        else if (mat.AlphaComp.Func1 == 0) fullcompare = compare0;
+                    }
+                    else if (mat.AlphaComp.MergeFunc == 0)
+                    {
+                        if (mat.AlphaComp.Func0 == 7) fullcompare = compare1;
+                        else if (mat.AlphaComp.Func1 == 7) fullcompare = compare0;
+                    }
+
+                    if (fullcompare == "") fullcompare = string.Format(alphacombine[mat.AlphaComp.MergeFunc], compare0, compare1);
+
+                    frag.AppendLine("    if (!(" + fullcompare + ")) discard;");
+                }
+
+                frag.AppendLine("}");
+            }
+
             int fragid = GL.CreateShader(ShaderType.FragmentShader);
             m_Shaders[matid].FragmentShader = fragid;
             GL.ShaderSource(fragid, frag.ToString());
@@ -366,9 +425,10 @@ namespace BMDReader
         }
 
 
-        public BmdRenderer(Bmd model)
+        public BmdRenderer(Bmd model, bool simpleRendering)
         {
             m_Model = model;
+            m_simpleRendering = simpleRendering;
 
             string[] extensions = GL.GetString(StringName.Extensions).Split(' ');
             m_HasShaders = extensions.Contains("GL_ARB_shading_language_100") &&
@@ -450,7 +510,7 @@ namespace BMDReader
             //GL.MatrixMode(MatrixMode.Projection);
             //GL.LoadIdentity();
             //GL.Ortho(-1.0, 1.0, -1.0, 1.0, -10.5, 10.5);
-
+            Console.WriteLine("Simple rendering: {0}", m_simpleRendering);
             foreach (Bmd.SceneGraphNode node in m_Model.SceneGraph)
             {
                 if (node.NodeType != 0) continue;
@@ -473,15 +533,20 @@ namespace BMDReader
                         GL.UseProgram(m_Shaders[node.MaterialID].Program);
 
                         // do multitexturing
-                        for (int i = 0; i < 8; i++)
+                        int max_i = 8;
+                        if (m_simpleRendering) {
+                            max_i = 1;
+                        }
+                        for (int i = 0; i < max_i; i++)
                         {
-                            GL.ActiveTexture(TextureUnit.Texture0 + i);
-
                             if (mat.TexStages[i] == 0xFFFF)
                             {
                                 GL.Disable(EnableCap.Texture2D);
                                 continue;
                             }
+
+                            GL.ActiveTexture(TextureUnit.Texture0 + i);
+
 
                             int loc = GL.GetUniformLocation(m_Shaders[node.MaterialID].Program, "texture" + i.ToString());
                             GL.Uniform1(loc, i);
@@ -661,11 +726,13 @@ namespace BMDReader
                         for (int i = 0; i < prim.NumIndices; i++)
                         {
 
-                            if ((prim.ArrayMask & (1 << 11)) != 0) GL.Color4(m_Model.ColorArray[0][prim.ColorIndices[0][i]]);
+                            if (((prim.ArrayMask & (1 << 11)) != 0)) {
+                                GL.Color4(m_Model.ColorArray[0][prim.ColorIndices[0][i]]);
+                            }
 
                             if (m_HasShaders)
                             {
-                                if ((prim.ArrayMask & (1 << 12)) != 0)
+                                if (((prim.ArrayMask & (1 << 12)) != 0) && !m_simpleRendering)
                                 {
                                     Vector4 color2 = m_Model.ColorArray[1][prim.ColorIndices[1][i]];
                                     GL.SecondaryColor3(color2.X, color2.Y, color2.Z);
@@ -673,13 +740,16 @@ namespace BMDReader
                                 }
                                 
                                 if ((prim.ArrayMask & (1 << 13)) != 0) GL.MultiTexCoord2(TextureUnit.Texture0, ref m_Model.TexcoordArray[0][prim.TexcoordIndices[0][i]]);
-                                if ((prim.ArrayMask & (1 << 14)) != 0) GL.MultiTexCoord2(TextureUnit.Texture1, ref m_Model.TexcoordArray[1][prim.TexcoordIndices[1][i]]);
-                                if ((prim.ArrayMask & (1 << 15)) != 0) GL.MultiTexCoord2(TextureUnit.Texture2, ref m_Model.TexcoordArray[2][prim.TexcoordIndices[2][i]]);
-                                if ((prim.ArrayMask & (1 << 16)) != 0) GL.MultiTexCoord2(TextureUnit.Texture3, ref m_Model.TexcoordArray[3][prim.TexcoordIndices[3][i]]);
-                                if ((prim.ArrayMask & (1 << 17)) != 0) GL.MultiTexCoord2(TextureUnit.Texture4, ref m_Model.TexcoordArray[4][prim.TexcoordIndices[4][i]]);
-                                if ((prim.ArrayMask & (1 << 18)) != 0) GL.MultiTexCoord2(TextureUnit.Texture5, ref m_Model.TexcoordArray[5][prim.TexcoordIndices[5][i]]);
-                                if ((prim.ArrayMask & (1 << 19)) != 0) GL.MultiTexCoord2(TextureUnit.Texture6, ref m_Model.TexcoordArray[6][prim.TexcoordIndices[6][i]]);
-                                if ((prim.ArrayMask & (1 << 20)) != 0) GL.MultiTexCoord2(TextureUnit.Texture7, ref m_Model.TexcoordArray[7][prim.TexcoordIndices[7][i]]);
+                                if (!m_simpleRendering) {
+                                
+                                    if ((prim.ArrayMask & (1 << 14)) != 0) GL.MultiTexCoord2(TextureUnit.Texture1, ref m_Model.TexcoordArray[1][prim.TexcoordIndices[1][i]]);
+                                    if ((prim.ArrayMask & (1 << 15)) != 0) GL.MultiTexCoord2(TextureUnit.Texture2, ref m_Model.TexcoordArray[2][prim.TexcoordIndices[2][i]]);
+                                    if ((prim.ArrayMask & (1 << 16)) != 0) GL.MultiTexCoord2(TextureUnit.Texture3, ref m_Model.TexcoordArray[3][prim.TexcoordIndices[3][i]]);
+                                    if ((prim.ArrayMask & (1 << 17)) != 0) GL.MultiTexCoord2(TextureUnit.Texture4, ref m_Model.TexcoordArray[4][prim.TexcoordIndices[4][i]]);
+                                    if ((prim.ArrayMask & (1 << 18)) != 0) GL.MultiTexCoord2(TextureUnit.Texture5, ref m_Model.TexcoordArray[5][prim.TexcoordIndices[5][i]]);
+                                    if ((prim.ArrayMask & (1 << 19)) != 0) GL.MultiTexCoord2(TextureUnit.Texture6, ref m_Model.TexcoordArray[6][prim.TexcoordIndices[6][i]]);
+                                    if ((prim.ArrayMask & (1 << 20)) != 0) GL.MultiTexCoord2(TextureUnit.Texture7, ref m_Model.TexcoordArray[7][prim.TexcoordIndices[7][i]]);
+                                }
                             }
                             else
                             {
@@ -687,8 +757,9 @@ namespace BMDReader
                             }
                             //if ((prim.ArrayMask & (1 << 0)) != 0) GL.Color4(debug[prim.PosMatrixIndices[i]]);
 
-                            if ((prim.ArrayMask & (1 << 10)) != 0) GL.Normal3(m_Model.NormalArray[prim.NormalIndices[i]]);
-
+                            if (!m_simpleRendering) {
+                                if ((prim.ArrayMask & (1 << 10)) != 0) GL.Normal3(m_Model.NormalArray[prim.NormalIndices[i]]);
+                            }
                             Vector3 pos = m_Model.PositionArray[prim.PositionIndices[i]];
                             if ((prim.ArrayMask & (1 << 0)) != 0) Vector3.TransformPerspective(ref pos, ref mtxtable[prim.PosMatrixIndices[i]], out pos);
                             else Vector3.TransformPerspective(ref pos, ref mtxtable[0], out pos);
@@ -718,7 +789,11 @@ namespace BMDReader
                         GL.UseProgram(m_Shaders[node.MaterialID].Program);
 
                         // do multitexturing
-                        for (int i = 0; i < 8; i++)
+                        int max_i = 8;
+                        if (m_simpleRendering) {
+                            max_i = 1;
+                        }
+                        for (int i = 0; i < max_i; i++)
                         {
                             GL.ActiveTexture(TextureUnit.Texture0 + i);
                             GL.Disable(EnableCap.Texture2D);

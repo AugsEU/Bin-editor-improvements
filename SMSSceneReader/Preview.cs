@@ -121,6 +121,7 @@ namespace SMSSceneReader
         public bool RenderDemo = true;
         public int SelectedRail = -1;
         public int SelectedFrame = -1;
+        AxisLockDisplay axisLockDisplay = new AxisLockDisplay();
 
         public Vector3 CameraPos
         {
@@ -263,9 +264,9 @@ namespace SMSSceneReader
             if (sky != null)
             {
                 if ((Properties.Settings.Default.skyDrawMode | 0x01) == Properties.Settings.Default.skyDrawMode && !Orthographic) 
-                    DrawBMD(sky);
+                    DrawBMD(sky, Properties.Settings.Default.SimplerRendering);
                 if ((Properties.Settings.Default.skyDrawMode | 0x02) == Properties.Settings.Default.skyDrawMode && !Orthographic) 
-                    DrawBMD(sky, RenderMode.Translucent);
+                    DrawBMD(sky, Properties.Settings.Default.SimplerRendering, RenderMode.Translucent);
             }
             GL.EndList();
 
@@ -273,16 +274,16 @@ namespace SMSSceneReader
             if (scene != null)
             {
                 if ((Properties.Settings.Default.worldDrawMode | 0x01) == Properties.Settings.Default.worldDrawMode)
-                    DrawBMD(scene);
+                    DrawBMD(scene, Properties.Settings.Default.SimplerRendering);
                 if ((Properties.Settings.Default.worldDrawMode | 0x02) == Properties.Settings.Default.worldDrawMode)
-                    DrawBMD(scene, RenderMode.Translucent);
+                    DrawBMD(scene, Properties.Settings.Default.SimplerRendering, RenderMode.Translucent);
             }
             GL.EndList();
 
             GL.NewList(SeaGList, ListMode.Compile);
             if (sea != null)
             {
-                DrawBMD(sea);
+                DrawBMD(sea, Properties.Settings.Default.SimplerRendering);
             }
             GL.EndList();
         }
@@ -502,7 +503,16 @@ namespace SMSSceneReader
 
                 GL.End();
             }
-
+            if (xAxisLock) {
+                axisLockDisplay.render(AxisLockDisplay.Axis.X);
+            }
+            if (yAxisLock) {
+                axisLockDisplay.render(AxisLockDisplay.Axis.Y);
+            }
+            if (zAxisLock) {
+                Console.WriteLine("Hmmm rendering");
+                axisLockDisplay.render(AxisLockDisplay.Axis.Z);
+            }
             if (RenderRails)
                 DrawRails();
             if (RenderDemo)
@@ -979,7 +989,26 @@ namespace SMSSceneReader
                         mainForm.CreateUndoSnapshot();
                         mainForm.Changed = true;
                     }
+                    Vector3 diff = OutputPosition - ObjectPosition;
 
+                    axisLockDisplay.Center.X = ObjectPosition.X;
+                    axisLockDisplay.Center.Y = ObjectPosition.Y;
+                    axisLockDisplay.Center.Z = ObjectPosition.Z;
+                    if (xAxisLock) {
+                        diff.Y = 0.0f;
+                        diff.Z = 0.0f;
+
+                    }
+                    if (yAxisLock) {
+                        diff.X = 0.0f;
+                        diff.Z = 0.0f;
+                    }
+                    if (zAxisLock) {
+                        diff.X = 0.0f;
+                        diff.Y = 0.0f;
+                    }
+
+                    OutputPosition = ObjectPosition + diff;
 
 
                     op.SetParamValue("X", selected[0], OutputPosition.X.ToString());
@@ -1010,7 +1039,7 @@ namespace SMSSceneReader
                     mainForm.CreateUndoSnapshot();
                     mainForm.Changed = true;
                 }
-                Console.WriteLine("{0}, {1}, {2}", xAxisLock, yAxisLock, zAxisLock);
+                /*
                 if (xAxisLock) {
                     ClickRelMouse.Y = 0.0f;
                     ClickRelMouse.Z = 0.0f;
@@ -1024,7 +1053,7 @@ namespace SMSSceneReader
                 if (zAxisLock) {
                     ClickRelMouse.Y = 0.0f;
                     ClickRelMouse.Z = 0.0f;
-                }
+                }*/
                 GameObject[] selected = GetSelectedObjects();
                 //Update all selected objects
                 foreach (GameObject go in selected)
@@ -1032,15 +1061,24 @@ namespace SMSSceneReader
                     ObjectParameters op = new ObjectParameters();
                     op.ReadObjectParameters(go);
                     //Vector3 n = newpoint;// + ClickRelMouse;
-                    
-                    Vector3 original = new Vector3(Convert.ToSingle(op.GetParamValue("X", go)), 
-                        Convert.ToSingle(op.GetParamValue("Y", go)), 
-                        Convert.ToSingle(op.GetParamValue("Z", go)));
-                    Vector3 diff = (newpoint+ClickRelMouse) - original;
 
+                    float x = 0f;
+                    float y = 0f;
+                    float z = 0f;
+
+                    float.TryParse(op.GetParamValue("X", selected[0]), out x);
+                    float.TryParse(op.GetParamValue("Y", selected[0]), out y);
+                    float.TryParse(op.GetParamValue("Z", selected[0]), out z);
+
+                    Vector3 original = new Vector3(x, y, z);
+                    Vector3 diff = (newpoint+ClickRelMouse) - original;
+                    axisLockDisplay.Center.X = original.X;
+                    axisLockDisplay.Center.Y = original.Y;
+                    axisLockDisplay.Center.Z = original.Z;
                     if (xAxisLock) {
                         diff.Y = 0.0f;
                         diff.Z = 0.0f;
+
                     }
                     if (yAxisLock) {
                         diff.X = 0.0f;
@@ -1280,12 +1318,12 @@ namespace SMSSceneReader
         }
 
         /* Draws a bmd model */
-        public static void DrawBMD(Bmd model, RenderMode rnd = RenderMode.Opaque)
+        public static void DrawBMD(Bmd model, bool simpleRender, RenderMode rnd = RenderMode.Opaque)
         {
             RenderInfo ri = new RenderInfo();
             ri.Mode = rnd;
 
-            BmdRenderer br = new BmdRenderer(model);
+            BmdRenderer br = new BmdRenderer(model, simpleRender);
             br.Render(ri);
         }
 
@@ -1853,9 +1891,9 @@ namespace SMSSceneReader
             //Model
             GL.NewList(List, ListMode.Compile);
             if ((cmode | 0x01) == cmode)
-                Preview.DrawBMD(Model);
+                Preview.DrawBMD(Model, Properties.Settings.Default.SimplerRendering);
             if ((cmode | 0x02) == cmode)
-                Preview.DrawBMD(Model, RenderMode.Translucent);
+                Preview.DrawBMD(Model, Properties.Settings.Default.SimplerRendering, RenderMode.Translucent);
             GL.EndList();
 
             //Calculate bounds of model
@@ -2437,6 +2475,45 @@ namespace SMSSceneReader
         {
             Origin = origin;
             Direction = dir;
+        }
+    }
+
+    class AxisLockDisplay {
+        public Vector3 Center;
+        public enum Axis: int {
+            None = 0,
+            X = 1,
+            Y = 2,
+            Z = 3
+        }
+        public Axis m_renderAxis = Axis.None;
+        public AxisLockDisplay() {
+            Center = new Vector3(0.0f, 0.0f, 0.0f);
+            m_renderAxis = Axis.None;
+        }
+
+        public void render(Axis renderAxis) {
+            GL.Begin(PrimitiveType.Lines);
+            switch (renderAxis) {
+                case Axis.X:
+                    GL.Color4(1.0f, 0, 0, 1.0f);
+                    GL.Vertex3(Center.X - 500000.0f, Center.Y, Center.Z);
+                    GL.Vertex3(Center.X + 500000.0f, Center.Y, Center.Z);
+                    break;
+                case Axis.Y:
+                    GL.Color4(0, 0, 1.0f, 1.0f);
+                    GL.Vertex3(Center.X, Center.Y - 50000.0f, Center.Z);
+                    GL.Vertex3(Center.X, Center.Y + 50000.0f, Center.Z);
+                    break;
+                case Axis.Z:
+                    GL.Color4(0, 1.0f, 0, 1.0f);
+                    GL.Vertex3(Center.X, Center.Y, Center.Z - 50000.0f);
+                    GL.Vertex3(Center.X, Center.Y, Center.Z + 50000.0f);
+                    break;
+                default:
+                    break;
+            }
+            GL.End();
         }
     }
 }
