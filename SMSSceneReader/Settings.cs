@@ -53,6 +53,8 @@ namespace SMSSceneReader
             else
                 previewResetButton.Enabled = false;
             
+            SimplerRenderingCheckbox.Checked = Properties.Settings.Default.SimplerRendering;
+
             foreach (string nm in Enum.GetNames(typeof(DrawModes)))
             {
                 skyCombo.Items.Add(nm);
@@ -487,6 +489,10 @@ namespace SMSSceneReader
                 return;
             Properties.Settings.Default.KeyBindStartDrag = (Keys)StartDragComboBox.SelectedItem;
             applyButton.Enabled = true;
+        }
+
+        private void SimplerRenderingCheckbox_CheckedChanged(object sender, EventArgs e) {
+            Properties.Settings.Default.SimplerRendering = SimplerRenderingCheckbox.Checked;
         }
     }
 }
