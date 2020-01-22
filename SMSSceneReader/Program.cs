@@ -19,7 +19,7 @@ namespace SMSSceneReader
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.ThreadException += new ThreadExceptionEventHandler(HandleException);
+            //Application.ThreadException += new ThreadExceptionEventHandler(HandleException);
             Application.Run(new MainForm(args));
         }
 
