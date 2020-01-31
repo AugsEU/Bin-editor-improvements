@@ -33,6 +33,12 @@ namespace SMSSceneReader
         DragObject,
         FreeLook
     }
+    
+    public enum ViewAxis : int
+    {
+        X,
+        Y,
+    }
 
     public partial class Preview : Form
     {
@@ -55,6 +61,8 @@ namespace SMSSceneReader
         private const float k_zFarOrtho = 100f;
         private Matrix4 m_ProjMatrix;
         private float m_AspectRatio;
+        private float m_ConditionalAspect;
+        private int m_AspectAxisConstraint;
         private Vector3 CameraRotation;
         private Vector3 CameraPosition;
         private Vector3 CameraVelocity;
@@ -403,12 +411,28 @@ namespace SMSSceneReader
             GL.Viewport(glControl1.ClientRectangle);
 
             m_AspectRatio = (float)glControl1.Width / (float)glControl1.Height;
+            m_ConditionalAspect = 16f / 9f;
+            m_AspectAxisConstraint = (int)ViewAxis.X;
+            if (m_AspectRatio < m_AspectAxisConstraint)
+            {
+                m_AspectAxisConstraint = (int)ViewAxis.Y;
+            }
             GL.MatrixMode(MatrixMode.Projection);
             if (!Orthographic)
-                m_ProjMatrix = Matrix4.CreatePerspectiveFieldOfView(CameraFOV, m_AspectRatio, k_zNear, k_zFar);
+                m_ProjMatrix = Matrix4.CreatePerspectiveFieldOfView(2.0f * (float)Math.Atan((float)Math.Tan(CameraFOV / 2.0f) / CalculateYAspect(m_AspectRatio, m_ConditionalAspect, m_AspectAxisConstraint)), m_AspectRatio, k_zNear, k_zFar);
             else
-                m_ProjMatrix = Matrix4.CreateOrthographic(0.1f * (float)OrthoZoom * m_AspectRatio, 0.1f * (float)OrthoZoom, k_zNearOrtho, k_zFarOrtho);
+                m_ProjMatrix = Matrix4.CreateOrthographic(0.1f * (float)OrthoZoom / CalculateYAspect(m_AspectRatio, m_ConditionalAspect, m_AspectAxisConstraint) * m_AspectRatio, 0.1f * (float)OrthoZoom / CalculateYAspect(m_AspectRatio, m_ConditionalAspect, m_AspectAxisConstraint), k_zNearOrtho, k_zFarOrtho);
             GL.LoadMatrix(ref m_ProjMatrix);
+        }
+        private float CalculateYAspect(float AspectRatio, float ConditionalAspect, int AspectAxisConstraint)
+        {
+            switch(AspectAxisConstraint)
+            {
+                default:
+                    return ConditionalAspect / ConditionalAspect;
+                case 1:
+                    return AspectRatio / ConditionalAspect;
+            }
         }
         private void UpdateCamera()
         {
