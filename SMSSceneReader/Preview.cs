@@ -534,7 +534,6 @@ namespace SMSSceneReader
                 axisLockDisplay.render(AxisLockDisplay.Axis.Y);
             }
             if (zAxisLock) {
-                Console.WriteLine("Hmmm rendering");
                 axisLockDisplay.render(AxisLockDisplay.Axis.Z);
             }
             if (RenderRails)
