@@ -817,6 +817,10 @@ namespace SMSReader
         /// <returns></returns>
         public bool ContainsParameter(string key)
         {
+            if (DataNames == null) {
+                return false;
+            }
+
             for (int i = 0; i < DataNames.Length; i++)
             {
                 if (DataNames[i] == key)
