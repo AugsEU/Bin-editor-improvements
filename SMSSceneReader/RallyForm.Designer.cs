@@ -85,6 +85,7 @@
             this.SubSurf = new System.Windows.Forms.Button();
             this.InsAfter = new System.Windows.Forms.Button();
             this.SetPositionToCamera = new System.Windows.Forms.Button();
+            this.connectloop = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.xUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.zUpDown)).BeginInit();
@@ -119,14 +120,14 @@
             this.listBox1.Location = new System.Drawing.Point(17, 16);
             this.listBox1.Margin = new System.Windows.Forms.Padding(4);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(236, 260);
+            this.listBox1.Size = new System.Drawing.Size(236, 340);
             this.listBox1.TabIndex = 0;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // addButton
             // 
             this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.addButton.Location = new System.Drawing.Point(137, 284);
+            this.addButton.Location = new System.Drawing.Point(137, 371);
             this.addButton.Margin = new System.Windows.Forms.Padding(4);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(117, 28);
@@ -138,7 +139,7 @@
             // remButton
             // 
             this.remButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.remButton.Location = new System.Drawing.Point(16, 284);
+            this.remButton.Location = new System.Drawing.Point(16, 371);
             this.remButton.Margin = new System.Windows.Forms.Padding(4);
             this.remButton.Name = "remButton";
             this.remButton.Size = new System.Drawing.Size(113, 28);
@@ -150,7 +151,7 @@
             // applyButton
             // 
             this.applyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.applyButton.Location = new System.Drawing.Point(867, 347);
+            this.applyButton.Location = new System.Drawing.Point(867, 434);
             this.applyButton.Margin = new System.Windows.Forms.Padding(4);
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(100, 28);
@@ -168,14 +169,14 @@
             this.listBox2.Location = new System.Drawing.Point(264, 16);
             this.listBox2.Margin = new System.Windows.Forms.Padding(4);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(236, 292);
+            this.listBox2.Size = new System.Drawing.Size(236, 340);
             this.listBox2.TabIndex = 3;
             this.listBox2.SelectedIndexChanged += new System.EventHandler(this.listBox2_SelectedIndexChanged);
             // 
             // remButton2
             // 
             this.remButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.remButton2.Location = new System.Drawing.Point(263, 320);
+            this.remButton2.Location = new System.Drawing.Point(264, 371);
             this.remButton2.Margin = new System.Windows.Forms.Padding(4);
             this.remButton2.Name = "remButton2";
             this.remButton2.Size = new System.Drawing.Size(111, 28);
@@ -187,7 +188,7 @@
             // addButton2
             // 
             this.addButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.addButton2.Location = new System.Drawing.Point(381, 320);
+            this.addButton2.Location = new System.Drawing.Point(381, 371);
             this.addButton2.Margin = new System.Windows.Forms.Padding(4);
             this.addButton2.Name = "addButton2";
             this.addButton2.Size = new System.Drawing.Size(119, 28);
@@ -218,6 +219,7 @@
             this.xUpDown.Name = "xUpDown";
             this.xUpDown.Size = new System.Drawing.Size(153, 22);
             this.xUpDown.TabIndex = 8;
+            this.xUpDown.ValueChanged += new System.EventHandler(this.xUpDown_ValueChanged);
             // 
             // yUpDown
             // 
@@ -236,6 +238,7 @@
             this.yUpDown.Name = "yUpDown";
             this.yUpDown.Size = new System.Drawing.Size(153, 22);
             this.yUpDown.TabIndex = 9;
+            this.yUpDown.ValueChanged += new System.EventHandler(this.yUpDown_ValueChanged);
             // 
             // zUpDown
             // 
@@ -254,6 +257,7 @@
             this.zUpDown.Name = "zUpDown";
             this.zUpDown.Size = new System.Drawing.Size(153, 22);
             this.zUpDown.TabIndex = 10;
+            this.zUpDown.ValueChanged += new System.EventHandler(this.zUpDown_ValueChanged);
             // 
             // u1UpDown
             // 
@@ -286,6 +290,7 @@
             this.yawUpDown.Name = "yawUpDown";
             this.yawUpDown.Size = new System.Drawing.Size(153, 22);
             this.yawUpDown.TabIndex = 15;
+            this.yawUpDown.ValueChanged += new System.EventHandler(this.yawUpDown_ValueChanged);
             // 
             // pitchUpDown
             // 
@@ -304,6 +309,7 @@
             this.pitchUpDown.Name = "pitchUpDown";
             this.pitchUpDown.Size = new System.Drawing.Size(153, 22);
             this.pitchUpDown.TabIndex = 14;
+            this.pitchUpDown.ValueChanged += new System.EventHandler(this.pitchUpDown_ValueChanged);
             // 
             // u2UpDown
             // 
@@ -318,6 +324,7 @@
             this.u2UpDown.Name = "u2UpDown";
             this.u2UpDown.Size = new System.Drawing.Size(67, 22);
             this.u2UpDown.TabIndex = 12;
+            this.u2UpDown.ValueChanged += new System.EventHandler(this.u2UpDown_ValueChanged);
             // 
             // label1
             // 
@@ -397,6 +404,7 @@
             this.rollUpDown.Name = "rollUpDown";
             this.rollUpDown.Size = new System.Drawing.Size(153, 22);
             this.rollUpDown.TabIndex = 16;
+            this.rollUpDown.ValueChanged += new System.EventHandler(this.rollUpDown_ValueChanged);
             // 
             // label7
             // 
@@ -445,6 +453,7 @@
             this.speedUpDown.Name = "speedUpDown";
             this.speedUpDown.Size = new System.Drawing.Size(153, 22);
             this.speedUpDown.TabIndex = 17;
+            this.speedUpDown.ValueChanged += new System.EventHandler(this.speedUpDown_ValueChanged);
             // 
             // label10
             // 
@@ -474,6 +483,7 @@
             this.endUpDown.Name = "endUpDown";
             this.endUpDown.Size = new System.Drawing.Size(153, 22);
             this.endUpDown.TabIndex = 19;
+            this.endUpDown.ValueChanged += new System.EventHandler(this.endUpDown_ValueChanged);
             // 
             // label11
             // 
@@ -503,6 +513,7 @@
             this.startUpDown.Name = "startUpDown";
             this.startUpDown.Size = new System.Drawing.Size(153, 22);
             this.startUpDown.TabIndex = 18;
+            this.startUpDown.ValueChanged += new System.EventHandler(this.startUpDown_ValueChanged);
             // 
             // label12
             // 
@@ -532,6 +543,7 @@
             this.u7UpDown.Name = "u7UpDown";
             this.u7UpDown.Size = new System.Drawing.Size(153, 22);
             this.u7UpDown.TabIndex = 24;
+            this.u7UpDown.ValueChanged += new System.EventHandler(this.u7UpDown_ValueChanged);
             // 
             // label13
             // 
@@ -561,6 +573,7 @@
             this.u6UpDown.Name = "u6UpDown";
             this.u6UpDown.Size = new System.Drawing.Size(153, 22);
             this.u6UpDown.TabIndex = 23;
+            this.u6UpDown.ValueChanged += new System.EventHandler(this.u6UpDown_ValueChanged);
             // 
             // label14
             // 
@@ -590,6 +603,7 @@
             this.u5UpDown.Name = "u5UpDown";
             this.u5UpDown.Size = new System.Drawing.Size(153, 22);
             this.u5UpDown.TabIndex = 22;
+            this.u5UpDown.ValueChanged += new System.EventHandler(this.u5UpDown_ValueChanged);
             // 
             // label15
             // 
@@ -629,6 +643,7 @@
             this.u4UpDown.Name = "u4UpDown";
             this.u4UpDown.Size = new System.Drawing.Size(153, 22);
             this.u4UpDown.TabIndex = 21;
+            this.u4UpDown.ValueChanged += new System.EventHandler(this.u4UpDown_ValueChanged);
             // 
             // u3UpDown
             // 
@@ -648,6 +663,7 @@
             this.u3UpDown.Name = "u3UpDown";
             this.u3UpDown.Size = new System.Drawing.Size(153, 22);
             this.u3UpDown.TabIndex = 20;
+            this.u3UpDown.ValueChanged += new System.EventHandler(this.u3UpDown_ValueChanged);
             // 
             // label21
             // 
@@ -677,6 +693,7 @@
             this.u8UpDown.Name = "u8UpDown";
             this.u8UpDown.Size = new System.Drawing.Size(153, 22);
             this.u8UpDown.TabIndex = 25;
+            this.u8UpDown.ValueChanged += new System.EventHandler(this.u8UpDown_ValueChanged);
             // 
             // numericUpDown1
             // 
@@ -691,11 +708,12 @@
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(67, 22);
             this.numericUpDown1.TabIndex = 13;
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // DupBtn
             // 
             this.DupBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.DupBtn.Location = new System.Drawing.Point(17, 320);
+            this.DupBtn.Location = new System.Drawing.Point(17, 407);
             this.DupBtn.Margin = new System.Windows.Forms.Padding(4);
             this.DupBtn.Name = "DupBtn";
             this.DupBtn.Size = new System.Drawing.Size(112, 28);
@@ -707,7 +725,7 @@
             // TranslateBtn
             // 
             this.TranslateBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.TranslateBtn.Location = new System.Drawing.Point(137, 320);
+            this.TranslateBtn.Location = new System.Drawing.Point(137, 407);
             this.TranslateBtn.Margin = new System.Windows.Forms.Padding(4);
             this.TranslateBtn.Name = "TranslateBtn";
             this.TranslateBtn.Size = new System.Drawing.Size(117, 28);
@@ -776,7 +794,7 @@
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(137, 356);
+            this.button1.Location = new System.Drawing.Point(137, 443);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(117, 28);
@@ -788,7 +806,7 @@
             // SubSurf
             // 
             this.SubSurf.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.SubSurf.Location = new System.Drawing.Point(17, 356);
+            this.SubSurf.Location = new System.Drawing.Point(17, 443);
             this.SubSurf.Margin = new System.Windows.Forms.Padding(4);
             this.SubSurf.Name = "SubSurf";
             this.SubSurf.Size = new System.Drawing.Size(112, 28);
@@ -800,7 +818,7 @@
             // InsAfter
             // 
             this.InsAfter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.InsAfter.Location = new System.Drawing.Point(381, 356);
+            this.InsAfter.Location = new System.Drawing.Point(381, 407);
             this.InsAfter.Margin = new System.Windows.Forms.Padding(4);
             this.InsAfter.Name = "InsAfter";
             this.InsAfter.Size = new System.Drawing.Size(119, 28);
@@ -819,11 +837,22 @@
             this.SetPositionToCamera.UseVisualStyleBackColor = true;
             this.SetPositionToCamera.Click += new System.EventHandler(this.button2_Click_1);
             // 
+            // connectloop
+            // 
+            this.connectloop.Location = new System.Drawing.Point(264, 446);
+            this.connectloop.Name = "connectloop";
+            this.connectloop.Size = new System.Drawing.Size(236, 23);
+            this.connectloop.TabIndex = 72;
+            this.connectloop.Text = "Connect Points as Loop";
+            this.connectloop.UseVisualStyleBackColor = true;
+            this.connectloop.Click += new System.EventHandler(this.connectloop_Click);
+            // 
             // RallyForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(979, 390);
+            this.ClientSize = new System.Drawing.Size(979, 477);
+            this.Controls.Add(this.connectloop);
             this.Controls.Add(this.SetPositionToCamera);
             this.Controls.Add(this.InsAfter);
             this.Controls.Add(this.SubSurf);
@@ -967,6 +996,7 @@
         private System.Windows.Forms.Button SubSurf;
         private System.Windows.Forms.Button InsAfter;
         private System.Windows.Forms.Button SetPositionToCamera;
+        private System.Windows.Forms.Button connectloop;
     }
 }
 

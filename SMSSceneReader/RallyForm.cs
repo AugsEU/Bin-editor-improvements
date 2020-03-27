@@ -165,17 +165,43 @@ namespace SMSRallyEditor
             file.GetAllRails()[listBox1.SelectedIndex].frames[listBox2.SelectedIndex] = rp;
         }
 
+        private void UpdatePeriods() {
+            if (listBox1.SelectedIndex == -1 || listBox2.SelectedIndex == -1)
+                return;
+
+            KeyFrame rp = file.GetAllRails()[listBox1.SelectedIndex].frames[listBox2.SelectedIndex];
+            Vector rpPosition = new Vector(rp.x, rp.y, rp.z);
+
+            for(int i = 0;i < rp.u1;i++)//Calculate distance values
+            {
+                try
+                {
+                    
+                    KeyFrame ConnectedFrame = file.GetAllRails()[listBox1.SelectedIndex].frames[rp.connections[i]];
+                    Vector ConnectionDisplacement = new Vector(rp.x - ConnectedFrame.x, rp.y - ConnectedFrame.y, rp.z - ConnectedFrame.z);
+                    rp.periods[i] = (float)Math.Sqrt(ConnectionDisplacement.Length);
+                }
+                catch
+                {
+                    rp.periods[i] = 0;
+                }
+            }
+            file.GetAllRails()[listBox1.SelectedIndex].frames[listBox2.SelectedIndex] = rp;
+        }
+
         private void addButton2_Click(object sender, EventArgs e)
         {
             if (listBox1.SelectedIndex == -1 || listBox1.Items.Count == 0)
                 return;
 
             KeyFrame rp = new KeyFrame();
+            //rp.u1 = 2;
             rp.NullData();
 
             file.GetAllRails()[listBox1.SelectedIndex].InsertFrame(rp, listBox2.SelectedIndex);
-
+            int index = listBox2.SelectedIndex;
             RefreshListBox2();
+            listBox2.SelectedIndex = index;
         }
 
         private void RefreshListBox2()
@@ -273,6 +299,7 @@ namespace SMSRallyEditor
                     startUpDown.Enabled = true;
                     break;
             }
+            CurrentKeyframeSetValue("u1", (short)u1UpDown.Value);
         }
 
         private void DupBtn_Click(object sender, EventArgs e)
@@ -444,11 +471,14 @@ namespace SMSRallyEditor
                 return;
 
             KeyFrame rp = new KeyFrame();
+            //rp.u1 = 2;
             rp.NullData();
 
             file.GetAllRails()[listBox1.SelectedIndex].InsertFrame(rp, listBox2.SelectedIndex + 1);
 
+            int index = listBox2.SelectedIndex+1;
             RefreshListBox2();
+            listBox2.SelectedIndex = index;
         }
 
         private void button2_Click_1(object sender, EventArgs e) {
@@ -461,6 +491,161 @@ namespace SMSRallyEditor
                 preview.ForceDraw();
             }
 
+        }
+        
+        private void startUpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetConnectionsValue(0,  (short)startUpDown.Value);
+            UpdatePeriods();
+        }
+
+        private void endUpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetConnectionsValue(1, (short)endUpDown.Value);
+            UpdatePeriods();
+        }
+
+        private void u3UpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetConnectionsValue(2,  (short)u3UpDown.Value);
+            UpdatePeriods();
+        }
+
+        private void u4UpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetConnectionsValue(3,  (short)u4UpDown.Value);
+            UpdatePeriods();
+        }
+
+        private void u5UpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetConnectionsValue(4,  (short)u5UpDown.Value);
+            UpdatePeriods();
+        }
+
+        private void u6UpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetConnectionsValue(5,  (short)u6UpDown.Value);
+            UpdatePeriods();
+        }
+
+        private void u7UpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetConnectionsValue(6,  (short)u7UpDown.Value);
+            UpdatePeriods();
+        }
+
+        private void u8UpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetConnectionsValue(7,  (short)u8UpDown.Value);
+            UpdatePeriods();
+        }
+
+        private void connectloop_Click(object sender, EventArgs e) {
+            if (listBox1.SelectedIndex == -1 || listBox1.Items.Count == 0)
+                return;
+
+            DialogResult dialogResult = MessageBox.Show("This operation will modify all points on the current rail. Do you want to proceed?", 
+                "Connect Points as Loop", MessageBoxButtons.YesNo);
+            
+            
+            if(dialogResult == DialogResult.Yes)
+            {
+                Rail rail = file.GetAllRails()[listBox1.SelectedIndex];
+                for (int i = 0; i < rail.frames.Count(); i++) {
+                    int last, next;
+
+                    if (i == 0) {
+                        last = rail.frames.Count()-1;
+                    }
+                    else {
+                        last = i - 1;
+                    }
+
+                    if (i == rail.frames.Count() - 1) {
+                        next = 0;
+                    }
+                    else {
+                        next = i + 1;
+                    }
+
+                    KeyFrame frame = rail.frames[i];
+                    if (frame.u1 < 2) {
+                        frame.u1 = 2;
+                    }
+                    frame.connections[0] = (short)last;
+                    frame.connections[1] = (short)next;
+                }
+                RefreshListBox2();
+                updateRender();
+            }
+            else if (dialogResult == DialogResult.No)
+            {
+                //do something else
+            }
+        }
+
+        void updateRender() {
+            SMSSceneReader.Preview preview = SMSSceneReader.MainForm.ScenePreview;
+            if (preview != null) {
+                preview.ForceDraw();
+            }
+        }
+
+        private void u2UpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetValue("u2", (short)u2UpDown.Value);
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetValue("u3", (short)numericUpDown1.Value);
+        }
+
+        private void CurrentKeyframeSetValue(string property, short value) {
+            if (listBox1.SelectedIndex == -1 || listBox2.SelectedIndex == -1)
+                return;
+            KeyFrame rp = file.GetAllRails()[listBox1.SelectedIndex].frames[listBox2.SelectedIndex];
+            Object rpboxed = (Object) rp;
+            Type kfType = rpboxed.GetType();
+            
+            var field = kfType.GetField(property);
+            
+            field.SetValue(rpboxed, value);
+            rp = (KeyFrame)rpboxed;
+
+            file.GetAllRails()[listBox1.SelectedIndex].frames[listBox2.SelectedIndex] = rp;
+            updateRender();
+        }
+
+        private void CurrentKeyframeSetConnectionsValue(int index, short value) {
+            if (listBox1.SelectedIndex == -1 || listBox2.SelectedIndex == -1)
+                return;
+            KeyFrame rp = file.GetAllRails()[listBox1.SelectedIndex].frames[listBox2.SelectedIndex];
+            rp.connections[index] = value;
+            file.GetAllRails()[listBox1.SelectedIndex].frames[listBox2.SelectedIndex] = rp;
+            updateRender();
+        }
+
+        private void pitchUpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetValue("pitch", (short)pitchUpDown.Value);
+        }
+
+        private void yawUpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetValue("yaw", (short)yawUpDown.Value);
+        }
+
+        private void rollUpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetValue("roll", (short)rollUpDown.Value);
+        }
+
+        private void speedUpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetValue("speed", (short)speedUpDown.Value);
+        }
+
+        private void xUpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetValue("x", (short)xUpDown.Value);
+            UpdatePeriods();
+        }
+
+        private void yUpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetValue("y", (short)yUpDown.Value);
+            UpdatePeriods();
+        }
+
+        private void zUpDown_ValueChanged(object sender, EventArgs e) {
+            CurrentKeyframeSetValue("z", (short)zUpDown.Value);
+            UpdatePeriods();
         }
     }
 }
