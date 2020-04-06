@@ -1985,6 +1985,25 @@ namespace SMSSceneReader
                 minBox = Model.BBoxMin;
             }
 
+            float xDiff = maxBox.X - minBox.X;
+            float yDiff = maxBox.Y - minBox.Y;
+            float zDiff = maxBox.Z - minBox.Z;
+            float minimum = 5;
+            if (xDiff < minimum*2) {
+                maxBox.X += minimum;
+                minBox.X -= minimum;
+            }
+
+            if (yDiff < minimum*2) {
+                maxBox.Y += minimum;
+                minBox.Y -= minimum;
+            }
+
+            if (zDiff < minimum*2) {
+                maxBox.Z += minimum;
+                minBox.Z -= minimum;
+            }
+            
         }
 
         public void UnLoad()
