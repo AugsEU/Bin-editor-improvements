@@ -704,6 +704,7 @@ namespace SMSSceneReader
                         if (t > 0 && t < currentDepth)
                         {
                             Vector3 point = r.Origin + (r.Direction * t);
+                            Vector3 originalpoint = point;
 
                             //Rotate collision point to angle where bounds are parallel to axes
                             point -= kvp.Value.ObjPosition;
@@ -721,7 +722,7 @@ namespace SMSSceneReader
                                 currentObject = kvp.Key;
                                 ClickNormal = normal;
                                 ClickPosition = pcenter;
-                                ClickRelMouse = kvp.Value.ObjPosition - point;
+                                ClickRelMouse = kvp.Value.ObjPosition - originalpoint;
                                 ClickOrigin = kvp.Value.ObjPosition;
                             }
                         }
