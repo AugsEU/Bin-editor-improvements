@@ -567,6 +567,7 @@ namespace SMSRallyEditor
                     }
                     frame.connections[0] = (short)last;
                     frame.connections[1] = (short)next;
+                    rail.frames[i] = frame;
                 }
                 RefreshListBox2();
                 updateRender();
