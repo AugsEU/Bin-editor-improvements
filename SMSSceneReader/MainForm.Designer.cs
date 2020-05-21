@@ -102,11 +102,7 @@
             this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.wizardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lightingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.placeholderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.emptyMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.emptyMapToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadObjectAssetsIntoEditorStorageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
@@ -147,7 +143,6 @@
             this.bmgOpenFile = new System.Windows.Forms.OpenFileDialog();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.label8 = new System.Windows.Forms.Label();
-            this.loadObjectAssetsIntoEditorStorageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.paramContextMenu.SuspendLayout();
             this.paramMenuStrip1.SuspendLayout();
             this.ParamBox.SuspendLayout();
@@ -327,9 +322,10 @@
             this.label2.Location = new System.Drawing.Point(8, 65);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(45, 17);
+            this.label2.Size = new System.Drawing.Size(40, 17);
             this.label2.TabIndex = 12;
-            this.label2.Text = "Name";
+            this.label2.Text = "Type";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label3
             // 
@@ -511,7 +507,7 @@
             this.undoToolStripMenuItem.Enabled = false;
             this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
             this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(171, 26);
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.undoToolStripMenuItem.Text = "Undo";
             this.undoToolStripMenuItem.Click += new System.EventHandler(this.undoToolStripMenuItem_Click);
             // 
@@ -520,32 +516,32 @@
             this.redoToolStripMenuItem.Enabled = false;
             this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
             this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.redoToolStripMenuItem.Size = new System.Drawing.Size(171, 26);
+            this.redoToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.redoToolStripMenuItem.Text = "Redo";
             this.redoToolStripMenuItem.Click += new System.EventHandler(this.redoToolStripMenuItem_Click);
             // 
             // toolStripMenuItem17
             // 
             this.toolStripMenuItem17.Name = "toolStripMenuItem17";
-            this.toolStripMenuItem17.Size = new System.Drawing.Size(168, 6);
+            this.toolStripMenuItem17.Size = new System.Drawing.Size(213, 6);
             // 
             // findToolStripMenuItem
             // 
             this.findToolStripMenuItem.Name = "findToolStripMenuItem";
             this.findToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this.findToolStripMenuItem.Size = new System.Drawing.Size(171, 26);
+            this.findToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.findToolStripMenuItem.Text = "Find";
             this.findToolStripMenuItem.Click += new System.EventHandler(this.findToolStripMenuItem_Click);
             // 
             // toolStripMenuItem16
             // 
             this.toolStripMenuItem16.Name = "toolStripMenuItem16";
-            this.toolStripMenuItem16.Size = new System.Drawing.Size(168, 6);
+            this.toolStripMenuItem16.Size = new System.Drawing.Size(213, 6);
             // 
             // clearMapToolStripMenuItem
             // 
             this.clearMapToolStripMenuItem.Name = "clearMapToolStripMenuItem";
-            this.clearMapToolStripMenuItem.Size = new System.Drawing.Size(171, 26);
+            this.clearMapToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
             this.clearMapToolStripMenuItem.Text = "Clear Map";
             this.clearMapToolStripMenuItem.Click += new System.EventHandler(this.clearMapToolStripMenuItem_Click);
             // 
@@ -555,7 +551,7 @@
             this.arrayToolStripMenuItem,
             this.moveToCameraToolStripMenuItem});
             this.objectToolStripMenuItem1.Name = "objectToolStripMenuItem1";
-            this.objectToolStripMenuItem1.Size = new System.Drawing.Size(171, 26);
+            this.objectToolStripMenuItem1.Size = new System.Drawing.Size(216, 26);
             this.objectToolStripMenuItem1.Text = "Object";
             // 
             // arrayToolStripMenuItem
@@ -814,50 +810,17 @@
             // wizardToolStripMenuItem
             // 
             this.wizardToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mapToolStripMenuItem,
             this.loadObjectAssetsIntoEditorStorageToolStripMenuItem});
             this.wizardToolStripMenuItem.Name = "wizardToolStripMenuItem";
             this.wizardToolStripMenuItem.Size = new System.Drawing.Size(68, 24);
             this.wizardToolStripMenuItem.Text = "Wizard";
             // 
-            // mapToolStripMenuItem
+            // loadObjectAssetsIntoEditorStorageToolStripMenuItem
             // 
-            this.mapToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lightingToolStripMenuItem,
-            this.emptyMapToolStripMenuItem});
-            this.mapToolStripMenuItem.Name = "mapToolStripMenuItem";
-            this.mapToolStripMenuItem.Size = new System.Drawing.Size(340, 26);
-            this.mapToolStripMenuItem.Text = "Map";
-            // 
-            // lightingToolStripMenuItem
-            // 
-            this.lightingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.placeholderToolStripMenuItem});
-            this.lightingToolStripMenuItem.Enabled = false;
-            this.lightingToolStripMenuItem.Name = "lightingToolStripMenuItem";
-            this.lightingToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
-            this.lightingToolStripMenuItem.Text = "Lighting";
-            // 
-            // placeholderToolStripMenuItem
-            // 
-            this.placeholderToolStripMenuItem.Name = "placeholderToolStripMenuItem";
-            this.placeholderToolStripMenuItem.Size = new System.Drawing.Size(162, 26);
-            this.placeholderToolStripMenuItem.Text = "Placeholder";
-            // 
-            // emptyMapToolStripMenuItem
-            // 
-            this.emptyMapToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.emptyMapToolStripMenuItem1});
-            this.emptyMapToolStripMenuItem.Name = "emptyMapToolStripMenuItem";
-            this.emptyMapToolStripMenuItem.Size = new System.Drawing.Size(216, 26);
-            this.emptyMapToolStripMenuItem.Text = "Templates";
-            // 
-            // emptyMapToolStripMenuItem1
-            // 
-            this.emptyMapToolStripMenuItem1.Name = "emptyMapToolStripMenuItem1";
-            this.emptyMapToolStripMenuItem1.Size = new System.Drawing.Size(160, 26);
-            this.emptyMapToolStripMenuItem1.Text = "Empty Map";
-            this.emptyMapToolStripMenuItem1.Click += new System.EventHandler(this.emptyMapToolStripMenuItem1_Click);
+            this.loadObjectAssetsIntoEditorStorageToolStripMenuItem.Name = "loadObjectAssetsIntoEditorStorageToolStripMenuItem";
+            this.loadObjectAssetsIntoEditorStorageToolStripMenuItem.Size = new System.Drawing.Size(340, 26);
+            this.loadObjectAssetsIntoEditorStorageToolStripMenuItem.Text = "Load Object Assets into Editor Storage";
+            this.loadObjectAssetsIntoEditorStorageToolStripMenuItem.Click += new System.EventHandler(this.loadObjectAssetsIntoEditorStorageToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -1169,13 +1132,6 @@
             this.label8.Text = "Translate";
             this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
-            // loadObjectAssetsIntoEditorStorageToolStripMenuItem
-            // 
-            this.loadObjectAssetsIntoEditorStorageToolStripMenuItem.Name = "loadObjectAssetsIntoEditorStorageToolStripMenuItem";
-            this.loadObjectAssetsIntoEditorStorageToolStripMenuItem.Size = new System.Drawing.Size(340, 26);
-            this.loadObjectAssetsIntoEditorStorageToolStripMenuItem.Text = "Load Object Assets into Editor Storage";
-            this.loadObjectAssetsIntoEditorStorageToolStripMenuItem.Click += new System.EventHandler(this.loadObjectAssetsIntoEditorStorageToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1318,11 +1274,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem16;
         private System.Windows.Forms.ToolStripMenuItem clearMapToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem wizardToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem mapToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem lightingToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem emptyMapToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem emptyMapToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem placeholderToolStripMenuItem;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ToolStripMenuItem reportBugToolStripMenuItem;

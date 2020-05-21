@@ -70,7 +70,7 @@ namespace SMSSceneReader
 
         Bmd CameraModel = null;
 
-        (string category, string actor, ObjectTemplate template) lastWizardSelection = ("", "", null);
+        (string category, string actor, ObjectTemplate template, bool insertMgr, bool insertAssets) lastWizardSelection = ("", "", null, true, true);
 
         /* Form1 */
         public MainForm(string[] args)
@@ -3604,6 +3604,7 @@ namespace SMSSceneReader
             objwizard.restoreState(lastWizardSelection);
             objwizard.ShowDialog();
             lastWizardSelection = objwizard.backupState();
+
             if (objwizard.addObjectClicked && lastWizardSelection.template != null) {
                 ObjectTemplate template = lastWizardSelection.template;
                 Console.WriteLine("add object");
@@ -3616,16 +3617,39 @@ namespace SMSSceneReader
                         MessageBox.Show("This map does not have an initialization group for managers");
                         return;
                     }
-                    List<GameObject> managers = GetChildObjects(manGroup, template.manager, null, null, 0);
-                    if (managers.Count == 0)
-                    {
-                        ObjectTemplate mgrTemplate;
-                        if (objwizard.actorMgrs.TryGetValue(template.manager, out mgrTemplate)) {
-                            (GameObject, ObjectParameters) mgrObj = mgrTemplate.CreateObject();
-                            AddObject(GetObjectNode(manGroup), mgrObj.Item1, mgrObj.Item2);
+                    foreach (string templateManager in template.getManagerList()) {
+                        List<GameObject> managers = GetChildObjects(manGroup, templateManager, null, null, 0);
+                        if (managers.Count == 0)
+                        {
+                            ObjectTemplate mgrTemplate;
+                            if (objwizard.actorMgrs.TryGetValue(templateManager, out mgrTemplate)) {
+                                (GameObject, ObjectParameters) mgrObj = mgrTemplate.CreateObject();
+                                AddObject(GetObjectNode(manGroup), mgrObj.Item1, mgrObj.Item2);
+                            }
                         }
                     }
                 } 
+                else if (template.manager != "null" && objwizard.includeManager == false) {
+                    GameObject manGroup = GetInitializationGroup();
+                    if (manGroup == null)
+                    {
+                        MessageBox.Show("Warning: Object needs a manager but map has no group for managers.");
+                    }
+                    else {
+                        var missingManagers = new List<string>();
+                        foreach (string templateManager in template.getManagerList()) {
+                            List<GameObject> managers = GetChildObjects(manGroup, templateManager, null, null, 0);
+                            if (managers.Count == 0) {
+                                missingManagers.Add(templateManager);
+                            }
+                        }
+                        if (missingManagers.Count > 0) {
+                            MessageBox.Show(String.Format("Warning: Object {0} needs manager(s) {1} which doesn't/don't exist in this stage.",
+                                    template.type, String.Join(",", missingManagers)));
+                            
+                        }
+                    }
+                }
 
                 string localAssetPath = Path.Combine( 
                     Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory), "GameAssets"
@@ -3703,6 +3727,10 @@ namespace SMSSceneReader
                 }
                 MessageBox.Show("Backed up assets from stage folder into editor's GameAssets folder.");
 			}
+        }
+
+        private void label2_Click(object sender, EventArgs e) {
+
         }
     }
 }
