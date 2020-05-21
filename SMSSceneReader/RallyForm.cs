@@ -62,7 +62,7 @@ namespace SMSRallyEditor
             addButton2.Enabled = value;
             listBox1.Enabled = value;
             listBox2.Enabled = value;
-            applyButton.Enabled = value;
+            //applyButton.Enabled = value;
         }
 
         private void UpdateItems()

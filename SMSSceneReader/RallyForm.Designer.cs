@@ -33,7 +33,6 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.addButton = new System.Windows.Forms.Button();
             this.remButton = new System.Windows.Forms.Button();
-            this.applyButton = new System.Windows.Forms.Button();
             this.listBox2 = new System.Windows.Forms.ListBox();
             this.remButton2 = new System.Windows.Forms.Button();
             this.addButton2 = new System.Windows.Forms.Button();
@@ -147,18 +146,6 @@
             this.remButton.Text = "Remove";
             this.remButton.UseVisualStyleBackColor = true;
             this.remButton.Click += new System.EventHandler(this.remButton_Click);
-            // 
-            // applyButton
-            // 
-            this.applyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.applyButton.Location = new System.Drawing.Point(867, 434);
-            this.applyButton.Margin = new System.Windows.Forms.Padding(4);
-            this.applyButton.Name = "applyButton";
-            this.applyButton.Size = new System.Drawing.Size(100, 28);
-            this.applyButton.TabIndex = 34;
-            this.applyButton.Text = "Apply";
-            this.applyButton.UseVisualStyleBackColor = true;
-            this.applyButton.Click += new System.EventHandler(this.applyButton_Click);
             // 
             // listBox2
             // 
@@ -900,7 +887,6 @@
             this.Controls.Add(this.remButton2);
             this.Controls.Add(this.addButton2);
             this.Controls.Add(this.listBox2);
-            this.Controls.Add(this.applyButton);
             this.Controls.Add(this.remButton);
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.listBox1);
@@ -944,7 +930,6 @@
         public System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Button remButton;
-        public System.Windows.Forms.Button applyButton;
         public System.Windows.Forms.ListBox listBox2;
         private System.Windows.Forms.Button remButton2;
         private System.Windows.Forms.Button addButton2;

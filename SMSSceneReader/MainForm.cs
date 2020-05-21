@@ -30,7 +30,7 @@ namespace SMSSceneReader
         const string PRMPATH = "map\\params\\";
         const string DEMOPATH = "map\\camera\\startcamera.bck";
         const string HASHFILE = "./hash.dat";
-        private const string ApplicationType = "Release Candidate";
+        private const string ApplicationType = "";
 
         public bool Changed = false;   //Whether or not something has changed (for save alert)
 
@@ -1512,7 +1512,7 @@ namespace SMSSceneReader
                 RailForm.Show();
 
                 RailForm.FormClosed += new FormClosedEventHandler(RallyForm_FormClosed);
-                RailForm.applyButton.Click += new EventHandler(RallyForm_Apply);
+                //RailForm.applyButton.Click += new EventHandler(RallyForm_Apply);
                 RailForm.listBox1.SelectedIndexChanged += new EventHandler(RallyForm_SelectedRail);
                 RailForm.listBox2.SelectedIndexChanged += new EventHandler(RallyForm_SelectedFrame);
 
