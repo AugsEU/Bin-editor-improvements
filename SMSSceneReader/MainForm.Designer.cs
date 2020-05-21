@@ -818,8 +818,8 @@
             // loadObjectAssetsIntoEditorStorageToolStripMenuItem
             // 
             this.loadObjectAssetsIntoEditorStorageToolStripMenuItem.Name = "loadObjectAssetsIntoEditorStorageToolStripMenuItem";
-            this.loadObjectAssetsIntoEditorStorageToolStripMenuItem.Size = new System.Drawing.Size(340, 26);
-            this.loadObjectAssetsIntoEditorStorageToolStripMenuItem.Text = "Load Object Assets into Editor Storage";
+            this.loadObjectAssetsIntoEditorStorageToolStripMenuItem.Size = new System.Drawing.Size(384, 26);
+            this.loadObjectAssetsIntoEditorStorageToolStripMenuItem.Text = "Backup Object Assets into Editor Asset Folder";
             this.loadObjectAssetsIntoEditorStorageToolStripMenuItem.Click += new System.EventHandler(this.loadObjectAssetsIntoEditorStorageToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
