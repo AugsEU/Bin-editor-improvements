@@ -35,62 +35,8 @@ namespace SMSSceneReader
         {
             if (paramList.SelectedIndex != -1)
                 parameter.ComboInfo[paramList.SelectedIndex].Clear();
-            string[] segs = textBox1.Text.Split(' ');
-            int ptr = 0;
-            while (ptr < segs.Length)
-            {
-                while (ptr < segs.Length && segs[ptr] == "")
-                    ptr++;
-                if (ptr >= segs.Length)
-                    break;
-
-                //ComboBox
-                string key = "";
-                if (segs[ptr][0] == '\"')
-                {
-                    //quote seperated
-                    key += segs[ptr].Substring(1, segs[ptr].Length - 1);
-                    if (segs[ptr][segs[ptr].Length - 1] != '\"')
-                    {
-                        do
-                        {
-                            ptr++;
-                            if (ptr == segs.Length)
-                                break;
-                            key += " " + segs[ptr];
-                        }
-                        while (segs[ptr][segs[ptr].Length - 1] != '\"');
-                    }
-                    ptr++;
-                    key = key.Substring(0, key.Length - 1);
-                }
-                else //Normal seperated
-                    key = segs[ptr++];
-                string entry = "";
-                if (segs[ptr] != "" && segs[ptr][0] == '\"')
-                {
-                    //quote seperated
-                    entry += segs[ptr].Substring(1, segs[ptr].Length - 1);
-                    if (segs[ptr][segs[ptr].Length - 1] != '\"')
-                    {
-                        do
-                        {
-                            ptr++;
-                            if (ptr == segs.Length)
-                                break;
-                            entry += " " + segs[ptr];
-                        }
-                        while (segs[ptr][segs[ptr].Length - 1] != '\"');
-                    }
-                    ptr++;
-                    entry = entry.Substring(0, entry.Length - 1);
-                }
-                else //Normal seperated
-                    entry = segs[ptr++];
-
-                parameter.ComboInfo[paramList.SelectedIndex].Add(key, entry);
-            }
-
+            //string[] segs = { };
+            //int ptr = 0;
             parameter.SaveObjectParameters();
         }
 
@@ -125,8 +71,6 @@ namespace SMSSceneReader
                 paramRemove.Enabled = false;
                 paramName.Enabled = false;
                 paramType.Enabled = false;
-                textBox1.Enabled = false;
-                textBox1.Text = "";
                 return;
             }
 
@@ -141,26 +85,18 @@ namespace SMSSceneReader
             if (parameter.DataTypes[paramList.SelectedIndex] == ParameterDataTypes.COMMENT)
             { //Update comment info
                 commentBox.Text = parameter.GetParamValue(paramList.SelectedIndex, null);
-                textBox1.Enabled = false;
-                textBox1.Text = "";
             }
             else if (parameter.DataTypes[paramList.SelectedIndex] == ParameterDataTypes.BUFFER)
             { //Update custom type info
                 commentBox.Text = parameter.GetParamLength(paramList.SelectedIndex, null).ToString();
-                textBox1.Enabled = false;
-                textBox1.Text = "";
             }
             else
             {
-                textBox1.Enabled = true;
-                textBox1.Text = "";
                 if (parameter.CommentInfo.ContainsKey(paramList.SelectedIndex))
                     commentBox.Text = parameter.CommentInfo[paramList.SelectedIndex];
                 else
                     commentBox.Text = "(null)";
 
-                foreach (KeyValuePair<string, string> kvp in parameter.ComboInfo[paramList.SelectedIndex])
-                    textBox1.Text += "\"" + kvp.Key.Replace("\"", "\\\"") + "\" " + "\"" + kvp.Value.Replace("\"", "\\\"") + "\" ";
             }
 
             paramRemove.Enabled = true;
