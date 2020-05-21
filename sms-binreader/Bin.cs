@@ -331,6 +331,16 @@ namespace SMSReader
             return dupe;
         }
 
+        public void SetObjectKey(string key) {
+            Description = key;
+            DescHash = GCN.CreateHash(key);
+        }
+
+        public void SetActorType(string type) {
+            Name = type;
+            Hash = GCN.CreateHash(type);
+        }
+
         /// <summary>
         /// Calculates the length of the game object.
         /// Used for saving.
