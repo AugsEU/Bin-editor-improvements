@@ -17,6 +17,7 @@ using DataReader;
 using SMSReader;
 using BMDReader;
 using OpenTK;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace SMSSceneReader
 {
@@ -29,7 +30,7 @@ namespace SMSSceneReader
         const string PRMPATH = "map\\params\\";
         const string DEMOPATH = "map\\camera\\startcamera.bck";
         const string HASHFILE = "./hash.dat";
-        private const string ApplicationType = "Beta";
+        private const string ApplicationType = "Release Candidate";
 
         public bool Changed = false;   //Whether or not something has changed (for save alert)
 
@@ -68,6 +69,8 @@ namespace SMSSceneReader
         int undoPointer;
 
         Bmd CameraModel = null;
+
+        (string category, string actor, ObjectTemplate template) lastWizardSelection = ("", "", null);
 
         /* Form1 */
         public MainForm(string[] args)
@@ -3589,6 +3592,117 @@ namespace SMSSceneReader
             CurrentObjectParameters.SetParamValue("Z", MyGo, CameraPos.Z.ToString());
             ScenePreview.UpdateObject(MyGo);
             treeView1_AfterSelect(sender, new TreeViewEventArgs(treeView1.SelectedNode));
+        }
+
+        private void addObjectTemplateToGroup(ObjectTemplate temp, GameObject group) {
+            (GameObject, ObjectParameters) obj = temp.CreateObject();
+            AddObject(GetObjectNode(group), obj.Item1, obj.Item2);
+        }
+
+        private void addObjectWizardToolStripMenuItem_Click(object sender, EventArgs e) {
+            ObjectWizardForm objwizard = new ObjectWizardForm();
+            objwizard.restoreState(lastWizardSelection);
+            objwizard.ShowDialog();
+            lastWizardSelection = objwizard.backupState();
+            if (objwizard.addObjectClicked && lastWizardSelection.template != null) {
+                ObjectTemplate template = lastWizardSelection.template;
+                Console.WriteLine("add object");
+                
+                if (template.manager != "null" && objwizard.includeManager) {
+                    Console.WriteLine("Add manager {0}", template.manager);
+                    GameObject manGroup = GetInitializationGroup();
+                    if (manGroup == null)
+                    {
+                        MessageBox.Show("This map does not have an initialization group for managers");
+                        return;
+                    }
+                    List<GameObject> managers = GetChildObjects(manGroup, template.manager, null, null, 0);
+                    if (managers.Count == 0)
+                    {
+                        ObjectTemplate mgrTemplate;
+                        if (objwizard.actorMgrs.TryGetValue(template.manager, out mgrTemplate)) {
+                            (GameObject, ObjectParameters) mgrObj = mgrTemplate.CreateObject();
+                            AddObject(GetObjectNode(manGroup), mgrObj.Item1, mgrObj.Item2);
+                        }
+                    }
+                } 
+
+                string localAssetPath = Path.Combine( 
+                    Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory), "GameAssets"
+                );
+
+                if (objwizard.includeAssets) {
+                    var missingAssets = template.getMissingAssets(localAssetPath);
+                    if (missingAssets.Count > 0) {
+                        var selection = missingAssets.GetRange(0, 5);
+                        int rest = missingAssets.Count - selection.Count;
+                        string errormessage = "Cannot copy assets, wasn't able to find the following assets in "+localAssetPath+"\n";
+                        errormessage += string.Join("\n", selection);
+                        if (rest > 0) {
+                            errormessage += String.Format("\n and {0} others.", rest);
+                        }
+                        MessageBox.Show(errormessage);
+                        return;
+                    }
+                    template.CopyAssetsToStage(localAssetPath, SceneRoot);
+                }
+
+                else if (SceneRoot != null) {
+                    var missingAssets = template.getMissingAssets(SceneRoot);
+                    if (missingAssets.Count > 0) {
+                        var selection = missingAssets.GetRange(0, Math.Min(missingAssets.Count, 5));
+                        int rest = missingAssets.Count - selection.Count;
+                        string errormessage = "Warning: For this object following assets are missing in "+SceneRoot+":\n";
+                        errormessage += string.Join("\n", selection);
+                        if (rest > 0) {
+                            errormessage += String.Format("\n and {0} others.", rest);
+                        }
+                        MessageBox.Show(errormessage);
+                    }
+                }
+
+                TreeNode top = treeView1.TopNode;
+                GameObject topobject = null;
+                if (top != null) {
+                    topobject = (GameObject)top.Tag;
+                }
+                (GameObject, ObjectParameters) obj = template.CreateObject();
+
+                AddObject(treeView1.SelectedNode, obj.Item1, obj.Item2);
+                TreeNode node = FindNodeForObject(treeView1.Nodes, obj.Item1);
+                top = FindNodeForObject(treeView1.Nodes, topobject);
+                if (node != null) {
+                    if (top != null) {
+                        top.EnsureVisible();
+                    }
+                    node.EnsureVisible();
+                    treeView1.SelectedNode = node;
+                }
+            }
+        }
+
+        private void loadObjectAssetsIntoEditorStorageToolStripMenuItem_Click(object sender, EventArgs e) {
+            CommonOpenFileDialog folderBrowserDialog = new CommonOpenFileDialog {
+                IsFolderPicker=true, Title="Stage Root Folder"
+            };
+
+            if (folderBrowserDialog.ShowDialog() == CommonFileDialogResult.Ok)
+			{
+                string rootBinPath = Path.Combine(folderBrowserDialog.FileName, "map", "scene.bin");
+                if (!File.Exists(rootBinPath)) {
+                    MessageBox.Show("Chosen folder is not root of a stage folder, could not back assets up! \n(root folder is usually called scene and contains, for example, the map and mapobj folder)");
+                    return;
+                }
+                ObjectWizardForm objwizard = new ObjectWizardForm();
+                string localAssetPath = Path.Combine( 
+                    Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory), "GameAssets"
+                );
+                int i = 0;
+                foreach (ObjectTemplate template in objwizard.objects) {
+                    template.BackupAssetsToStash(folderBrowserDialog.FileName, localAssetPath);
+                }
+                MessageBox.Show("Backed up assets from stage folder into editor's GameAssets folder.");
+			}
         }
     }
 }
