@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using SMSReader;
+using System.Globalization;
 
 namespace SMSSceneReader
 {
@@ -17,6 +18,7 @@ namespace SMSSceneReader
         [STAThread]
         static void Main(string[] args)
         {
+            CultureInfo.CurrentCulture = new CultureInfo("", false);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.ThreadException += new ThreadExceptionEventHandler(HandleException);
