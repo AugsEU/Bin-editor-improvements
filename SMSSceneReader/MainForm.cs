@@ -2306,7 +2306,7 @@ namespace SMSSceneReader
             if (ScenePreview != null)
                 ScenePreview.RemoveObject((GameObject)node.Tag);
         }
-        public TreeNode AddObject(TreeNode node, GameObject gObject, ObjectParameters op)
+        public TreeNode AddObject(TreeNode node, GameObject gObject, ObjectParameters op, bool resetScale=true)
         {
             Changed = true;
             CreateUndoSnapshot();
@@ -2317,7 +2317,7 @@ namespace SMSSceneReader
                 op.SetParamValue("Y", gObject, ScenePreview.CameraPos.Y);
                 op.SetParamValue("Z", gObject, ScenePreview.CameraPos.Z);
             }
-            if (op.ContainsParameter("ScaleX") && op.ContainsParameter("ScaleY") && op.ContainsParameter("ScaleZ"))
+            if (resetScale && op.ContainsParameter("ScaleX") && op.ContainsParameter("ScaleY") && op.ContainsParameter("ScaleZ"))
             {
                 op.SetParamValue("ScaleX", gObject, 1.0f);
                 op.SetParamValue("ScaleY", gObject, 1.0f);
@@ -3608,7 +3608,7 @@ namespace SMSSceneReader
             if (objwizard.addObjectClicked && lastWizardSelection.template != null) {
                 ObjectTemplate template = lastWizardSelection.template;
                 Console.WriteLine("add object");
-                
+                TreeNode selected = treeView1.SelectedNode;
                 if (template.manager != "null" && objwizard.includeManager) {
                     Console.WriteLine("Add manager {0}", template.manager);
                     GameObject manGroup = GetInitializationGroup();
@@ -3692,7 +3692,7 @@ namespace SMSSceneReader
                 }
                 (GameObject, ObjectParameters) obj = template.CreateObject();
 
-                AddObject(treeView1.SelectedNode, obj.Item1, obj.Item2);
+                AddObject(selected, obj.Item1, obj.Item2, false);
                 TreeNode node = FindNodeForObject(treeView1.Nodes, obj.Item1);
                 top = FindNodeForObject(treeView1.Nodes, topobject);
                 if (node != null) {
