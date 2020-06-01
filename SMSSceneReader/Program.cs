@@ -21,6 +21,9 @@ namespace SMSSceneReader
             CultureInfo.CurrentCulture = new CultureInfo("", false);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // Force the CWD to be the directory in which the exe is located
+            Directory.SetCurrentDirectory(System.IO.Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory));
             //Application.ThreadException += new ThreadExceptionEventHandler(HandleException);
             Application.Run(new MainForm(args));
         }
