@@ -153,8 +153,14 @@ namespace SMSSceneReader
                         break;
                     default:
                         if (File.Exists(args[ptr])) {
-                            try { LoadFile(args[ptr]); }
-                            catch { newToolStripMenuItem_Click(this, new EventArgs()); }
+                            try { 
+                                LoadFile(args[ptr]); 
+                                SavePath = args[ptr];
+                            }
+
+                            catch { 
+                                newToolStripMenuItem_Click(this, new EventArgs()); 
+                            }
                         }
                         break;
                 }
