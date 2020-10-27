@@ -3664,9 +3664,9 @@ namespace SMSSceneReader
                 if (objwizard.includeAssets) {
                     var missingAssets = template.getMissingAssets(localAssetPath);
                     if (missingAssets.Count > 0) {
-                        var selection = missingAssets.GetRange(0, 5);
+                        var selection = missingAssets.GetRange(0, Math.Min(missingAssets.Count, 5));
                         int rest = missingAssets.Count - selection.Count;
-                        string errormessage = "Cannot copy assets, wasn't able to find the following assets in "+localAssetPath+"\n";
+                        string errormessage = "Cannot copy assets, wasn't able to find the following assets in "+localAssetPath+":\n";
                         errormessage += string.Join("\n", selection);
                         if (rest > 0) {
                             errormessage += String.Format("\n and {0} others.", rest);
