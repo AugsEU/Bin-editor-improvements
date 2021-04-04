@@ -335,7 +335,9 @@ namespace SMSRallyEditor
             }
 
             UpdateItems();//Update
-            listBox2.SelectedIndex = 0;
+            if (listBox2.Items.Count > 0) {
+                listBox2.SelectedIndex = 0;
+            }
             listBox1.SelectedIndex = OutputIndex;
         }
 
