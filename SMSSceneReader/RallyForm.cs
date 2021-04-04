@@ -331,7 +331,8 @@ namespace SMSRallyEditor
             for(int i = 0; i < file.GetAllRails()[DuplicationIndex].frames.Length;i++)//For each frame
             {
                 KeyFrame rp = file.GetAllRails()[DuplicationIndex].frames[i];//Keyframe = node
-                file.GetAllRails()[OutputIndex].InsertFrame(rp, i);//add node to file
+                KeyFrame new_rp = rp.DeepCopy();
+                file.GetAllRails()[OutputIndex].InsertFrame(new_rp, i);//add node to file
             }
 
             UpdateItems();//Update
