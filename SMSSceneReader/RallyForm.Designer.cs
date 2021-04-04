@@ -349,9 +349,9 @@
             this.label4.Location = new System.Drawing.Point(523, 203);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(50, 17);
+            this.label4.Size = new System.Drawing.Size(56, 17);
             this.label4.TabIndex = 19;
-            this.label4.Text = "Pitch/s";
+            this.label4.Text = "Value 1";
             // 
             // label5
             // 
@@ -399,9 +399,9 @@
             this.label7.Location = new System.Drawing.Point(523, 235);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(45, 17);
+            this.label7.Size = new System.Drawing.Size(56, 17);
             this.label7.TabIndex = 21;
-            this.label7.Text = "Yaw/s";
+            this.label7.Text = "Value 2";
             // 
             // label8
             // 
@@ -409,9 +409,9 @@
             this.label8.Location = new System.Drawing.Point(523, 266);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(43, 17);
+            this.label8.Size = new System.Drawing.Size(56, 17);
             this.label8.TabIndex = 22;
-            this.label8.Text = "Roll/s";
+            this.label8.Text = "Value 3";
             // 
             // label9
             // 
@@ -419,9 +419,9 @@
             this.label9.Location = new System.Drawing.Point(523, 298);
             this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(49, 17);
+            this.label9.Size = new System.Drawing.Size(56, 17);
             this.label9.TabIndex = 24;
-            this.label9.Text = "Speed";
+            this.label9.Text = "Value 4";
             // 
             // speedUpDown
             // 
