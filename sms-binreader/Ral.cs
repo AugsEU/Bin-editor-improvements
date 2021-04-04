@@ -28,7 +28,7 @@ namespace SMSReader
         public float[] periods;
 
         /*
-         * Sets all data to 0
+         * Sets all data to default
          */
         public void NullData()
         {
@@ -37,10 +37,10 @@ namespace SMSReader
             z = 0;
             u1 = 0;
             u2 = 0;
-            pitch = 0;
-            yaw = 0;
-            roll = 0;
-            speed = 0;
+            pitch = -1;
+            yaw = -1;
+            roll = -1;
+            speed = -1;
             connections = new short[8];
             periods = new float[8];
         }
